@@ -1,4 +1,7 @@
 # Dependency directories
-node_modules/
+/client/node_modules
+/client/.pnp
+/client/.pnp.js
+/client/package-lock.json
 
 .DS_Store
