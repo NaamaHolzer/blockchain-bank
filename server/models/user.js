@@ -39,6 +39,10 @@ module.exports = db => {
         return this.findOne({ username: username });
     }
 
+    schema.statics.DELETE = async function(username) {
+        return this.deleteOne({ username: username })
+    }
+
 
     db.model('User', schema, 'User');
 }

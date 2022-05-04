@@ -4,11 +4,11 @@ let favicon = require('serve-favicon');
 let cookieParser = require('cookie-parser');
 let session = require('express-session');
 let MongoStore = require('connect-mongo');
-let account = require('./routes/accountcontroller');
+let account = require('./routes/account-controller');
 let index = require('./routes/index');
-let loan = require('./routes/loancontroller');
-let transaction = require('./routes/transactioncontroller');
-let user = require('./routes/usercontroller');
+let loan = require('./routes/loan-controller');
+let transaction = require('./routes/transaction-controller');
+let user = require('./routes/user-controller');
 let app = express();
 
 (async() => {
