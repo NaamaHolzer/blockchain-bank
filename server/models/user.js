@@ -8,16 +8,19 @@ module.exports = db => {
         password: { type: String, required: true },
         admin: Boolean,
         approved: Boolean,
+        amount: Number,
     }, { autoIndex: false });
 
     schema.statics.CREATE = async function(user) {
+        console.log("In create", user)
         return this.create({
-            firstName: user[0],
-            lastName: user[1],
-            username: user[2],
-            password: user[3],
-            admin: user[4],
-            approved: user[5]
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            password: user.password,
+            admin: false,
+            approved: false,
+            amount: 0
         });
     };
 
@@ -32,5 +35,10 @@ module.exports = db => {
         }
     }
 
-    db.model('User', schema, 'User'); // if model name === collection name
+    schema.statics.REQUEST_ONE = async function(username) {
+        return this.findOne({ username: username });
+    }
+
+
+    db.model('User', schema, 'User');
 }

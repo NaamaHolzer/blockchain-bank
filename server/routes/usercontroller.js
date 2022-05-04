@@ -1,36 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const checksession = require('../middlewares/checksession');
-const dotenv = require('dotenv');
-
 const jwt = require('jsonwebtoken');
+const User = require('../models')("User");
+const bcrypt = require('bcryptjs');
 
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
+router.post('/login',
+    async(req, res) => {
+        const findUser = await User.REQUEST_ONE(req.body.username);
+        const verified = bcrypt.compareSync(req.body.password, findUser.password);
+        if (verified) {
+            const token = jwt.sign({ username: req.body.username }, process.env.TOKEN_SECRET);
+            return res.cookie('token', token, {
+                secure: false, // since we're not using https
+                httpOnly: true,
+            }).status(200).json({ message: "login successful" });
 
-    if (token == null) return res.sendStatus(401)
-
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-        console.log(err)
-
-        if (err) return res.sendStatus(403)
-
-        req.user = user
-
-        next()
-    })
-}
-
-
-router.post('/user/login',
-    (req, res) => {
-        console.log("In login post")
-        var session = req.session;
-        session.userId = req.user.id;
-        session.admin = req.user.admin;
-        session.userName = req.user.name;
-        res.redirect('/');
+        } else {
+            res.status(500).json({ message: "Username or password incorrect" });
+        }
     });
+
+
 
 module.exports = router;

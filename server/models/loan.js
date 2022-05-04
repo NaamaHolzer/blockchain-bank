@@ -2,7 +2,7 @@ const mongo = require("mongoose");
 
 module.exports = db => {
     let schema = new mongo.Schema({
-        amount: { type: Float32Array, required: true, index: true },
+        amount: { type: Number, required: true, index: true },
         date: { type: Date, required: true, index: true },
         from: { type: String, required: true, unique: true },
         to: { type: String, required: true },

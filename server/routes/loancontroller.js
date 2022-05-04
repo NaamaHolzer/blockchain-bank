@@ -1,5 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const checksession = require('../middlewares/checksession');
+const checkAuth = require('../middlewares/check-auth');
 
 module.exports = router;
