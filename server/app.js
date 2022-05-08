@@ -8,7 +8,7 @@ let account = require('./routes/account-controller');
 let index = require('./routes/index');
 let loan = require('./routes/loan-controller');
 let transaction = require('./routes/transaction-controller');
-let user = require('./routes/user-controller');
+let auth = require('./routes/auth-controller');
 let app = express();
 
 (async() => {
@@ -34,7 +34,7 @@ let app = express();
     app.use('/', index);
     app.use('/loan', loan);
     app.use('/transaction', transaction);
-    app.use('/user', user);
+    app.use('/auth', auth);
     app.use(function(req, res, next) {
         let err = new Error('Not Found');
         err.status = 404;

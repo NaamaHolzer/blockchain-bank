@@ -3,6 +3,7 @@ const router = express.Router();
 const checkAuth = require('../middlewares/check-auth');
 const bcrypt = require('bcryptjs');
 const User = require('../models')("User");
+const checkAdmin = require('../middlewares/check-admin');
 
 router.post('/request',
     async(req, res) => {
@@ -14,7 +15,6 @@ router.post('/request',
         }
         const findUser = await User.REQUEST_ONE(newUser.username);
         if (findUser) {
-            console.log("In if")
             res.status(500).json({ message: "User already exists" });
             return;
         }
@@ -28,27 +28,26 @@ router.post('/request',
 
 
 //Check if current user is admin
-router.post('/handleRequest',
-    async(req, res) => {
-        const findUser = await User.REQUEST_ONE(req.body.username.toLowerCase());
-        if (!findUser) {
-            res.status(500).json({ message: "User does not exist" });
-            return;
+router.post('/handleRequest', checkAdmin, async(req, res) => {
+    const findUser = await User.REQUEST_ONE(req.body.username.toLowerCase());
+    if (!findUser) {
+        res.status(500).json({ message: "User does not exist" });
+        return;
+    }
+    try {
+        if (req.body.approved) {
+            console.log("Updating request")
+            await User.UPDATE({
+                username: findUser.username
+            }, { approved: true, amount: req.body.amount });
+        } else {
+            await User.DELETE(findUser.username)
         }
-        try {
-            if (req.body.approved) {
-                console.log("Updating request")
-                await User.UPDATE({
-                    username: findUser.username
-                }, { approved: true, amount: req.body.amount });
-            } else {
-                await User.DELETE(findUser.username)
-            }
-            res.status(204).json({ message: "Request updated successfully" })
-        } catch (err) {
-            res.json({ message: err });
-        }
-    });
+        res.status(204).json({ message: "Request updated successfully" })
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
 
 
 module.exports = router;
