@@ -20,7 +20,7 @@ router.post('/request',
         }
         try {
             await User.CREATE(newUser);
-            res.status(204)
+            res.status(200).json({ message: "Request sent successfully" });
         } catch (err) {
             res.json({ message: err });
         }
@@ -28,7 +28,7 @@ router.post('/request',
 
 
 //Check if current user is admin
-router.post('/handleRequest', checkAdmin, async(req, res) => {
+router.post('/handleRequest', checkAdmin.verifyAdmin, async(req, res) => {
     const findUser = await User.REQUEST_ONE(req.body.username.toLowerCase());
     if (!findUser) {
         res.status(500).json({ message: "User does not exist" });
@@ -43,9 +43,21 @@ router.post('/handleRequest', checkAdmin, async(req, res) => {
         } else {
             await User.DELETE(findUser.username)
         }
-        res.status(204).json({ message: "Request updated successfully" })
+        res.status(200).json({ message: "Request updated successfully" });
     } catch (err) {
-        res.json({ message: err });
+        res.status(500).json({ message: err });
+    }
+});
+
+router.put('/', checkAuth.verifyToken, async(req, res) => {
+    try {
+        console.log("Updating request")
+        await User.UPDATE({
+            username: req.currentUser.username
+        }, { firstName: req.body.firstName, lastName: req.body.lastName });
+        res.status(200).json({ message: "Request updated successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err });
     }
 });
 

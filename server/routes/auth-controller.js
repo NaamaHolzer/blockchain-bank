@@ -22,9 +22,5 @@ router.post('/login',
         }
     });
 
-router.put('/', checkAuth.verifyToken, async(req, res) => {
-    console.log(req.currentUser);
-});
-
 
 module.exports = router;
