@@ -41,5 +41,11 @@ module.exports = db => {
             ]
         }).exec();
     }
+
+    schema.statics.REQUEST_USER_DEBTS = async function(username) {
+        return this.find({
+            to: username
+        }).exec();
+    }
     db.model('Loan', schema, 'Loan'); // if model name === collection name
 }
