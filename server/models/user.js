@@ -9,6 +9,8 @@ module.exports = db => {
         admin: Boolean,
         approved: Boolean,
         balance: Number,
+        email: String,
+        rate: Number
     }, { autoIndex: false });
 
     schema.statics.CREATE = async function(user) {
@@ -18,6 +20,8 @@ module.exports = db => {
             lastName: user.lastName,
             username: user.username,
             password: user.password,
+            email: user.email,
+            rate: user.rate,
             admin: false,
             approved: false,
             balance: 0
