@@ -3,6 +3,7 @@ const router = express.Router();
 const checkAuth = require('../middlewares/check-auth');
 const Transaction = require('../models')("Transaction");
 const User = require('../models')("User");
+const Loan = require('../models')("Loan");
 
 
 router.get('/', checkAuth.verifyToken, async(req, res) => {
@@ -37,6 +38,14 @@ router.post('/', checkAuth.verifyToken, async(req, res) => {
                 date: new Date()
             }
             await Transaction.CREATE(transaction);
+
+            const userDebts = await Loan.REQUEST_USER_DEBTS(fromUser.username);
+            userDebts.forEach(debt => {
+                if (debt.amount > 0.6 * newBalance) {
+                    //TODO: alert debt.fromUser
+                    console.log("alerting ", debt.from);
+                }
+            });
 
             if (newBalance === 0) {
                 console.log("toast manager balance is 0")
