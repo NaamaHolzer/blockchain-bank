@@ -30,5 +30,16 @@ module.exports = db => {
         }
     }
 
+    schema.statics.REQUEST_USER_LOANS = async function(username) {
+        return this.find({
+            $or: [{
+                    from: username
+                },
+                {
+                    to: username
+                }
+            ]
+        }).exec();
+    }
     db.model('Loan', schema, 'Loan'); // if model name === collection name
 }

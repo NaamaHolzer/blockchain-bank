@@ -27,7 +27,15 @@ module.exports = db => {
     }
 
     schema.statics.REQUEST_USER_TRANSACTIONS = async function(username) {
-        return this.find({ from: username, to: username }).exec();
+        return this.find({
+            $or: [{
+                    from: username
+                },
+                {
+                    to: username
+                }
+            ]
+        }).exec();
     }
 
     schema.statics.REQUEST_TRANSACTIONS_RANGE = async function(username, range) {
