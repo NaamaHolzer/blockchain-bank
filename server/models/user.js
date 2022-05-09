@@ -8,7 +8,7 @@ module.exports = db => {
         password: { type: String, required: true },
         admin: Boolean,
         approved: Boolean,
-        amount: Number,
+        balance: Number,
     }, { autoIndex: false });
 
     schema.statics.CREATE = async function(user) {
@@ -20,7 +20,7 @@ module.exports = db => {
             password: user.password,
             admin: false,
             approved: false,
-            amount: 0
+            balance: 0
         });
     };
 

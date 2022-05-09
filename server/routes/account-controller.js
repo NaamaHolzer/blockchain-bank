@@ -39,7 +39,7 @@ router.post('/handleRequest', checkAdmin.verifyAdmin, async(req, res) => {
             console.log("Updating request")
             await User.UPDATE({
                 username: findUser.username
-            }, { approved: true, amount: req.body.amount });
+            }, { approved: true, balance: req.body.balance });
         } else {
             await User.DELETE(findUser.username)
         }
@@ -56,6 +56,16 @@ router.put('/', checkAuth.verifyToken, async(req, res) => {
             username: req.currentUser.username
         }, { firstName: req.body.firstName, lastName: req.body.lastName });
         res.status(200).json({ message: "Request updated successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+});
+
+router.get('/balance', checkAuth.verifyToken, async(req, res) => {
+    try {
+        console.log("Getting account balance")
+        const user = await User.REQUEST_ONE(req.currentUser.username);
+        res.status(200).json({ message: "Request updated successfully", balance: user.balance });
     } catch (err) {
         res.status(500).json({ message: err });
     }
