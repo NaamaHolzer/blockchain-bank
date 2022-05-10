@@ -21,6 +21,11 @@ router.post('/', checkAuth.verifyToken, async(req, res) => {
         console.log("performing loan")
         const fromUser = await User.REQUEST_ONE(req.currentUser.username);
         const toUser = await User.REQUEST_ONE(req.body.toUser);
+        if (!toUser || !toUser.approved) {
+            console.log("toast toUser does not exist")
+            res.status(200).json({ message: "Transaction failed" });
+            return;
+        }
         const newBalance = fromUser.balance - req.body.amount;
         if (newBalance <= 0.5 * fromUser.balance) {
             //TODO: toast
