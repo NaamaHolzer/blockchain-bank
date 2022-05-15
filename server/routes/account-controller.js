@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models')("User");
 const checkAdmin = require('../middlewares/check-admin');
 const fetch = require('node-fetch');
+const nodemailer = require("nodemailer");
 
 router.post('/request',
     async(req, res) => {
@@ -22,6 +23,7 @@ router.post('/request',
         }
         try {
             await User.CREATE(newUser);
+            sendEmail(req.body.username);
             res.status(200).json({ message: "Request sent successfully" });
         } catch (err) {
             res.json({ message: err });
@@ -123,5 +125,34 @@ async function convertCurrency(amount, fromCurrency, toCurrency) {
         .catch(error => console.log('error', error));
 }
 
+function sendEmail(username) {
+
+    let mailTransporter = nodemailer.createTransport({
+        service: 'AOL',
+        auth: {
+            user: 'bankproject2022@aol.com',
+            pass: 'bbnuxhgmwztfnhhj'
+        },
+        tls: {
+            // do not fail on invalid certs
+            rejectUnauthorized: false,
+        },
+    });
+
+    let mailDetails = {
+        from: 'bankproject2022@aol.com',
+        to: process.env.ADMIN_EMAIL,
+        subject: "New Sign-Up Request!",
+        text: "Hi Admin, a new sign-up request from " + username + " needs your attention. Happy banking :)",
+    };
+
+    mailTransporter.sendMail(mailDetails, function(err, data) {
+        if (err) {
+            console.log('Error Occurs', err);
+        } else {
+            console.log('Email sent successfully');
+        }
+    });
+}
 
 module.exports = router;
