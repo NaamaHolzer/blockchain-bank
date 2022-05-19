@@ -23,16 +23,9 @@
  }
 
   .Home-p {
-    color: #07877D;
-    font-size: 40px;
+    color: 'black';
  }
   
   .Home-img {
     max-width: 70vmin;
-  }
-
-  Button
-  {
-   height: 25px;
-   width: 228px;
   }

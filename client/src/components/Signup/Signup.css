@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap');
+
+.Signup {
+   text-align: center;
+   background-color: white;
+   letter-spacing: 2px;
+  
+ }
+
+ .Signup-img{
+   max-width: 30vmin;
+   max-height: 60vmin;
+   align-self: center;
+   position: relative;
+   margin-top: 10%;
+ }
