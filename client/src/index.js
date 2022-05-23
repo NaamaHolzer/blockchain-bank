@@ -1,31 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import Home from './components/Home/Home'
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+import React from "react";
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
+import ReactDOM from "react-dom/client";
+import Home from "./components/Home/Home";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'Montserrat, sans-serif'
+    fontFamily: "Montserrat, sans-serif",
   },
   palette: {
     primary: {
-      main: '#07877D'
+      main: "#07877D",
     },
     secondary: {
-      main: '#07877D'
-    }
-  }
+      main: "#07877D",
+    },
+  },
 });
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-    <MuiThemeProvider theme={theme}>
+  <StyledEngineProvider injectFirst>
+    <ThemeProvider theme={theme}>
       <React.StrictMode>
         <Home />
       </React.StrictMode>
-    </MuiThemeProvider>
-  
-  );
-  
+    </ThemeProvider>
+  </StyledEngineProvider>
+);

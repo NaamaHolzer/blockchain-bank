@@ -1,31 +1,42 @@
- @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap');
- @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap");
 
-
-
-
+.Home-Button {
+  margin: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  width: 228px;
+}
 
 .Home {
-    text-align: center;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 2px;
-    font-family: 'Montserrat', sans-serif;
-  }
+  text-align: center;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 2px;
+  font-family: "Montserrat", sans-serif;
+}
 
- .Home-header {
-    font-size: 40px;
-    color: black;
-    font-weight: 100px;
- }
+.Home-header {
+  font-size: 40px;
+  color: black;
+  font-weight: 100px;
+}
 
-  .Home-p {
-    color: 'black';
- }
-  
-  .Home-img {
-    max-width: 70vmin;
-  }
+.Home-p {
+  margin-bottom: 2px;
+}
+
+.Home-img {
+  max-width: 70vmin;
+}
+
+.Home-TextField {
+  width: 228px;
+}
+
+.eye-icon {
+  width: 35px;
+}
