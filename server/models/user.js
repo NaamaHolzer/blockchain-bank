@@ -6,6 +6,8 @@ module.exports = db => {
         lastName: { type: String, required: true, index: true },
         username: { type: String, required: true, unique: true },
         password: { type: String, required: true },
+        privateKey: { type: String },
+        publicKey: { type: String },
         admin: Boolean,
         approved: Boolean,
         balance: Number,
@@ -14,12 +16,13 @@ module.exports = db => {
     }, { autoIndex: false });
 
     schema.statics.CREATE = async function(user) {
-        console.log("In create", user)
         return this.create({
             firstName: user.firstName,
             lastName: user.lastName,
             username: user.username,
             password: user.password,
+            privateKey: '',
+            publicKey: '',
             email: user.email,
             rate: user.rate,
             admin: false,
