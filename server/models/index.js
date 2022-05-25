@@ -9,4 +9,5 @@ db.on('open', function() {
 require("./user")(db);
 require("./loan")(db);
 require("./transaction")(db);
+require("./blockchain")(db);
 module.exports = model => db.model(model);
