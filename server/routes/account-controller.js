@@ -6,6 +6,7 @@ const User = require('../models')("User");
 const checkAdmin = require('../middlewares/check-admin');
 const fetch = require('node-fetch');
 const nodemailer = require("nodemailer");
+const keyGenerator = require('../blockchain/keygenerator');
 
 router.post('/request',
     async(req, res) => {
@@ -57,10 +58,10 @@ router.post('/handleRequest', checkAdmin.verifyAdmin, async(req, res) => {
                     console.log(err);
                 }
             }
-            console.log("got here ", balance)
+            const keys = keyGenerator.getKeys();
             await User.UPDATE({
                 username: findUser.username
-            }, { approved: true, balance: balance, rate: await calcRate() });
+            }, { approved: true, balance: balance, rate: await calcRate(), privateKey: keys.privateKey, publicKey: keys.publicKey });
         } else {
             await User.DELETE(findUser.username)
         }

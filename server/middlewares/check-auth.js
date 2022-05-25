@@ -9,6 +9,7 @@ module.exports.verifyToken = async function(req, res, next) {
         const decrypt = await jwt.verify(token, process.env.TOKEN_SECRET);
         req.currentUser = {
             username: decrypt.username,
+            publicKey: decrypt.publicKey,
             admin: decrypt.admin
         };
         next();
