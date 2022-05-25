@@ -1,11 +1,13 @@
-const EC = require('elliptic').ec;
-const ec = new EC('secp256k1'); // bitcoin wallets algorithm.
+const EC = require("elliptic").ec;
 
-const key = ec.genKeyPair();
-const publicKey = key.getPublic('hex');
-const privateKey = key.getPrivate('hex');
-
-console.log();
-console.log("Private key: ", privateKey);
-console.log();
-console.log("Public Key: ", publicKey);
+module.exports.getKeys = function () {
+  console.log("generating keys");
+  const ec = new EC("secp256k1"); // bitcoin wallets algorithm.
+  const key = ec.genKeyPair();
+  const public = key.getPublic("hex");
+  const private = key.getPrivate("hex");
+  return {
+    privateKey: private,
+    publicKey: public,
+  };
+}

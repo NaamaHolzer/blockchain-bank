@@ -3,24 +3,29 @@ const EC = require('elliptic').ec;
 
 const ec = new EC('secp256k1'); // bitcoin wallets algorithm.
 
-class Transaction {
-    constructor(fromAddress, toAddress, amount) {
+class Action {
+    constructor(fromAddress, toAddress, amount, endDate, date) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
+        this.endDate = this.endDate;
+        this.date = date;
     }
 
     calculateHash() {
-        return SHA256(this.fromAddress, this.toAddress, this.amount).toString();
+        return SHA256(this.fromAddress, this.toAddress, this.amount, this.endDate, this.date).toString();
     }
 
-    signTransaction(signingKey) {
-        if (signingKey.getPublic('hex') !== this.fromAddress) {
+    signAction(privateKey) {
+        const publicKey = ec.keyFromPrivate(privateKey).getPublic('hex');
+        console.log(publicKey);
+
+        if (publicKey!== this.fromAddress) {
             throw new Error("This is not your wallet you're trying to use.");
         }
 
         const hashTx = this.calculateHash();
-        const sig = signingKey.sign(hashTx, 'base64');
+        const sig = ec.keyFromPrivate(privateKey).sign(hashTx, 'base64');
         this.signature = sig.toDER('hex');
     }
 
@@ -28,7 +33,7 @@ class Transaction {
         if (!this.fromAddress) return true;
 
         if (!this.signature || !this.signature.length) {
-            throw new Error("No signature in this transaction");
+            throw new Error("No signature in this action");
         }
 
         const publicKey = ec.keyFromPublic(this.fromAddress, 'hex');
@@ -37,42 +42,36 @@ class Transaction {
 }
 
 class Block {
-    constructor(timestamp, transactions, previousHash = '') {
+    constructor(date, action, previousHash = '') {
         this.previousHash = previousHash;
-        this.timestamp = timestamp;
-        this.transactions = transactions;
-        this.nonce = 0;
+        this.date = date;
+        this.action = action;
         this.hash = this.calculateHash();
     }
 
     calculateHash() {
-        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).toString();
+        return SHA256(this.previousHash + this.date + JSON.stringify(this.action)).toString();
     }
 
-    mineBlock(difficulty) {
-        while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")) {
-            this.nonce++;
-            this.hash = this.calculateHash();
+    hashValidAction() {
+        if (!this.action.isValid()) {
+             return false;
         }
-
-        console.log("Block mined!", this.hash);
-    }
-
-    hashValidaTransactions() {
-        for (const tx of this.transactions) {
-            if (!tx.isValid()) return false;
-        }
-
         return true;
     }
 }
 
 class Blockchain {
-    constructor() {
-        this.chain = [this.createGenesisBlock()];
-        this.difficulty = 2;
-        this.pendingTransactions = [];
-        this.miningReward = 0; // no rewards for mining.
+    constructor(blockchain) {
+        if (blockchain) {
+          this.chain = blockchain;
+        } else {
+          this.chain = [this.createGenesisBlock()];
+        }
+    }
+
+    getChain() {
+        return this.chain;
     }
 
     createGenesisBlock() {
@@ -83,45 +82,32 @@ class Blockchain {
         return this.chain[this.chain.length - 1];
     }
 
-    minePendingTransactions(miningRewardAddress) {
-        const rewardTx = new Transaction(null, miningRewardAddress, this.miningReward);
-        this.pendingTransactions.push(rewardTx);
+    addAction(action) {
+        if (!action.fromAddress || !action.toAddress) {
+            throw new Error("Action must include from and to address");
+        }
 
-        const block = new Block(Date.now(), this.pendingTransactions, this.getLatestBlock().hash);
-        block.mineBlock(this.difficulty);
+        if (!action.isValid()) {
+            throw new Error("Action is not valid");
+        }
 
-        console.log("Block mined successfully");
+        const block = new Block(Date.now(), action, this.getLatestBlock().hash);
         this.chain.push(block);
-
-        this.pendingTransactions = [];
     }
 
-    addTransaction(transaction) {
-        if (!transaction.fromAddress || !transaction.toAddress) {
-            throw new Error("Transaction must include from and to address");
-        }
-
-        if (!transaction.isValid()) {
-            throw new Error("Transaction is not valid");
-        }
-
-        this.pendingTransactions.push(transaction);
-    }
-
-    getBalanceOfAddress(address) {
-        let balance = 0;
-        for (const block of this.chain) {
-            for (const trans of block.transactions) {
-                if (trans.fromAddress === address) {
-                    balance -= trans.amount;
-                } else if (trans.toAddress === address) {
-                    balance += trans.amount;
-                }
-            }
-        }
-
-        return balance;
-    }
+    // getBalanceOfAddress(address) {
+    //     let balance = 0;
+    //     for (const block of this.chain) {
+    //         for (const trans of block.actions) {
+    //             if (trans.fromAddress === address) {
+    //                 balance -= trans.amount;
+    //             } else if (trans.toAddress === address) {
+    //                 balance += trans.amount;
+    //             }
+    //         }
+    //     }
+    //     return balance;
+    // }
 
     isChainValid() {
         for (let i = 1; i < this.chain.length; i++) {
@@ -130,7 +116,7 @@ class Blockchain {
 
             if (currentBlock.hash !== currentBlock.calculateHash() ||
                 currentBlock.previousHash !== previousBlock.hash ||
-                !currentBlock.hashValidaTransactions()) {
+                !currentBlock.hashValidAction()) {
                 return false;
             }
         }
@@ -140,4 +126,4 @@ class Blockchain {
 }
 
 module.exports.Blockchain = Blockchain;
-module.exports.Transaction = Transaction;
+module.exports.Action = Action;
