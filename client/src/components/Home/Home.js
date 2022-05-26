@@ -19,14 +19,14 @@ function Home() {
     <div className="Home">
       <img src={home} className="Home-img" />
       <h1 className="Home-header">Welcome to Lev Bank</h1>
-      <TextField
+      <TextField className='Home-TextField'
       className="Home-TextField"
         label="Username"
         variant="standard"
         id="standard-basic"
         margin="10px"
       />
-      <TextField
+      <TextField className='Home-TextField'
         id="input-with-sx"
         label="Password"
         margin="10px"
