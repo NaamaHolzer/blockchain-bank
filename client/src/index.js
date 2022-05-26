@@ -1,7 +1,9 @@
 import React from "react";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import ReactDOM from "react-dom/client";
-import Home from "./components/Home/Home";
+import Home from "./components/Home/Home"
+import User from "./components/User/User";
+import NavigationBar from "./components/NavgationBar/NavigationBar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -13,7 +15,7 @@ const theme = createTheme({
       main: "#07877D",
     },
     secondary: {
-      main: "#07877D",
+      main: "#FFFFFF",
     },
   },
 });
@@ -24,7 +26,8 @@ root.render(
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={theme}>
       <React.StrictMode>
-        <Home />
+        <User username="Kayla" isAdmin={true}/>
+        {/* <Home></Home> */}
       </React.StrictMode>
     </ThemeProvider>
   </StyledEngineProvider>
