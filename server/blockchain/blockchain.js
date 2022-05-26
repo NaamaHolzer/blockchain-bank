@@ -8,7 +8,7 @@ class Action {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
-        this.endDate = this.endDate;
+        this.endDate = endDate;
         this.date = date;
     }
 
@@ -65,8 +65,8 @@ class Blockchain {
 
         if (blockchain) {
           this.chain = blockchain.chain;
+
         } else {
-            console.log("in else");
           this.chain = [this.createGenesisBlock()];
         }
     }

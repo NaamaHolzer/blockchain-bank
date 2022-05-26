@@ -3,15 +3,19 @@ const router = express.Router();
 const checkAuth = require("../middlewares/check-auth");
 const Loan = require("../models")("Loan");
 const User = require("../models")("User");
+const BlockchainModel = require("../models")("Blockchain");
 
-router.get("/", checkAuth.verifyToken, async (req, res) => {
+const { Blockchain, Action } = require("../blockchain/blockchain");
+
+router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
   try {
     console.log("Getting loans");
-    const loans = []; //await Blockchain.REQUEST_USER_BLOCKS("loan", req.currentUser.publicKey);
-
-    res
-      .status(200)
-      .json({ message: "Retrieved loans successfully", loans: loans });
+    const loans = await BlockchainModel.REQUEST_USER_BLOCKS("loan", req.currentUser.publicKey);
+    console.log(loans);
+    res.status(200).json({
+      message: "Retrieved loans successfully",
+      loans: loans,
+    });
   } catch (err) {
     res.status(500).json({ message: err });
   }
@@ -24,7 +28,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     const toUser = await User.REQUEST_ONE(req.body.toUser);
     if (!toUser || !toUser.approved) {
       console.log("toast toUser does not exist");
-      res.status(200).json({ message: "Transaction failed" });
+      res.status(200).json({ message: "Loan failed" });
       return;
     }
     const newBalance = fromUser.balance - req.body.amount;
@@ -45,19 +49,28 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
         fromUser.publicKey,
         toUser.publicKey,
         req.body.amount,
-        req.body.endDate,
+        new Date(req.body.endDate),
         Date.now()
       );
       loan.signAction(fromUser.privateKey);
-      const blockchain = []; // new Blockchain(await BlockchainModel.REQUEST("loans"));
-      blockchain.addAction(transaction);
-      // await BlockchainModel.UPDATE({chainType: "loan", chain: blockchain.getChain()});
+
+      const blockchain = new Blockchain(
+        (await BlockchainModel.REQUEST("loan"))[0]
+      );
+      blockchain.addAction(loan);
+      await BlockchainModel.UPDATE(
+        { chainType: "loan" },
+        {
+          chain: blockchain.getChain(),
+        }
+      );
     } catch (err) {
       //TODO toast
       res.status(500).json({
         message: "You are not certified to perform this loan ",
         err,
       });
+      return;
     }
 
     await User.UPDATE(
@@ -73,14 +86,8 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       },
       { balance: toUser.balance + req.body.amount }
     );
-    const loan = {
-      from: fromUser.username,
-      to: toUser.username,
-      amount: req.body.amount,
-      date: new Date(),
-      endDate: req.body.endDate,
-    };
-    const userDebts = []; // await Blockchain.REQUEST_USER_BLOCKS("loan", fromUser.publicKey);
+
+    const userDebts = await Blockchain.REQUEST_USER_BLOCKS("loan", fromUser.publicKey);
     userDebts.forEach((debt) => {
       if (debt.amount > 0.6 * newBalance) {
         //TODO: toast debt.fromuser
@@ -89,6 +96,25 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     });
 
     res.status(200).json({ message: "Loan succeeded" });
+    return;
+  } catch (err) {
+    res.status(500).json({ message: err });
+    return;
+  }
+});
+
+router.get("/", checkAuth.verifyToken, async (req, res) => {
+  try {
+    console.log("Getting loans");
+    const loans = await BlockchainModel.REQUEST_BLOCKS_RANGE(
+      "loan",
+      req.currentUser.publicKey,
+      req.body.range
+    );
+    res.status(200).json({
+      message: "Retrieved loans successfully",
+      loans: loans,
+    });
   } catch (err) {
     res.status(500).json({ message: err });
   }

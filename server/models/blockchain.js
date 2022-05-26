@@ -25,7 +25,7 @@ module.exports = (db) => {
     let chain = await this.find({ chainType: chainType }).exec();
     chain = chain[0].chain.slice(1, chain[0].chain.length);
     return chain.filter(
-      (block) => {return block.action.fromAddress == publicKey.toString() || block.action.toAddress == publicKey.toString()}
+      (block) => {return block.action.fromAddress === publicKey.toString() || block.action.toAddress === publicKey.toString()}
     );
   };
 
