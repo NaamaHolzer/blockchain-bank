@@ -60,8 +60,8 @@ export default function Signup() {
           <br></br>
         </DialogContent>
         <DialogActions className="Signup-DialogOptions">
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Signup</Button>
+          <Button variant="outlined" onClick={handleClose} >Cancel</Button>
+          <Button variant="contained" onClick={handleClose}>Signup</Button>
         </DialogActions>
       </Dialog>
     </div>
