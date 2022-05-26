@@ -11,7 +11,7 @@ router.post('/login',
         const findUser = await User.REQUEST_ONE(username);
         const verified = bcrypt.compareSync(req.body.password, findUser.password);
         if (verified) {
-            const token = jwt.sign({ username: username, admin: findUser.admin }, process.env.TOKEN_SECRET);
+            const token = jwt.sign({ username: username, admin: findUser.admin, publicKey: findUser.publicKey }, process.env.TOKEN_SECRET);
             return res.cookie('token', token, {
                 secure: false, // since we're not using https
                 httpOnly: true,

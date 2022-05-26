@@ -18,7 +18,6 @@ class Action {
 
     signAction(privateKey) {
         const publicKey = ec.keyFromPrivate(privateKey).getPublic('hex');
-        console.log(publicKey);
 
         if (publicKey!== this.fromAddress) {
             throw new Error("This is not your wallet you're trying to use.");
@@ -63,9 +62,11 @@ class Block {
 
 class Blockchain {
     constructor(blockchain) {
+
         if (blockchain) {
-          this.chain = blockchain;
+          this.chain = blockchain.chain;
         } else {
+            console.log("in else");
           this.chain = [this.createGenesisBlock()];
         }
     }
@@ -84,14 +85,19 @@ class Blockchain {
 
     addAction(action) {
         if (!action.fromAddress || !action.toAddress) {
+            console.log("here");
+
             throw new Error("Action must include from and to address");
         }
 
         if (!action.isValid()) {
+            console.log("hi");
+
             throw new Error("Action is not valid");
         }
 
         const block = new Block(Date.now(), action, this.getLatestBlock().hash);
+        console.log(this.chain);
         this.chain.push(block);
     }
 

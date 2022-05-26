@@ -10,8 +10,7 @@ const { Blockchain, Action } = require("../blockchain/blockchain");
 router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
   try {
     console.log("Getting transactions");
-    const transactions = await BlockchainModel.REQUEST("transaction"); //await BlockchainModel.REQUEST_USER_BLOCKS("transaction", req.currentUser.publicKey);
-    console.log(transactions);
+    const transactions = await BlockchainModel.REQUEST_USER_BLOCKS("transaction", req.currentUser.publicKey);
     res.status(200).json({
       message: "Retrieved transactions successfully",
       transactions: transactions,
@@ -24,8 +23,7 @@ router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
 router.get("/", checkAuth.verifyToken, async (req, res) => {
   try {
     console.log("Getting transactions");
-    const transactions = []; //await Blockchain.REQUEST_BLOCKS_RANGE("transaction", req.currentUser.publicKey, req.body.range);
-    console.log(transactions);
+    const transactions = await BlockchainModel.REQUEST_BLOCKS_RANGE("transaction", req.currentUser.publicKey, req.body.range);
     res.status(200).json({
       message: "Retrieved transactions successfully",
       transactions: transactions,
@@ -53,19 +51,19 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
           fromUser.publicKey,
           toUser.publicKey,
           req.body.amount,
-          new Date("2000-01-01"),
+          new Date(2000, 1, 1),
           Date.now()
         );
         transaction.signAction(fromUser.privateKey);
+
         const blockchain = new Blockchain(
-          await BlockchainModel.REQUEST("transaction")[0]
+          (await BlockchainModel.REQUEST("transaction"))[0]
         );
         blockchain.addAction(transaction);
-
         await BlockchainModel.UPDATE(
           { chainType: "transaction" },
           {
-            chain: blockchain.getChain()
+            chain: blockchain.getChain(),
           }
         );
       } catch (err) {
@@ -93,7 +91,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
 
       //await Transaction.CREATE(transaction);
 
-      const userDebts = []; //await Blockchain.REQUEST_USER_BLOCKS("loan", fromUser.publicKey);
+      const userDebts = await Blockchain.REQUEST_USER_BLOCKS("loan", fromUser.publicKey);
       userDebts.forEach((debt) => {
         if (debt.amount > 0.6 * newBalance) {
           //TODO: alert debt.fromUser
@@ -120,10 +118,8 @@ router.post("/initializeChains", async (req, res) => {
   try {
     const loansChain = new Blockchain();
     const transactionsChain = new Blockchain();
-    console.log("hi");
     await BlockchainModel.CREATE("loan", loansChain.chain);
     await BlockchainModel.CREATE("transaction", transactionsChain.chain);
-    console.log("hi2");
     res.status(200).json({ message: "Chains initialized" });
   } catch (err) {
     res.status(500).json({ message: err });
