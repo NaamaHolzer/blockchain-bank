@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap");
+
+.Logo-container {
+  display: flex;
+  height: fit-content;
+  width: fit-content;
+  margin-left: -70px;
+}
+
+.Logo-img {
+    height: 80px;
+    width: 180px;
+}
+
