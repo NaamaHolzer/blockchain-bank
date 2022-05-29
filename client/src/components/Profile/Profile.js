@@ -6,6 +6,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import { Box } from "@mui/material";
+import EditProfile from "../EditProfile/EditProfile";
 
 function Profile() {
   const [AnchorEl, setAnchorEl] = React.useState(null);
@@ -25,7 +26,7 @@ function Profile() {
     PaperProps={{  
         style: {  
           width: 200,
-          height: 100, 
+          height: 115, 
         },  
      }} 
       anchorEl={AnchorEl}
@@ -37,8 +38,12 @@ function Profile() {
       open={isMenuOpen}
       onClick={handleMenuClose}
     >
-      <MenuItem className="Menu-item" color="primary">My Account</MenuItem>
-      <MenuItem className="Menu-item" color="primary">Logout</MenuItem>
+      <MenuItem className="Menu-item" color="primary" >
+        <EditProfile></EditProfile>
+      </MenuItem>
+      <MenuItem className="Menu-item" color="primary">
+        <Button>Logout</Button>
+      </MenuItem>
   
     </Menu>
   );

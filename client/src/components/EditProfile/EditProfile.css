@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap");
+
+.Edit {
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.Edit-img {
+  max-width: 50vmin;
+  max-height: 80vmin;
+  align-self: center;
+  position: relative;
+  margin-top: 10%;
+}
+
+.Edit-header {
+  align-self: center;
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 1px;
+}
+
+.Edit-DialogOptions {
+  align-self: center;
+  margin-top: 10px;
+  margin-bottom: 30px; ;
+}
+
+.Edit-DialogContent {
+  align-self: center;
+  max-width: 5000px;
+  max-height: 5000px;
+}
+
+.Edit-Dialog {
+  max-height: fit-content;
+}

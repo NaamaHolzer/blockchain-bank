@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap");
+
+.Action {
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.Transfer-img {
+  max-width: 45vmin;
+  max-height: 25vmin;
+  align-self: center;
+  position: relative;
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+
+.Loan-img {
+  max-width: 30vmin;
+  max-height: 50vmin;
+  align-self: center;
+  position: relative;
+  margin-top: 30px;
+}
+
+.Action-header {
+  align-self: center;
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 1px;
+}
+
+.Action-DialogOptions {
+  align-self: center;
+  margin-top: 10px;
+  margin-bottom: 30px; ;
+}
+
+.Action-DialogContent {
+  align-self: center;
+  max-width: 5000px;
+  max-height: 5000px;
+}
+
+.Action-Dialog {
+  max-height: fit-content;
+  align-self: center;
+  top:10%;
+}
+
+.Action-button {
+  margin-left: 15px;
+  color: white;
+  width: 150px;
+}

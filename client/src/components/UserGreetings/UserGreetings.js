@@ -3,6 +3,7 @@ import admin from "../../images/admin.svg";
 import "./UserGreetings.css";
 import Fab from "@mui/material/Fab";
 import * as React from "react";
+import ActionModal from "../ActionModal/ActionModal";
 
 export default function UserGreetings(props) {
   return (
@@ -21,20 +22,8 @@ export default function UserGreetings(props) {
         </div>
       ) : (
         <div className="Actions-div">
-          <Fab
-            className="Action-button"
-            variant="extended"
-            color="primary"
-          >
-            Transfer
-          </Fab>
-          <Fab
-            className="Action-button"
-            variant="extended"
-            color="primary"
-          >
-            Loan
-          </Fab>
+          <ActionModal action='TRANSFER'/>
+          <ActionModal action='LOAN'/>
         </div>
       )}
     </div>
