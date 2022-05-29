@@ -26,7 +26,7 @@ root.render(
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={theme}>
       <React.StrictMode>
-        <User username="Kayla" isAdmin={true}/>
+        <User username="Kayla" isAdmin={false}/>
         {/* <Home></Home> */}
       </React.StrictMode>
     </ThemeProvider>

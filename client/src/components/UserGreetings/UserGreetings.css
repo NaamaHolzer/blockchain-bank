@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@50&display=swap");
+
+
+.Img {
+  align-content: center;
+  margin-top: 40px;
+  height: 350px;
+}
+
+.User-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Greetings {
+  font-size: 50px;
+  text-align: center;
+  font-family: Montserrat, sans-serif;
+  color: #07877d;
+}
+
+.Actions-div {
+  display: flex;
+  justify-content: center;
+}
+
+.Action-button {
+  margin-left: 15px;
+  color: white;
+  width: 150px;
+}
+
+.Requests-button {
+  color: white;
+  width: 300px;
+}
