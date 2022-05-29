@@ -76,7 +76,7 @@ router.put('/', checkAuth.verifyToken, async(req, res) => {
         console.log("Updating request")
         await User.UPDATE({
             username: req.currentUser.username
-        }, { firstName: req.body.firstName, lastName: req.body.lastName });
+        }, { firstName: req.body.firstName, lastName: req.body.lastName ,email:req.body.email});
         res.status(200).json({ message: "Request updated successfully" });
     } catch (err) {
         res.status(500).json({ message: err });

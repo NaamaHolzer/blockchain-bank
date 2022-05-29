@@ -3,6 +3,8 @@ import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import ReactDOM from "react-dom/client";
 import Home from "./components/Home/Home"
 import User from "./components/User/User";
+import ActionTable from "./components/ActionTable/ActionTable";
+
 import NavigationBar from "./components/NavgationBar/NavigationBar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -27,7 +29,7 @@ root.render(
     <ThemeProvider theme={theme}>
       <React.StrictMode>
         <User username="Kayla" isAdmin={false}/>
-        {/* <Home></Home> */}
+        {/* <ActionTable action='TRANSACTIONS'></ActionTable> */}
       </React.StrictMode>
     </ThemeProvider>
   </StyledEngineProvider>

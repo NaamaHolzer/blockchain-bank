@@ -1,5 +1,6 @@
 import NavigationBar from "../NavgationBar/NavigationBar";
 import UserGreetings from "../UserGreetings/UserGreetings";
+import ActionTable from "../ActionTable/ActionTable";
 import "./User.css";
 import Fab from "@mui/material/Fab";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
@@ -28,15 +29,14 @@ function User(props) {
               ></UserGreetings>
             );
           case "Transactions":
-            return <p>Transactions</p>;
+            return (<ActionTable action="TRANSACTIONS"></ActionTable>)
           case "Loans":
-            return <p>Loans</p>;
+            return (<ActionTable action="LOANS"></ActionTable>)
           default:
-            console.log(anchorEl.AnchorEl==="Greetings")
             return <p>{AnchorEl}</p>;
         }
       })()}
-      <Fab className="Chat-button" size="large" edge="end" color="primary">
+      <Fab className="Chat-button" size="large" edge="end" color="primary" style={{position:'absolute' ,top:'90%'}}>
         <ChatBubbleOutlineOutlinedIcon className="Chat-icon" color="primary" />
       </Fab>
     </div>
