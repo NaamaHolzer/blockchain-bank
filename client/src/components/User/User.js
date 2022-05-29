@@ -7,9 +7,8 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import * as React from "react";
 
 function User(props) {
-
   const [AnchorEl, setAnchorEl] = React.useState("Greetings");
-  const handleState=(state)=>{ 
+  const handleState = (state) => {
     console.log(state);
     setAnchorEl(state);
   };
@@ -17,11 +16,10 @@ function User(props) {
   return (
     <div className="User-div">
       <NavigationBar handleState={handleState}></NavigationBar>
-      {(()=>{
-        const anchorEl = {AnchorEl};
-        switch (anchorEl.AnchorEl) 
-        {
-          case 'Greetings':
+      {(() => {
+        const anchorEl = { AnchorEl };
+        switch (anchorEl.AnchorEl) {
+          case "Greetings":
             return (
               <UserGreetings
                 username={props.username}
@@ -29,14 +27,20 @@ function User(props) {
               ></UserGreetings>
             );
           case "Transactions":
-            return (<ActionTable action="TRANSACTIONS"></ActionTable>)
+            return <ActionTable action="TRANSACTIONS"></ActionTable>;
           case "Loans":
-            return (<ActionTable action="LOANS"></ActionTable>)
+            return <ActionTable action="LOANS"></ActionTable>;
           default:
             return <p>{AnchorEl}</p>;
         }
       })()}
-      <Fab className="Chat-button" size="large" edge="end" color="primary" style={{position:'absolute' ,top:'90%'}}>
+      <Fab
+        className="Chat-button"
+        size="large"
+        edge="end"
+        color="primary"
+        style={{ position: "absolute", top: "90%" }}
+      >
         <ChatBubbleOutlineOutlinedIcon className="Chat-icon" color="primary" />
       </Fab>
     </div>

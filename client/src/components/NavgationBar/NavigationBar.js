@@ -10,9 +10,8 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 
 export default function NavgationBar(props) {
-
   return (
-    <AppBar position="static" color="secondary" >
+    <AppBar position="static" color="secondary">
       <Container maxWidth="xl" disableGutters>
         <Toolbar
           disableGutters
@@ -22,18 +21,21 @@ export default function NavgationBar(props) {
             flexDirection: "row",
           }}
         >
-          <Logo sx={{ display: { xs: "none", md: "flex" } } } handleState={props.handleState}/> 
+          <Logo
+            sx={{ display: { xs: "none", md: "flex" } }}
+            handleState={props.handleState}
+          />
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button
-              onClick= {()=>props.handleState('Transactions')}
+              onClick={() => props.handleState("Transactions")}
               className="Nav-items"
               key="transactions"
               sx={{ my: 2, display: "block" }}
             >
-               Transactions
+              Transactions
             </Button>
             <Button
-              onClick= {()=>props.handleState('Loans')}
+              onClick={() => props.handleState("Loans")}
               className="Nav-items"
               key="loans"
               sx={{ my: 2, display: "block" }}

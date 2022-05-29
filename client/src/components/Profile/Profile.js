@@ -23,12 +23,12 @@ function Profile() {
 
   const renderMenu = (
     <Menu
-    PaperProps={{  
-        style: {  
+      PaperProps={{
+        style: {
           width: 200,
-          height: 115, 
-        },  
-     }} 
+          height: 115,
+        },
+      }}
       anchorEl={AnchorEl}
       keepMounted
       anchorOrigin={{
@@ -38,20 +38,24 @@ function Profile() {
       open={isMenuOpen}
       onClick={handleMenuClose}
     >
-      <MenuItem className="Menu-item" color="primary" >
+      <MenuItem className="Menu-item" color="primary">
         <EditProfile></EditProfile>
       </MenuItem>
       <MenuItem className="Menu-item" color="primary">
         <Button>Logout</Button>
       </MenuItem>
-  
     </Menu>
   );
 
   return (
     <Box>
-      <IconButton size="large" edge="end" >
-        <AccountCircleOutlinedIcon size="Large" className="Icon" color="primary" onClick={handleMenuOpen}/>
+      <IconButton size="large" edge="end">
+        <AccountCircleOutlinedIcon
+          size="Large"
+          className="Icon"
+          color="primary"
+          onClick={handleMenuOpen}
+        />
         {renderMenu}
       </IconButton>
     </Box>

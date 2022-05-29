@@ -7,7 +7,7 @@ import ActionModal from "../ActionModal/ActionModal";
 
 export default function UserGreetings(props) {
   return (
-    <div className= 'User-div'>
+    <div className="User-div">
       {props.isAdmin ? (
         <img src={admin} className="Img"></img>
       ) : (
@@ -22,8 +22,8 @@ export default function UserGreetings(props) {
         </div>
       ) : (
         <div className="Actions-div">
-          <ActionModal action='TRANSFER'/>
-          <ActionModal action='LOAN'/>
+          <ActionModal action="TRANSFER" />
+          <ActionModal action="LOAN" />
         </div>
       )}
     </div>

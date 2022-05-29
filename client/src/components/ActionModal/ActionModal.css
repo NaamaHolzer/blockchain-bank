@@ -15,7 +15,6 @@
   margin-right: 20px;
 }
 
-
 .Loan-img {
   max-width: 30vmin;
   max-height: 50vmin;
@@ -33,7 +32,7 @@
 .Action-DialogOptions {
   align-self: center;
   margin-top: 10px;
-  margin-bottom: 30px; ;
+  margin-bottom: 30px;
 }
 
 .Action-DialogContent {
@@ -45,7 +44,7 @@
 .Action-Dialog {
   max-height: fit-content;
   align-self: center;
-  top:10%;
+  top: 10%;
 }
 
 .Action-button {

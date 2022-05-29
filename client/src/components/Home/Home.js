@@ -1,10 +1,5 @@
 import home from "../../images/home.svg";
-import {
-  TextField,
-  InputAdornment,
-  Button,
-  IconButton,
-} from "@mui/material";
+import { TextField, InputAdornment, Button, IconButton } from "@mui/material";
 import "./Home.css";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -19,14 +14,15 @@ function Home() {
     <div className="Home">
       <img src={home} className="Home-img" />
       <h1 className="Home-header">Welcome to Lev Bank</h1>
-      <TextField className='Home-TextField'
-      className="Home-TextField"
+      <TextField
+        className="Home-TextField"
         label="Username"
         variant="standard"
         id="standard-basic"
         margin="10px"
       />
-      <TextField className='Home-TextField'
+      <TextField
+        className="Home-TextField"
         id="input-with-sx"
         label="Password"
         margin="10px"
@@ -47,16 +43,10 @@ function Home() {
           ),
         }}
       />
-      <Button
-        className="Home-Button"
-        variant="outlined"
-        margin="none"
-      >
+      <Button className="Home-Button" variant="outlined" margin="none">
         Login
       </Button>
-      <p className="Home-p">
-        Don't have an account yet?
-      </p>
+      <p className="Home-p">Don't have an account yet?</p>
       <Signup />
     </div>
   );

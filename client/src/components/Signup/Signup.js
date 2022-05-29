@@ -21,9 +21,7 @@ export default function Signup() {
   };
   return (
     <div className="Signup">
-      <Button onClick={handleClickOpen}>
-        Sign up here
-      </Button>
+      <Button onClick={handleClickOpen}>Sign up here</Button>
       <Dialog className="Signup-Dialog" open={open} onClose={handleClose}>
         <img src={signup} className="Signup-img" />
         <h1 className="Signup-header">Join us!</h1>
@@ -60,8 +58,12 @@ export default function Signup() {
           <br></br>
         </DialogContent>
         <DialogActions className="Signup-DialogOptions">
-          <Button variant="outlined" onClick={handleClose} >Cancel</Button>
-          <Button variant="contained" onClick={handleClose}>Signup</Button>
+          <Button variant="outlined" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleClose}>
+            Signup
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
