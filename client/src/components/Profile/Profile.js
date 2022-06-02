@@ -49,7 +49,7 @@ function Profile() {
 
   return (
     <Box>
-      <IconButton size="large" edge="end">
+      <IconButton size="large" edge="end" className="IconButton">
         <AccountCircleOutlinedIcon
           size="Large"
           className="Icon"
