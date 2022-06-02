@@ -1,6 +1,7 @@
 import NavigationBar from "../NavgationBar/NavigationBar";
 import UserGreetings from "../UserGreetings/UserGreetings";
 import ActionTable from "../ActionTable/ActionTable";
+import Requests from "../Requests/Requests";
 import "./User.css";
 import Fab from "@mui/material/Fab";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
@@ -24,12 +25,15 @@ function User(props) {
               <UserGreetings
                 username={props.username}
                 isAdmin={props.isAdmin}
+                handleState={handleState}
               ></UserGreetings>
             );
           case "Transactions":
             return <ActionTable action="TRANSACTIONS"></ActionTable>;
           case "Loans":
             return <ActionTable action="LOANS"></ActionTable>;
+          case "Requests":
+            return <Requests></Requests>;
           default:
             return <p>{AnchorEl}</p>;
         }
