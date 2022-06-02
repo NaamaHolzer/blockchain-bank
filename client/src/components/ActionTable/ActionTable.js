@@ -125,7 +125,7 @@ const EnhancedTableToolbar = (props) => {
   return <h1 className="Title">{props.action}</h1>;
 };
 
-export default function EnhancedTable(props) {
+export default function ActionTable(props) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("date");
   const [dense, setDense] = React.useState(false);
