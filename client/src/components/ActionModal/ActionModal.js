@@ -10,6 +10,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 export default function ActionModal(props) {
+  const [toFilled, setToFilled] = React.useState();
+  const [amountFilled, setAmountFilled] = React.useState();
+
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,13 +45,15 @@ export default function ActionModal(props) {
             <img src={loan} className="Loan-img" />
           )}
           <DialogContent className="Action-DialogContent">
-            <TextField id="to" label="To" type="text" variant="standard" />
+            <TextField id="to" label="To" type="text" variant="standard" onChange={(e)=>setToFilled(e.target.value)}/>
             <br></br>
             <TextField
               id="amount"
               label="Amount"
-              type="text"
+              type="number"
+              InputProps={{ inputProps: { min: 1} }}
               variant="standard"
+              onChange={(e)=>setAmountFilled(e.target.value)}
             />
             <br></br>
             {props.action === "LOAN" ? (
@@ -72,7 +77,7 @@ export default function ActionModal(props) {
             <Button variant="outlined" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="contained" onClick={handleClose}>
+            <Button variant="contained" onClick={handleClose} disabled={!toFilled || !amountFilled}>
               Save
             </Button>
           </DialogActions>
