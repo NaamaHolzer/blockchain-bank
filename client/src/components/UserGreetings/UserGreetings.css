@@ -1,9 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@50&display=swap");
 
+
 .Img {
   align-content: center;
   margin-top: 40px;
-  height: 350px;
+  height: 300px;
+}
+
+.ImgAdmin{
+  align-content: center;
+  margin-top: 40px;
+  height: 300px;
 }
 
 .User-div {
@@ -24,7 +31,59 @@
   justify-content: center;
 }
 
+.Action-button {
+  margin-left: 15px;
+  color: white;
+  width: 150px;
+}
+
+.Chat-button {
+  margin-left: 20px;
+}
+.Chat-icon {
+  height: 35px;
+  color: white;
+}
+
 .Requests-button {
   color: white;
   width: 300px;
 }
+
+/* 
+.ImgAdmin {
+  align-content: center;
+  margin-top: 40px;
+  height: 320px;
+}
+
+
+.Img {
+  align-content: center;
+  margin-top: 40px;
+  height: 300px;
+}
+
+.User-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Greetings {
+  font-size: 40px;
+  text-align: center;
+  font-family: Montserrat, sans-serif;
+  color: #07877d;
+}
+
+.Actions-div {
+  display: flex;
+  justify-content: center;
+}
+
+.Requests-button {
+  color: white;
+  width: 300px;
+  margin-bottom: 20px;
+} */
