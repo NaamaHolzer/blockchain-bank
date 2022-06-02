@@ -34,3 +34,10 @@
 .Signup-Dialog {
   max-height: fit-content;
 }
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  margin-top: 16px;
+  margin-bottom: 200px;
+  margin-right: 16px;
+  margin-left: 16px;
+}
