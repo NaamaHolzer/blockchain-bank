@@ -13,6 +13,24 @@ import "./Signup.css";
 
 export default function Signup() {
   const [open, setOpen] = React.useState(false);
+  const [emailVal, setEmailVal] = React.useState();
+  const [firstNameVal, setFirstNameVal] = React.useState();
+  const [lastNameVal, setLastNameVal] = React.useState();
+  const [usernameVal, setUsernameVal] = React.useState();
+  const [passwordVal, setPasswordVal] = React.useState();
+
+  const validateEmail = () => {
+    if (
+      String(emailVal)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+    )
+      return true;
+    else return false;
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -31,6 +49,7 @@ export default function Signup() {
             label="First Name"
             type="text"
             variant="standard"
+            onChange={(e) => setFirstNameVal(e.target.value)}
           />
           <br></br>
           <TextField
@@ -38,6 +57,7 @@ export default function Signup() {
             label="Last Name"
             type="text"
             variant="standard"
+            onChange={(e) => setLastNameVal(e.target.value)}
           />
           <br></br>
           <TextField
@@ -45,15 +65,24 @@ export default function Signup() {
             label="Username"
             type="text"
             variant="standard"
+            onChange={(e) => setUsernameVal(e.target.value)}
           />
           <br></br>
-          <TextField id="email" label="Email" type="email" variant="standard" />
+          <TextField
+            id="email"
+            label="Email"
+            type="email"
+            variant="standard"
+            onChange={(e) => setEmailVal(e.target.value)}
+            error={!validateEmail() && emailVal != "" && emailVal != null}
+          />
           <br></br>
           <TextField
             id="password"
             label="Password"
             type="password"
             variant="standard"
+            onChange={(e) => setPasswordVal(e.target.value)}
           />
           <br></br>
         </DialogContent>
@@ -61,7 +90,18 @@ export default function Signup() {
           <Button variant="outlined" onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant="contained" onClick={handleClose}>
+          <Button
+            variant="contained"
+            onClick={handleClose}
+            disabled={
+              !emailVal ||
+              !firstNameVal ||
+              !lastNameVal ||
+              !passwordVal ||
+              !usernameVal ||
+              !validateEmail()
+            }
+          >
             Signup
           </Button>
         </DialogActions>
