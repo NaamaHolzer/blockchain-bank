@@ -3,11 +3,13 @@ import { TextField, InputAdornment, Button, IconButton } from "@mui/material";
 import "./Home.css";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import React, { useState } from "react";
+import React from "react";
 import Signup from "../Signup/Signup";
 
 function Home() {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [usernameFilled, setUsernameFilled] = React.useState();
+  const [passwordFilled, setPasswordFilled] = React.useState();
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   return (
@@ -20,6 +22,7 @@ function Home() {
         variant="standard"
         id="standard-basic"
         margin="10px"
+        onChange={(e)=>setUsernameFilled(e.target.value)}
       />
       <TextField
         className="Home-TextField"
@@ -28,6 +31,7 @@ function Home() {
         margin="10px"
         variant="standard"
         type={showPassword ? "text" : "password"}
+        onChange={(e)=>setPasswordFilled(e.target.value)}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -43,7 +47,7 @@ function Home() {
           ),
         }}
       />
-      <Button className="Home-Button" variant="outlined" margin="none">
+      <Button className="Home-Button" variant="outlined" margin="none" disabled={!usernameFilled || !passwordFilled}>
         Login
       </Button>
       <p className="Home-p">Don't have an account yet?</p>
