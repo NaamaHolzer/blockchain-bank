@@ -11,7 +11,7 @@ import {
 import signup from "../../images/signup.svg";
 import "./Signup.css";
 
-export default function Signup() {
+export default function Signup(props) {
   const [open, setOpen] = React.useState(false);
   const [emailVal, setEmailVal] = React.useState();
   const [firstNameVal, setFirstNameVal] = React.useState();
@@ -92,7 +92,10 @@ export default function Signup() {
           </Button>
           <Button
             variant="contained"
-            onClick={handleClose}
+            onClick={() => {
+              handleClose();
+              props.auth(usernameVal);
+            }}
             disabled={
               !emailVal ||
               !firstNameVal ||

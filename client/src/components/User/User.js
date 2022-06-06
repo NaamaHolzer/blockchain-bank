@@ -8,7 +8,7 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import * as React from "react";
 
 function User(props) {
-  const [AnchorEl, setAnchorEl] = React.useState("Greetings");
+  const [AnchorEl, setAnchorEl] = React.useState(props.initialState);
   const handleState = (state) => {
     console.log(state);
     setAnchorEl(state);
@@ -23,8 +23,7 @@ function User(props) {
           case "Greetings":
             return (
               <UserGreetings
-                username={props.username}
-                isAdmin={props.isAdmin}
+                currentUser={props.currentUser}
                 handleState={handleState}
               ></UserGreetings>
             );

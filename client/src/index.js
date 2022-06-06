@@ -1,10 +1,10 @@
 import React from "react";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import ReactDOM from "react-dom/client";
-import Home from "./components/Home/Home"
+import Home from "./components/Home/Home";
 import User from "./components/User/User";
 import ActionTable from "./components/ActionTable/ActionTable";
-
+import { BrowserRouter, Routes, Route, Router, Switch } from "react-router-dom";
 import NavigationBar from "./components/NavgationBar/NavigationBar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -22,14 +22,73 @@ const theme = createTheme({
   },
 });
 
+export default function App() {
+  const [IsLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [CurrentUser, setCurrentUser] = React.useState({ username: "Kayla", isAdmin: true });
+
+  const authenticate = (usernameFilled) => {
+    // get user from BE
+    const currentUser = { username: "Kayla", isAdmin: true };
+    //do something to check if logged in
+    setIsLoggedIn(true);
+    setCurrentUser(currentUser);
+  };
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            IsLoggedIn ? (
+              <User
+                initialState={"Greetings"}
+                currentUser={CurrentUser}
+              />
+            ) : (
+              <Home auth={authenticate} />
+            )
+          }
+        ></Route>
+        <Route
+          path="transactions"
+          element={
+            <User
+              initialState={"Transactions"}
+              currentUser={CurrentUser}
+            />
+          }
+        />
+        <Route
+          path="loans"
+          element={
+            <User
+              initialState={"Loans"}
+              currentUser={CurrentUser}
+            />
+          }
+        />
+        <Route
+          path="requests"
+          element={
+            <User
+              initialState={"Requests"}
+              currentUser={CurrentUser}
+            />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={theme}>
       <React.StrictMode>
-        <User username="Kayla" isAdmin={false}/>
-        {/* <ActionTable action='TRANSACTIONS'></ActionTable> */}
+        <App></App>
       </React.StrictMode>
     </ThemeProvider>
   </StyledEngineProvider>

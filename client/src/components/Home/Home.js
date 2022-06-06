@@ -6,7 +6,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import React from "react";
 import Signup from "../Signup/Signup";
 
-function Home() {
+function Home(props) {
   const [showPassword, setShowPassword] = React.useState(false);
   const [usernameFilled, setUsernameFilled] = React.useState();
   const [passwordFilled, setPasswordFilled] = React.useState();
@@ -47,11 +47,11 @@ function Home() {
           ),
         }}
       />
-      <Button className="Home-Button" variant="outlined" margin="none" disabled={!usernameFilled || !passwordFilled}>
+      <Button onClick={() => props.auth(usernameFilled)} className="Home-Button" variant="outlined" margin="none" disabled={!usernameFilled || !passwordFilled}>
         Login
       </Button>
       <p className="Home-p">Don't have an account yet?</p>
-      <Signup />
+      <Signup auth={props.auth}/>
     </div>
   );
 }
