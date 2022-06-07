@@ -1,14 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap");
 
-.Home-Button {
-  margin: 20px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  width: 228px;
-}
-
-.Home {
+.NotFound {
   text-align: center;
   background-color: white;
   display: flex;
@@ -19,24 +12,12 @@
   font-family: "Montserrat", sans-serif;
 }
 
-.Home-header {
-  font-size: 40px;
-  color: #07877D;
-  font-weight: 100px;
-}
-
-.Home-p {
-  margin-bottom: 2px;
-}
-
-.Home-img {
+.NotFound-img {
   max-width: 70vmin;
 }
 
-.Home-TextField {
-  width: 228px;
-}
-
-.eye-icon {
-  width: 35px;
+.NotFound-header {
+  font-size: 40px;
+  color: #07877D;
+  font-weight: 100px;
 }

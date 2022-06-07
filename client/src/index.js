@@ -7,6 +7,7 @@ import ActionTable from "./components/ActionTable/ActionTable";
 import { BrowserRouter, Routes, Route, Router, Switch } from "react-router-dom";
 import NavigationBar from "./components/NavgationBar/NavigationBar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import NotFound from "./components/NotFound/NotFound";
 
 const theme = createTheme({
   typography: {
@@ -23,7 +24,7 @@ const theme = createTheme({
 });
 
 export default function App() {
-  const [IsLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [IsLoggedIn, setIsLoggedIn] = React.useState(false);
   const [CurrentUser, setCurrentUser] = React.useState({ username: "Kayla", isAdmin: true });
 
   const authenticate = (usernameFilled) => {
@@ -71,10 +72,17 @@ export default function App() {
         <Route
           path="requests"
           element={
+            CurrentUser.isAdmin? 
             <User
               initialState={"Requests"}
               currentUser={CurrentUser}
-            />
+            /> : <NotFound/>
+          }
+        />
+        <Route
+          path="/*"
+          element={
+            <NotFound/>
           }
         />
       </Routes>
