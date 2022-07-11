@@ -74,6 +74,8 @@ router.post('/handleRequest', checkAdmin.verifyAdmin, async(req, res) => {
 router.put('/', checkAuth.verifyToken, async(req, res) => {
     try {
         console.log("Updating request")
+        if(!req.isLoggedIn)
+            res.status(401).json('You need to login')
         await User.UPDATE({
             username: req.currentUser.username
         }, { firstName: req.body.firstName, lastName: req.body.lastName ,email:req.body.email});
@@ -86,6 +88,8 @@ router.put('/', checkAuth.verifyToken, async(req, res) => {
 router.get('/balance', checkAuth.verifyToken, async(req, res) => {
     try {
         console.log("Getting account balance")
+        if(!req.isLoggedIn)
+            res.status(401).json('You need to login')
         const user = await User.REQUEST_ONE(req.currentUser.username);
         if (req.body.currency === "LEV") {
             res.status(200).json({ message: "Balance retrieved successfully", balance: user.balance });

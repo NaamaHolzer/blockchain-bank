@@ -9,13 +9,20 @@ let index = require('./routes/index');
 let loan = require('./routes/loan-controller');
 let transaction = require('./routes/transaction-controller');
 let auth = require('./routes/auth-controller');
+let cors=require("cors");
 let app = express();
+
+
 
 (async() => {
     let sessConnStr = "mongodb+srv://naamaholzer:0584322277@cluster0.xsp95.mongodb.net/blockchain-bank?retryWrites=true&w=majority";
     process.on('SIGINT', async() => {
         process.exit(0);
     });
+    app.use(cors({
+        origin:'*', 
+        credentials:true,            //access-control-allow-credentials:true
+        optionSuccessStatus:200})) // Use this after the variable declaration
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     let secret = 'blockchain bank secret ';

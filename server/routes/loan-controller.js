@@ -10,7 +10,13 @@ const { Blockchain, Action } = require("../blockchain/blockchain");
 router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
   try {
     console.log("Getting loans");
-    const loans = await BlockchainModel.REQUEST_USER_BLOCKS("loan", req.currentUser.publicKey);
+    if (!req.isLoggedIn) {
+      res.status(401).json("You need to login");
+    }
+    const loans = await BlockchainModel.REQUEST_USER_BLOCKS(
+      "loan",
+      req.currentUser.publicKey
+    );
     console.log(loans);
     res.status(200).json({
       message: "Retrieved loans successfully",
@@ -24,6 +30,9 @@ router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
 router.post("/", checkAuth.verifyToken, async (req, res) => {
   try {
     console.log("performing loan");
+    if (!req.isLoggedIn) {
+      res.status(401).json("You need to login");
+    }
     const fromUser = await User.REQUEST_ONE(req.currentUser.username);
     const toUser = await User.REQUEST_ONE(req.body.toUser);
     if (!toUser || !toUser.approved) {
@@ -87,7 +96,10 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       { balance: toUser.balance + req.body.amount }
     );
 
-    const userDebts = await Blockchain.REQUEST_USER_BLOCKS("loan", fromUser.publicKey);
+    const userDebts = await Blockchain.REQUEST_USER_BLOCKS(
+      "loan",
+      fromUser.publicKey
+    );
     userDebts.forEach((debt) => {
       if (debt.amount > 0.6 * newBalance) {
         //TODO: toast debt.fromuser
@@ -106,6 +118,9 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
 router.get("/", checkAuth.verifyToken, async (req, res) => {
   try {
     console.log("Getting loans");
+    if (!req.isLoggedIn) {
+      res.status(401).json("You need to login");
+    }
     const loans = await BlockchainModel.REQUEST_BLOCKS_RANGE(
       "loan",
       req.currentUser.publicKey,

@@ -10,7 +10,13 @@ const { Blockchain, Action } = require("../blockchain/blockchain");
 router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
   try {
     console.log("Getting transactions");
-    const transactions = await BlockchainModel.REQUEST_USER_BLOCKS("transaction", req.currentUser.publicKey);
+    if (!req.isLoggedIn) {
+      res.status(401).json("You need to login");
+    }
+    const transactions = await BlockchainModel.REQUEST_USER_BLOCKS(
+      "transaction",
+      req.currentUser.publicKey
+    );
     res.status(200).json({
       message: "Retrieved transactions successfully",
       transactions: transactions,
@@ -23,7 +29,14 @@ router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
 router.get("/", checkAuth.verifyToken, async (req, res) => {
   try {
     console.log("Getting transactions");
-    const transactions = await BlockchainModel.REQUEST_BLOCKS_RANGE("transaction", req.currentUser.publicKey, req.body.range);
+    if (!req.isLoggedIn) {
+      res.status(401).json("You need to login");
+    }
+    const transactions = await BlockchainModel.REQUEST_BLOCKS_RANGE(
+      "transaction",
+      req.currentUser.publicKey,
+      req.body.range
+    );
     res.status(200).json({
       message: "Retrieved transactions successfully",
       transactions: transactions,
@@ -36,6 +49,9 @@ router.get("/", checkAuth.verifyToken, async (req, res) => {
 router.post("/", checkAuth.verifyToken, async (req, res) => {
   try {
     console.log("performing transaction");
+    if (!req.isLoggedIn) {
+      res.status(401).json("You need to login");
+    }
     const fromUser = await User.REQUEST_ONE(req.currentUser.username);
     const toUser = await User.REQUEST_ONE(req.body.toUser);
     if (!toUser || !toUser.approved) {
@@ -91,7 +107,10 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
 
       //await Transaction.CREATE(transaction);
 
-      const userDebts = await Blockchain.REQUEST_USER_BLOCKS("loan", fromUser.publicKey);
+      const userDebts = await Blockchain.REQUEST_USER_BLOCKS(
+        "loan",
+        fromUser.publicKey
+      );
       userDebts.forEach((debt) => {
         if (debt.amount > 0.6 * newBalance) {
           //TODO: alert debt.fromUser

@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Router, Switch } from "react-router-dom";
 import NavigationBar from "./components/NavgationBar/NavigationBar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import NotFound from "./components/NotFound/NotFound";
+import { useEffect } from "react";
 
 const theme = createTheme({
   typography: {
@@ -25,15 +26,34 @@ const theme = createTheme({
 
 export default function App() {
   const [IsLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [CurrentUser, setCurrentUser] = React.useState({ username: "Kayla", isAdmin: true });
+  const [CurrentUser, setCurrentUser] = React.useState({});
 
-  const authenticate = (usernameFilled) => {
-    // get user from BE
-    const currentUser = { username: "Kayla", isAdmin: true };
+  const authenticate = () => {
+
+    fetch('http://localhost:8080'+"/auth/currentUser", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response.isLoggedIn);
+        return response;
+      })
+      .then((response) => {
+        setIsLoggedIn(response.isLoggedIn);
+        if(response.isLoggedIn){
+        const currentUser = {username:response.currentUser.username, isAdmin:response.currentUser.isAdmin}
+        setCurrentUser(currentUser);}
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     //do something to check if logged in
-    setIsLoggedIn(true);
-    setCurrentUser(currentUser);
   };
+  useEffect(()=>authenticate())
 
   return (
     <BrowserRouter>
@@ -42,10 +62,7 @@ export default function App() {
           path="/"
           element={
             IsLoggedIn ? (
-              <User
-                initialState={"Greetings"}
-                currentUser={CurrentUser}
-              />
+              <User initialState={"Greetings"} currentUser={CurrentUser} />
             ) : (
               <Home auth={authenticate} />
             )
@@ -54,37 +71,24 @@ export default function App() {
         <Route
           path="transactions"
           element={
-            <User
-              initialState={"Transactions"}
-              currentUser={CurrentUser}
-            />
+            <User initialState={"Transactions"} currentUser={CurrentUser} />
           }
         />
         <Route
           path="loans"
-          element={
-            <User
-              initialState={"Loans"}
-              currentUser={CurrentUser}
-            />
-          }
+          element={<User initialState={"Loans"} currentUser={CurrentUser} />}
         />
         <Route
           path="requests"
           element={
-            CurrentUser.isAdmin? 
-            <User
-              initialState={"Requests"}
-              currentUser={CurrentUser}
-            /> : <NotFound/>
+            CurrentUser.isAdmin ? (
+              <User initialState={"Requests"} currentUser={CurrentUser} />
+            ) : (
+              <NotFound />
+            )
           }
         />
-        <Route
-          path="/*"
-          element={
-            <NotFound/>
-          }
-        />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
