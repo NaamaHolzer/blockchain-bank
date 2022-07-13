@@ -44,11 +44,9 @@ export default function ActionModal(props) {
           alert(response.message);
         } else {
           response = await response.json();
-          console.log(response)
           alert(response.message);
         }
       } catch (err) {
-        console.log(err);
       }
     }
     else
@@ -79,7 +77,6 @@ export default function ActionModal(props) {
           alert(response.message);
         }
       } catch (err) {
-        console.log(err);
       }
     }
   };

@@ -10,7 +10,6 @@ import EditProfile from "../EditProfile/EditProfile";
 
 function Profile(props) {
   const logout = async () => {
-    console.log("clicked")
     try {
       let response = await fetch(
         process.env.REACT_APP_BASE_URL + "/auth/logout",
@@ -20,14 +19,11 @@ function Profile(props) {
             "content-type": "application/json",
             accept: "application/json",
           },
-          credentials:"include"
+          credentials: "include",
         }
       );
-      console.log(response.status);
       if (response.ok || response.status === 401) {
-        console.log("logged out successfully")
-        console.log(response);
-        props.auth(/*isLoggedIn=*/false, {});
+        props.auth(/*isLoggedIn=*/ false, {});
       } else {
         response = await response.json();
         alert(response.message);
@@ -68,7 +64,7 @@ function Profile(props) {
       <MenuItem className="Menu-item" color="primary">
         <EditProfile></EditProfile>
       </MenuItem>
-      <MenuItem className="Menu-item" color="primary"  onClick={logout}>
+      <MenuItem className="Menu-item" color="primary" onClick={logout}>
         <Button>Logout</Button>
       </MenuItem>
     </Menu>

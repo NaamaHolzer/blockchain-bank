@@ -26,9 +26,6 @@ function Home(props) {
       );
 
       if (response.ok) {
-        console.log("logged in successfully")
-        console.log(response);
-
         response = await response.json();
         props.auth(/*isLoggedIn=*/true, {username: usernameFilled, admin: response.admin});
       } else {
@@ -36,7 +33,6 @@ function Home(props) {
         alert(response.message);
       }
     } catch (err) {
-      console.log(err);
     }
   };
 

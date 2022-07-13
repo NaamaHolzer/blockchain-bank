@@ -54,8 +54,6 @@ export default function EditProfile() {
         }),
       });
       if (response.ok) {
-        console.log("Edited details");
-        console.log(response);
         handleClose();
       } else {
         alert(response.status);
@@ -64,7 +62,6 @@ export default function EditProfile() {
         alert(response.message);
       }
     } catch (err) {
-      console.log(err);
     }
   };
   const handleClickOpen = () => {

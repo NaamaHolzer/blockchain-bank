@@ -22,7 +22,6 @@ module.exports = (db) => {
   };
 
   schema.statics.REQUEST_USER_BLOCKS = async function (chainType, publicKey) {
-    console.log('in request')
     let chain = await this.find({ chainType: chainType }).exec();
     chain = chain[0].chain.slice(1, chain[0].chain.length);
     return chain.filter(
@@ -40,7 +39,6 @@ module.exports = (db) => {
     chain = chain.chain.slice(1, chain.length);
     const today = new Date();
     const day = 86400000; // number of milliseconds in a day
-    console.log(today);
 
     const startDate = new Date(today - range * day);
 

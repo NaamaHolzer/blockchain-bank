@@ -9,7 +9,6 @@ const { Blockchain, Action } = require("../blockchain/blockchain");
 
 router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
   try {
-    console.log("Getting loans");
     if (!req.isLoggedIn) {
       res.status(401).json("You need to login");
     }
@@ -17,7 +16,6 @@ router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
       "loan",
       req.currentUser.publicKey
     );
-    console.log(loans);
     res.status(200).json({
       message: "Retrieved loans successfully",
       loans: loans,
@@ -29,27 +27,27 @@ router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
 
 router.post("/", checkAuth.verifyToken, async (req, res) => {
   try {
-    console.log("performing loan");
     if (!req.isLoggedIn) {
       res.status(401).json("You need to login");
     }
     const fromUser = await User.REQUEST_ONE(req.currentUser.username);
     const toUser = await User.REQUEST_ONE(req.body.toUser.toLowerCase());
     if (!toUser || !toUser.approved) {
-      console.log("toast to user does not exist");
       res.status(401).json({ message: "Loan failed: to user does not exist" });
       return;
     }
     const newBalance = fromUser.balance - Number(req.body.amount);
     if (newBalance <= 0.5 * fromUser.balance) {
       //TODO: toast
-      console.log("toast fromuser balance is not enough");
-      res.status(401).json({ message: "Loan failed: from user balance is not enough" });
+      res
+        .status(401)
+        .json({ message: "Loan failed: from user balance is not enough" });
       return;
     }
     if (toUser.balance * 0.6 < Number(req.body.amount)) {
-      console.log("toast touser balance is not enough");
-      res.status(401).json({ message: "Loan failed: to user balance is not enough" });
+      res
+        .status(401)
+        .json({ message: "Loan failed: to user balance is not enough" });
       return;
     }
 
@@ -103,7 +101,6 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     userDebts.forEach((debt) => {
       if (debt.amount > 0.6 * newBalance) {
         //TODO: toast debt.fromuser
-        console.log("alerting ", debt.from);
       }
     });
 
@@ -117,7 +114,6 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
 
 router.get("/", checkAuth.verifyToken, async (req, res) => {
   try {
-    console.log("Getting loans");
     if (!req.isLoggedIn) {
       res.status(401).json("You need to login");
     }

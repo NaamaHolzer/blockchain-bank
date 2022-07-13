@@ -42,14 +42,11 @@ module.exports = (db) => {
   };
 
   schema.statics.REQUEST_TRANSACTIONS_RANGE = async function (username, range) {
-    console.log("in model");
     const today = new Date();
     const day = 86400000; // number of milliseconds in a day
-    console.log(today);
 
     const startDate = new Date(today - range * day);
 
-    console.log(startDate);
 
     return this.find({
       $or: [

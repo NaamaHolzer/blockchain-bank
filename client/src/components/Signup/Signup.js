@@ -42,7 +42,7 @@ export default function Signup(props) {
         handleClose();
         response = await response.json();
         alert(response.message);
-      } else{
+      } else {
         response = await response.json();
         alert(response.message);
       }

@@ -85,13 +85,11 @@ class Blockchain {
 
     addAction(action) {
         if (!action.fromAddress || !action.toAddress) {
-            console.log("here");
 
             throw new Error("Action must include from and to address");
         }
 
         if (!action.isValid()) {
-            console.log("hi");
 
             throw new Error("Action is not valid");
         }

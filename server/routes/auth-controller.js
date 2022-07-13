@@ -7,7 +7,6 @@ const checkAuth = require("../middlewares/check-auth");
 
 router.post("/login", async (req, res) => {
   try {
-    console.log("in login controller ", req.isLoggedIn);
     const username = req.body.username.toLowerCase();
     const findUser = await User.REQUEST_ONE(username);
     const verified = bcrypt.compareSync(req.body.password, findUser.password);
@@ -34,11 +33,9 @@ router.post("/login", async (req, res) => {
         .json({ message: "Account is not approved yet"});
     }
     else {
-      console.log("in else");
       res.status(404).json({ message: "Login Failed" });
     }
   } catch (err) {
-    console.log("in catch")
     res.status(500).json({ message: err });
   }
 });
@@ -48,7 +45,6 @@ router.get("/currentUser", checkAuth.verifyToken, async (req, res) => {
 });
 
 router.get("/logout", checkAuth.verifyToken, (req, res) => {
-  console.log("in logout")
   return res
     .clearCookie("token")
     .status(200)

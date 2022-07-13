@@ -9,7 +9,6 @@ const { Blockchain, Action } = require("../blockchain/blockchain");
 
 router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
   try {
-    console.log("Getting transactions");
     if (!req.isLoggedIn) {
       res.status(401).json("You need to login");
     }
@@ -28,7 +27,6 @@ router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
 
 router.get("/", checkAuth.verifyToken, async (req, res) => {
   try {
-    console.log("Getting transactions");
     if (!req.isLoggedIn) {
       res.status(401).json("You need to login");
     }
@@ -48,14 +46,12 @@ router.get("/", checkAuth.verifyToken, async (req, res) => {
 
 router.post("/", checkAuth.verifyToken, async (req, res) => {
   try {
-    console.log("performing transaction");
     if (!req.isLoggedIn) {
       res.status(401).json("You need to login");
     }
     const fromUser = await User.REQUEST_ONE(req.currentUser.username);
     const toUser = await User.REQUEST_ONE(req.body.toUser.toLowerCase());
     if (!toUser || !toUser.approved) {
-      console.log("toast toUser does not exist");
       res
         .status(401)
         .json({ message: "Transaction failed: to user does not exist" });
@@ -111,7 +107,6 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
         "loan",
         fromUser.publicKey
       );
-      console.log("before user debts");
 
       userDebts.forEach((debt) => {
         if (debt.amount > 0.6 * newBalance) {
@@ -121,20 +116,18 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       });
 
       if (newBalance === 0) {
-        console.log("toast manager balance is 0");
         // TODO: toast
       }
       res.status(200).json({ message: "Transaction succeeded" });
     } else {
       //TODO: toast
-      console.log("toast user balance is less than 0");
       res
         .status(401)
         .json({ message: "Transaction failed: user balance is less than 0" });
     }
   } catch (err) {
     throw err;
-   // res.status(500).json({ message: err });
+    // res.status(500).json({ message: err });
   }
 });
 
