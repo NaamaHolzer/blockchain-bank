@@ -20,10 +20,10 @@ function User(props) {
     <div>
       {props.currentUser ? (
         <div className="User-div">
-          <NavigationBar handleState={handleState}></NavigationBar>
+          <NavigationBar auth = {props.auth} handleState={handleState}></NavigationBar>
           {(() => {
             const anchorEl = { AnchorEl };
-            // if (!props.currentUser.isAdmin && anchorEl.AnchorEl === "Requests") {
+            // if (!props.currentUser.admin && anchorEl.AnchorEl === "Requests") {
             //   return <NotFound handleState={handleState}/>;
             // }
             switch (anchorEl.AnchorEl) {
@@ -59,7 +59,7 @@ function User(props) {
         </div>
       ) : (
         <div>
-          <Home />
+          <Home auth={props.auth} />
         </div>
       )}
     </div>

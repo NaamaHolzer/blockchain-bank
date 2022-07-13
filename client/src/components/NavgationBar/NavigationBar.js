@@ -50,7 +50,7 @@ export default function NavgationBar(props) {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip>
-              <Profile></Profile>
+              <Profile auth = {props.auth}></Profile>
             </Tooltip>
           </Box>
         </Toolbar>

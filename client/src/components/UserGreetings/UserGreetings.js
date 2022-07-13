@@ -9,13 +9,13 @@ import { Link } from "react-router-dom";
 export default function UserGreetings(props) {
   return (
     <div className="User-div">
-      {props.currentUser.isAdmin ? (
+      {props.currentUser.admin ? (
         <img src={admin} className="ImgAdmin"></img>
       ) : (
         <img src={user} className="Img"></img>
       )}
       <p className="Greetings">Welcome back, {props.currentUser.username}!</p>
-      {props.currentUser.isAdmin ? (
+      {props.currentUser.admin ? (
         <Link to="/requests" style={{ textDecoration: "none" }}>
           <div className="Actions-div">
             <Fab

@@ -28,32 +28,39 @@ export default function App() {
   const [IsLoggedIn, setIsLoggedIn] = React.useState(false);
   const [CurrentUser, setCurrentUser] = React.useState({});
 
-  const authenticate = () => {
-
-    fetch('http://localhost:8080'+"/auth/currentUser", {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response.isLoggedIn);
-        return response;
-      })
-      .then((response) => {
-        setIsLoggedIn(response.isLoggedIn);
-        if(response.isLoggedIn){
-        const currentUser = {username:response.currentUser.username, isAdmin:response.currentUser.isAdmin}
-        setCurrentUser(currentUser);}
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    //do something to check if logged in
+  const authenticate = (isLoggedIn, currentUser) => {
+    setIsLoggedIn(isLoggedIn);
+    setCurrentUser(currentUser);
   };
-  useEffect(()=>authenticate())
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(CurrentUser);
+      if (!CurrentUser || Object.keys(CurrentUser).length === 0) {
+        console.log("fetching");
+        let res = await fetch(
+          process.env.REACT_APP_BASE_URL + "/auth/currentUser",
+          {
+            method: "GET",
+            headers: {
+              "content-type": "application/json",
+              accept: "application/json",
+            },
+            credentials: "include",
+          }
+        );
+        if (res.ok) {
+          res = await res.json();
+          console.log("res ok")
+          console.log(res.isLoggedIn);
+          setIsLoggedIn(true);
+          setCurrentUser(res.currentUser);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <BrowserRouter>
@@ -62,7 +69,7 @@ export default function App() {
           path="/"
           element={
             IsLoggedIn ? (
-              <User initialState={"Greetings"} currentUser={CurrentUser} />
+              <User initialState={"Greetings"} currentUser={CurrentUser} auth={authenticate} />
             ) : (
               <Home auth={authenticate} />
             )
@@ -71,18 +78,32 @@ export default function App() {
         <Route
           path="transactions"
           element={
-            <User initialState={"Transactions"} currentUser={CurrentUser} />
+            <User
+              auth={authenticate}
+              initialState={"Transactions"}
+              currentUser={CurrentUser}
+            />
           }
         />
         <Route
           path="loans"
-          element={<User initialState={"Loans"} currentUser={CurrentUser} />}
+          element={
+            <User
+              auth={authenticate}
+              initialState={"Loans"}
+              currentUser={CurrentUser}
+            />
+          }
         />
         <Route
           path="requests"
           element={
-            CurrentUser.isAdmin ? (
-              <User initialState={"Requests"} currentUser={CurrentUser} />
+            IsLoggedIn && CurrentUser?.admin ? (
+              <User
+                auth={authenticate}
+                initialState={"Requests"}
+                currentUser={CurrentUser}
+              />
             ) : (
               <NotFound />
             )

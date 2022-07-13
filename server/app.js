@@ -20,13 +20,12 @@ let app = express();
         process.exit(0);
     });
     app.use(cors({
-        origin:'*', 
+        origin:'http://localhost:3000', 
         credentials:true,            //access-control-allow-credentials:true
         optionSuccessStatus:200})) // Use this after the variable declaration
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     let secret = 'blockchain bank secret ';
-    app.use(cookieParser(secret));
     app.use(session({
         name: 'users.sid',
         secret: secret,
@@ -36,7 +35,7 @@ let app = express();
         store: MongoStore.create({ mongoUrl: sessConnStr }),
         cookie: { maxAge: 900000, httpOnly: true, sameSite: true }
     }));
-
+    app.use(cookieParser(secret));
     app.use('/account', account);
     app.use('/', index);
     app.use('/loan', loan);

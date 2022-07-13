@@ -7,6 +7,39 @@ import React from "react";
 import Signup from "../Signup/Signup";
 
 function Home(props) {
+  const login = async () => {
+    try {
+      let response = await fetch(
+        process.env.REACT_APP_BASE_URL + "/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            username: usernameFilled,
+            password: passwordFilled,
+          }),
+          credentials:"include"
+        }
+      );
+
+      if (response.ok) {
+        console.log("logged in successfully")
+        console.log(response);
+
+        response = await response.json();
+        props.auth(/*isLoggedIn=*/true, {username: usernameFilled, admin: response.admin});
+      } else if (response.status === 404) {
+        response = await response.json();
+        alert(response.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const [showPassword, setShowPassword] = React.useState(false);
   const [usernameFilled, setUsernameFilled] = React.useState();
   const [passwordFilled, setPasswordFilled] = React.useState();
@@ -22,7 +55,7 @@ function Home(props) {
         variant="standard"
         id="standard-basic"
         margin="10px"
-        onChange={(e)=>setUsernameFilled(e.target.value)}
+        onChange={(e) => setUsernameFilled(e.target.value)}
       />
       <TextField
         className="Home-TextField"
@@ -31,7 +64,7 @@ function Home(props) {
         margin="10px"
         variant="standard"
         type={showPassword ? "text" : "password"}
-        onChange={(e)=>setPasswordFilled(e.target.value)}
+        onChange={(e) => setPasswordFilled(e.target.value)}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -47,11 +80,17 @@ function Home(props) {
           ),
         }}
       />
-      <Button onClick={() => props.auth(usernameFilled)} className="Home-Button" variant="outlined" margin="none" disabled={!usernameFilled || !passwordFilled}>
+      <Button
+        onClick={() => login()}
+        className="Home-Button"
+        variant="outlined"
+        margin="none"
+        disabled={!usernameFilled || !passwordFilled}
+      >
         Login
       </Button>
       <p className="Home-p">Don't have an account yet?</p>
-      <Signup auth={props.auth}/>
+      <Signup auth={props.auth} />
     </div>
   );
 }

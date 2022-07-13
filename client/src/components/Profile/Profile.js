@@ -8,7 +8,35 @@ import * as React from "react";
 import { Box } from "@mui/material";
 import EditProfile from "../EditProfile/EditProfile";
 
-function Profile() {
+function Profile(props) {
+  const logout = async () => {
+    console.log("clicked")
+    try {
+      let response = await fetch(
+        process.env.REACT_APP_BASE_URL + "/auth/logout",
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          credentials:"include"
+        }
+      );
+      console.log(response.status);
+      if (response.ok || response.status === 401) {
+        console.log("logged out successfully")
+        console.log(response);
+        props.auth(/*isLoggedIn=*/false, {});
+      } else {
+        response = await response.json();
+        alert(response.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const [AnchorEl, setAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(AnchorEl);
 
@@ -18,7 +46,6 @@ function Profile() {
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
-    console.log(event.currentTarget);
   };
 
   const renderMenu = (
@@ -41,7 +68,7 @@ function Profile() {
       <MenuItem className="Menu-item" color="primary">
         <EditProfile></EditProfile>
       </MenuItem>
-      <MenuItem className="Menu-item" color="primary">
+      <MenuItem className="Menu-item" color="primary"  onClick={logout}>
         <Button>Logout</Button>
       </MenuItem>
     </Menu>
