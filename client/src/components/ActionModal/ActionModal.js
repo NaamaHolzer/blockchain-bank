@@ -150,7 +150,7 @@ export default function ActionModal(props) {
               onClick={submitRequest}
               disabled={!toFilled || !amountFilled}
             >
-              Save
+              Approve
             </Button>
           </DialogActions>
         </Dialog>
