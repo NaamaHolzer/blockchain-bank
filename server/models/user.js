@@ -31,8 +31,11 @@ module.exports = db => {
         });
     };
 
-    schema.statics.UPDATE = async function(idenifier, val) {
-        return this.updateOne(idenifier, { $set: val })
+    schema.statics.UPDATE = async function(identifier, val) {
+        console.log(identifier)
+        console.log(val)
+
+        return this.updateOne(identifier, { $set: val })
     }
 
     schema.statics.REQUEST = async function() {
@@ -50,6 +53,9 @@ module.exports = db => {
         return this.deleteOne({ username: username })
     }
 
+    schema.statics.REQUEST_REQUESTS = async function() {
+        return this.find({approved: false}).select('username').exec()
+    }
 
     db.model('User', schema, 'User');
 }

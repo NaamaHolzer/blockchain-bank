@@ -33,6 +33,11 @@ export default function EditProfile() {
         setLastNameVal(res.userDetails.lastName);
         setEmailVal(res.userDetails.email)
       }
+      else
+      {
+        res = await res.json();
+        alert(res.message)
+      }
     };
 
     fetchData();

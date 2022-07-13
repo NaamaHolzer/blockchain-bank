@@ -30,8 +30,9 @@ router.post("/request", async (req, res) => {
   }
 });
 
-router.post("/handleRequest", checkAdmin.verifyAdmin, async (req, res) => {
+router.post("/handleRequest", [checkAuth.verifyToken,checkAdmin.verifyAdmin], async (req, res) => {
   const findUser = await User.REQUEST_ONE(req.body.username.toLowerCase());
+  console.log(findUser);
   if (!findUser) {
     res.status(500).json({ message: "User does not exist" });
     return;
@@ -41,13 +42,13 @@ router.post("/handleRequest", checkAdmin.verifyAdmin, async (req, res) => {
       const currency = req.body.currency;
       var balance = 0;
       if (currency === "LEV") {
-        balance = parseFloat(req.body.balance);
+        balance = Number(req.body.balance);
       } else if (currency === "USD") {
-        balance = parseFloat(req.body.balance) * calcRate();
+        balance = Number(req.body.balance) * calcRate();
       } else {
         try {
           const usdBalance = parseFloat(
-            (await convertCurrency(req.body.balance, "ILS", "USD")).result
+            (await convertCurrency(Number(req.body.balance), "ILS", "USD")).result
           );
           const rate = await calcRate();
           balance = usdBalance * rate;
@@ -73,6 +74,7 @@ router.post("/handleRequest", checkAdmin.verifyAdmin, async (req, res) => {
     }
     res.status(200).json({ message: "Request updated successfully" });
   } catch (err) {
+    throw err;
     res.status(500).json({ message: err });
   }
 });
@@ -101,29 +103,23 @@ router.get("/balance", checkAuth.verifyToken, async (req, res) => {
     if (!req.isLoggedIn) res.status(401).json("You need to login");
     const user = await User.REQUEST_ONE(req.currentUser.username);
     if (req.body.currency === "LEV") {
-      res
-        .status(200)
-        .json({
-          message: "Balance retrieved successfully",
-          balance: user.balance,
-        });
+      res.status(200).json({
+        message: "Balance retrieved successfully",
+        balance: user.balance,
+      });
     } else if (req.body.currency === "USD") {
-      res
-        .status(200)
-        .json({
-          message: "Balance retrieved successfully",
-          balance: user.balance / user.rate,
-        });
+      res.status(200).json({
+        message: "Balance retrieved successfully",
+        balance: user.balance / user.rate,
+      });
     } else {
       const ilsBalance = (
         await convertCurrency(user.balance / user.rate, "USD", "ILS")
       ).result;
-      res
-        .status(200)
-        .json({
-          message: "Balance retrieved successfully",
-          balance: ilsBalance,
-        });
+      res.status(200).json({
+        message: "Balance retrieved successfully",
+        balance: ilsBalance,
+      });
     }
   } catch (err) {
     res.status(500).json({ message: err });
@@ -133,15 +129,24 @@ router.get("/balance", checkAuth.verifyToken, async (req, res) => {
 router.get("/getUserDetails", checkAuth.verifyToken, async (req, res) => {
   try {
     const user = await User.REQUEST_ONE(req.currentUser.username);
-    res
-      .status(200)
-      .json({
-        userDetails: {
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-        },
-      });
+    res.status(200).json({
+      userDetails: {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+});
+
+router.get("/getRequests", checkAuth.verifyToken, async (req, res) => {
+  try {
+    const users = await User.REQUEST_REQUESTS();
+    res.status(200).json({
+      users: users
+    });
   } catch (err) {
     res.status(500).json({ message: err });
   }
