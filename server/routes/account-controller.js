@@ -75,13 +75,14 @@ router.put('/', checkAuth.verifyToken, async(req, res) => {
     try {
         console.log("Updating request")
         if(!req.isLoggedIn)
-            res.status(401).json('You need to login')
+            return res.status(401).json('You need to login')
         await User.UPDATE({
             username: req.currentUser.username
         }, { firstName: req.body.firstName, lastName: req.body.lastName ,email:req.body.email});
-        res.status(200).json({ message: "Request updated successfully" });
+        console.log("updated successfully")
+        return res.status(200).json({ message: "Request updated successfully" });
     } catch (err) {
-        res.status(500).json({ message: err });
+        return res.status(500).json({ message: err });
     }
 });
 

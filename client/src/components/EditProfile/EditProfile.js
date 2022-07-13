@@ -11,6 +11,38 @@ export default function EditProfile() {
   const [firstNameVal, setFirstNameVal] = React.useState();
   const [lastNameVal, setLastNameVal] = React.useState();
 
+  const submitChange = async () => {
+    try {
+      let response = await fetch(
+        process.env.REACT_APP_BASE_URL + "/account",
+        {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          credentials:"include",
+          body: JSON.stringify({
+            firstName: firstNameVal,
+            lastName: lastNameVal,
+            email: emailVal,
+          }),
+        }
+      );
+      if (response.ok) {
+        console.log("Edited details")
+        console.log(response);
+        handleClose();
+      } else {
+        alert(response.status);
+
+        response = await response.json();
+        alert(response.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -68,7 +100,7 @@ export default function EditProfile() {
           </Button>
           <Button
             variant="contained"
-            onClick={handleClose}
+            onClick={submitChange}
             disabled={
               !emailVal || !firstNameVal || !lastNameVal || !validateEmail()
             }

@@ -38,6 +38,7 @@ module.exports.verifyToken = async function(req, res, next) {
             publicKey: decrypt.publicKey,
             admin: decrypt.admin
         };
+        req.isLoggedIn = true
         next();
     } catch (err) {
         return res.status(500).json(err.toString());

@@ -18,7 +18,7 @@ export default function Signup(props) {
   const [lastNameVal, setLastNameVal] = React.useState();
   const [usernameVal, setUsernameVal] = React.useState();
   const [passwordVal, setPasswordVal] = React.useState();
-  const signup = async () => {
+  const submitRequest = async () => {
     try {
       let response = await fetch(
         process.env.REACT_APP_BASE_URL + "/account/request",
@@ -123,7 +123,7 @@ export default function Signup(props) {
           </Button>
           <Button
             variant="contained"
-            onClick={signup}
+            onClick={submitRequest}
             disabled={
               !emailVal ||
               !firstNameVal ||

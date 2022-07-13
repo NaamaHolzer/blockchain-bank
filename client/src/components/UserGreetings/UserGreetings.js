@@ -14,7 +14,7 @@ export default function UserGreetings(props) {
       ) : (
         <img src={user} className="Img"></img>
       )}
-      <p className="Greetings">Welcome back, {props.currentUser.username}!</p>
+      <p className="Greetings">Welcome back, {props.currentUser.username[0].toUpperCase()+props.currentUser.username.substring(1)}!</p>
       {props.currentUser.admin ? (
         <Link to="/requests" style={{ textDecoration: "none" }}>
           <div className="Actions-div">
