@@ -119,7 +119,6 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
           // console.log("alerting ", debt.from);
         }
       });
-      console.log("after loop");
 
       if (newBalance === 0) {
         console.log("toast manager balance is 0");

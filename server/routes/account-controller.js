@@ -32,7 +32,6 @@ router.post('/request',
     });
 
 
-//Check if current user is admin
 router.post('/handleRequest', checkAdmin.verifyAdmin, async(req, res) => {
     const findUser = await User.REQUEST_ONE(req.body.username.toLowerCase());
     if (!findUser) {
@@ -88,7 +87,6 @@ router.put('/', checkAuth.verifyToken, async(req, res) => {
 
 router.get('/balance', checkAuth.verifyToken, async(req, res) => {
     try {
-        console.log("Getting account balance")
         if(!req.isLoggedIn)
             res.status(401).json('You need to login')
         const user = await User.REQUEST_ONE(req.currentUser.username);
@@ -104,6 +102,16 @@ router.get('/balance', checkAuth.verifyToken, async(req, res) => {
         res.status(500).json({ message: err });
     }
 });
+
+router.get('/getUserDetails', checkAuth.verifyToken, async(req, res) => {
+    try {
+        const user = await User.REQUEST_ONE(req.currentUser.username);
+        res.status(200).json({userDetails:{email:user.email,firstName:user.firstName,lastName:user.lastName}})
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+});
+
 
 async function calcRate() {
     const numUsers = ((await User.REQUEST()).filter(account => account.approved)).length;
@@ -130,6 +138,8 @@ async function convertCurrency(amount, fromCurrency, toCurrency) {
         .then(response => response.json())
         .catch(error => console.log('error', error));
 }
+
+
 
 function sendEmail(username) {
 

@@ -44,33 +44,6 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/currentUser", checkAuth.verifyToken, async (req, res) => {
-  // try {
-  //   console.log("currentUser Controller ");
-  //   const token = req.cookies.token || "";
-  //   if (!token) {
-  //     console.log("!token")
-  //     res.status(200).json({ isLoggedIn: false });
-  //   } else {
-  //     console.log("token")
-  //     const decrypt = await jwt.verify(token, process.env.TOKEN_SECRET);
-  //     isLoggedIn = true;
-  //     currentUser = {
-  //       username: decrypt.username,
-  //       publicKey: decrypt.publicKey,
-  //       admin: decrypt.admin,
-  //     };
-  //     res.status(200).json({
-  //       isLoggedIn: true,
-  //       currentUser: currentUser.username,
-  //       admin: currentUser.admin,
-  //     });
-  //   }
-
-  // } catch (err) {
-  //   return res.status(500).json(err.toString());
-  // }
-  console.log("in currentUser controller");
-  console.log(req.currentUser);
   return res.status(200).json({currentUser: req.currentUser});
 });
 

@@ -36,9 +36,7 @@ export default function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(CurrentUser);
       if (!CurrentUser || Object.keys(CurrentUser).length === 0) {
-        console.log("fetching");
         let res = await fetch(
           process.env.REACT_APP_BASE_URL + "/auth/currentUser",
           {
@@ -52,8 +50,6 @@ export default function App() {
         );
         if (res.ok) {
           res = await res.json();
-          console.log("res ok");
-          console.log(res.isLoggedIn);
           setIsLoggedIn(true);
           setCurrentUser(res.currentUser);
         }
@@ -63,60 +59,6 @@ export default function App() {
     fetchData();
   }, []);
 
-  // return (
-  //   <BrowserRouter>
-  //     <Routes>
-  //       <Route
-  //         path="/"
-  //         element={
-  //           IsLoggedIn ? (
-  //             <User initialState={"Greetings"} currentUser={CurrentUser} auth={authenticate} />
-  //           ) : (
-  //             <Home auth={authenticate} />
-  //           )
-  //         }
-  //       ></Route>
-  //       <Route
-  //         path="transactions"
-  //         element={IsLoggedIn ? (
-  //           <User
-  //             auth={authenticate}
-  //             initialState={"Transactions"}
-  //             currentUser={CurrentUser}
-  //           />
-  //         ) : (
-  //             <Home auth={authenticate} />
-  //           )
-  //         }
-  //       />
-  //       <Route
-  //         path="loans"
-  //         element={
-  //           <User
-  //             auth={authenticate}
-  //             initialState={"Loans"}
-  //             currentUser={CurrentUser}
-  //           />
-  //         }
-  //       />
-  //       <Route
-  //         path="requests"
-  //         element={
-  //           IsLoggedIn && CurrentUser?.admin ? (
-  //             <User
-  //               auth={authenticate}
-  //               initialState={"Requests"}
-  //               currentUser={CurrentUser}
-  //             />
-  //           ) : (
-  //             <NotFound />
-  //           )
-  //         }
-  //       />
-  //       <Route path="/*" element={<NotFound />} />
-  //     </Routes>
-  //   </BrowserRouter>
-  // );
 
   return (
     <BrowserRouter>

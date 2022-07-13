@@ -4,33 +4,57 @@ import { TextField, Dialog, DialogActions, DialogContent } from "@mui/material";
 import editProfile from "../../images/editProfile.svg";
 import "./EditProfile.css";
 import { validator } from "validator";
+import { useEffect } from "react";
 
 export default function EditProfile() {
   const [open, setOpen] = React.useState(false);
   const [emailVal, setEmailVal] = React.useState();
   const [firstNameVal, setFirstNameVal] = React.useState();
   const [lastNameVal, setLastNameVal] = React.useState();
+  const [userDetails, setUserDetails] = React.useState({firstName:'',lastName:'',email:''});
 
-  const submitChange = async () => {
-    try {
-      let response = await fetch(
-        process.env.REACT_APP_BASE_URL + "/account",
+  useEffect(() => {
+    const fetchData = async () => {
+      let res = await fetch(
+        process.env.REACT_APP_BASE_URL + "/account/getUserDetails",
         {
-          method: "PUT",
+          method: "GET",
           headers: {
             "content-type": "application/json",
             accept: "application/json",
           },
-          credentials:"include",
-          body: JSON.stringify({
-            firstName: firstNameVal,
-            lastName: lastNameVal,
-            email: emailVal,
-          }),
+          credentials: "include",
         }
       );
+      if (res.ok) {
+        res = await res.json();
+        setUserDetails(res.userDetails);
+        setFirstNameVal(res.userDetails.firstName);
+        setLastNameVal(res.userDetails.lastName);
+        setEmailVal(res.userDetails.email)
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const submitChange = async () => {
+    try {
+      let response = await fetch(process.env.REACT_APP_BASE_URL + "/account", {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          firstName: firstNameVal,
+          lastName: lastNameVal,
+          email: emailVal,
+        }),
+      });
       if (response.ok) {
-        console.log("Edited details")
+        console.log("Edited details");
         console.log(response);
         handleClose();
       } else {
@@ -49,7 +73,6 @@ export default function EditProfile() {
   const handleClose = () => {
     setOpen(false);
   };
-
   const validateEmail = () => {
     if (
       String(emailVal)
@@ -61,7 +84,6 @@ export default function EditProfile() {
       return true;
     else return false;
   };
-
   return (
     <div className="Edit">
       <Button onClick={handleClickOpen}>Edit Details </Button>
@@ -69,6 +91,7 @@ export default function EditProfile() {
         <img src={editProfile} className="Edit-img" />
         <DialogContent className="Edit-DialogContent">
           <TextField
+            defaultValue={userDetails.firstName}
             onChange={(e) => setFirstNameVal(e.target.value)}
             id="firstName"
             label="First Name"
@@ -77,6 +100,7 @@ export default function EditProfile() {
           />
           <br></br>
           <TextField
+            defaultValue={userDetails.lastName}
             onChange={(e) => setLastNameVal(e.target.value)}
             id="lastName"
             label="Last Name"
@@ -85,6 +109,7 @@ export default function EditProfile() {
           />
           <br></br>
           <TextField
+            defaultValue={userDetails.email}
             error={!validateEmail() && emailVal != "" && emailVal != null}
             onChange={(e) => setEmailVal(e.target.value)}
             id="email"
