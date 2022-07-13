@@ -31,7 +31,7 @@ function Home(props) {
 
         response = await response.json();
         props.auth(/*isLoggedIn=*/true, {username: usernameFilled, admin: response.admin});
-      } else if (response.status === 404) {
+      } else {
         response = await response.json();
         alert(response.message);
       }

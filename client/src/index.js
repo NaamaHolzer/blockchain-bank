@@ -9,6 +9,7 @@ import NavigationBar from "./components/NavgationBar/NavigationBar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import NotFound from "./components/NotFound/NotFound";
 import { useEffect } from "react";
+import GuardedRoute from "./util/GuardedRoute";
 
 const theme = createTheme({
   typography: {
@@ -51,7 +52,7 @@ export default function App() {
         );
         if (res.ok) {
           res = await res.json();
-          console.log("res ok")
+          console.log("res ok");
           console.log(res.isLoggedIn);
           setIsLoggedIn(true);
           setCurrentUser(res.currentUser);
@@ -62,6 +63,61 @@ export default function App() {
     fetchData();
   }, []);
 
+  // return (
+  //   <BrowserRouter>
+  //     <Routes>
+  //       <Route
+  //         path="/"
+  //         element={
+  //           IsLoggedIn ? (
+  //             <User initialState={"Greetings"} currentUser={CurrentUser} auth={authenticate} />
+  //           ) : (
+  //             <Home auth={authenticate} />
+  //           )
+  //         }
+  //       ></Route>
+  //       <Route
+  //         path="transactions"
+  //         element={IsLoggedIn ? (
+  //           <User
+  //             auth={authenticate}
+  //             initialState={"Transactions"}
+  //             currentUser={CurrentUser}
+  //           />
+  //         ) : (
+  //             <Home auth={authenticate} />
+  //           )
+  //         }
+  //       />
+  //       <Route
+  //         path="loans"
+  //         element={
+  //           <User
+  //             auth={authenticate}
+  //             initialState={"Loans"}
+  //             currentUser={CurrentUser}
+  //           />
+  //         }
+  //       />
+  //       <Route
+  //         path="requests"
+  //         element={
+  //           IsLoggedIn && CurrentUser?.admin ? (
+  //             <User
+  //               auth={authenticate}
+  //               initialState={"Requests"}
+  //               currentUser={CurrentUser}
+  //             />
+  //           ) : (
+  //             <NotFound />
+  //           )
+  //         }
+  //       />
+  //       <Route path="/*" element={<NotFound />} />
+  //     </Routes>
+  //   </BrowserRouter>
+  // );
+
   return (
     <BrowserRouter>
       <Routes>
@@ -69,44 +125,59 @@ export default function App() {
           path="/"
           element={
             IsLoggedIn ? (
-              <User initialState={"Greetings"} currentUser={CurrentUser} auth={authenticate} />
+              <User
+                initialState={"Greetings"}
+                currentUser={CurrentUser}
+                auth={authenticate}
+              />
             ) : (
               <Home auth={authenticate} />
             )
           }
         ></Route>
         <Route
-          path="transactions"
+          path="/transactions"
           element={
-            <User
-              auth={authenticate}
-              initialState={"Transactions"}
-              currentUser={CurrentUser}
-            />
+            <GuardedRoute
+              element={
+                <User
+                  auth={authenticate}
+                  initialState={"Transactions"}
+                  currentUser={CurrentUser}
+                />
+              }
+              accessCondition={IsLoggedIn}
+            ></GuardedRoute>
           }
         />
-        <Route
-          path="loans"
+    <Route
+          path="/loans"
           element={
-            <User
-              auth={authenticate}
-              initialState={"Loans"}
-              currentUser={CurrentUser}
-            />
+            <GuardedRoute
+              element={
+                <User
+                  auth={authenticate}
+                  initialState={"Loans"}
+                  currentUser={CurrentUser}
+                />
+              }
+              accessCondition={IsLoggedIn}
+            ></GuardedRoute>
           }
         />
-        <Route
-          path="requests"
+         <Route
+          path="/requests"
           element={
-            IsLoggedIn && CurrentUser?.admin ? (
-              <User
-                auth={authenticate}
-                initialState={"Requests"}
-                currentUser={CurrentUser}
-              />
-            ) : (
-              <NotFound />
-            )
+            <GuardedRoute
+              element={
+                <User
+                  auth={authenticate}
+                  initialState={"Requests"}
+                  currentUser={CurrentUser}
+                />
+              }
+              accessCondition={IsLoggedIn}
+            ></GuardedRoute>
           }
         />
         <Route path="/*" element={<NotFound />} />

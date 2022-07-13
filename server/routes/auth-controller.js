@@ -11,8 +11,7 @@ router.post("/login", async (req, res) => {
     const username = req.body.username.toLowerCase();
     const findUser = await User.REQUEST_ONE(username);
     const verified = bcrypt.compareSync(req.body.password, findUser.password);
-    if (verified) {
-      console.log("in if");
+    if (verified && findUser.approved) {
       const token = jwt.sign(
         {
           username: username,
@@ -28,7 +27,13 @@ router.post("/login", async (req, res) => {
         })
         .status(200)
         .json({ message: "Login successful", admin:findUser.admin});
-    } else {
+    } else if(verified)
+    {
+      return res
+        .status(401)
+        .json({ message: "Account is not approved yet"});
+    }
+    else {
       console.log("in else");
       res.status(404).json({ message: "Login Failed" });
     }

@@ -18,7 +18,38 @@ export default function Signup(props) {
   const [lastNameVal, setLastNameVal] = React.useState();
   const [usernameVal, setUsernameVal] = React.useState();
   const [passwordVal, setPasswordVal] = React.useState();
-
+  const signup = async () => {
+    try {
+      let response = await fetch(
+        process.env.REACT_APP_BASE_URL + "/account/request",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            email: emailVal,
+            firstName: firstNameVal,
+            lastName: lastNameVal,
+            password: passwordVal,
+            username: usernameVal,
+          }),
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        handleClose();
+        response = await response.json();
+        alert(response.message);
+      } else{
+        response = await response.json();
+        alert(response.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const validateEmail = () => {
     if (
       String(emailVal)
@@ -92,10 +123,7 @@ export default function Signup(props) {
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              handleClose();
-              props.auth(usernameVal);
-            }}
+            onClick={signup}
             disabled={
               !emailVal ||
               !firstNameVal ||
