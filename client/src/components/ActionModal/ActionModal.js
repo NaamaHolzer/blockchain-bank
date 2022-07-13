@@ -20,11 +20,73 @@ export default function ActionModal(props) {
   const handleClose = () => {
     setOpen(false);
   };
+  const submitRequest = async () => {
+    if (props.action === "TRANSFER") {
+      try {
+        let response = await fetch(
+          process.env.REACT_APP_BASE_URL + "/transaction",
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              accept: "application/json",
+            },
+            body: JSON.stringify({
+              amount: amountFilled,
+              toUser: toFilled
+            }),
+            credentials: "include",
+          }
+        );
+        if (response.ok) {
+          handleClose();
+          response = await response.json();
+          alert(response.message);
+        } else {
+          response = await response.json();
+          console.log(response)
+          alert(response.message);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    else
+    {
+      try {
+        let response = await fetch(
+          process.env.REACT_APP_BASE_URL + "/loan",
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              accept: "application/json",
+            },
+            body: JSON.stringify({
+              amount: amountFilled,
+              toUser : toFilled,
+              endDate: date 
+            }),
+            credentials: "include",
+          }
+        );
+        if (response.ok) {
+          handleClose();
+          response = await response.json();
+          alert(response.message);
+        } else{
+          response = await response.json();
+          alert(response.message);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+  const [date, setDate] = React.useState(new Date());
 
-  const [value, setValue] = React.useState(new Date());
-
-  const handleChange = (newValue) => {
-    setValue(newValue);
+  const handleChange = (newDate) => {
+    setDate(newDate);
   };
 
   return (
@@ -45,15 +107,21 @@ export default function ActionModal(props) {
             <img src={loan} className="Loan-img" />
           )}
           <DialogContent className="Action-DialogContent">
-            <TextField id="to" label="To" type="text" variant="standard" onChange={(e)=>setToFilled(e.target.value)}/>
+            <TextField
+              id="to"
+              label="To"
+              type="text"
+              variant="standard"
+              onChange={(e) => setToFilled(e.target.value)}
+            />
             <br></br>
             <TextField
               id="amount"
               label="Amount"
               type="number"
-              InputProps={{ inputProps: { min: 1} }}
+              InputProps={{ inputProps: { min: 1 } }}
               variant="standard"
-              onChange={(e)=>setAmountFilled(e.target.value)}
+              onChange={(e) => setAmountFilled(e.target.value)}
             />
             <br></br>
             {props.action === "LOAN" ? (
@@ -61,7 +129,7 @@ export default function ActionModal(props) {
                 <br></br>
                 <DesktopDatePicker
                   label="End Date"
-                  value={value}
+                  value={date}
                   onChange={handleChange}
                   inputFormat="MM/dd/yyyy"
                   renderInput={(params) => <TextField {...params} />}
@@ -77,7 +145,11 @@ export default function ActionModal(props) {
             <Button variant="outlined" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="contained" onClick={handleClose} disabled={!toFilled || !amountFilled}>
+            <Button
+              variant="contained"
+              onClick={submitRequest}
+              disabled={!toFilled || !amountFilled}
+            >
               Save
             </Button>
           </DialogActions>

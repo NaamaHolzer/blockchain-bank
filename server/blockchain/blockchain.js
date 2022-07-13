@@ -97,23 +97,9 @@ class Blockchain {
         }
 
         const block = new Block(Date.now(), action, this.getLatestBlock().hash);
-        console.log(this.chain);
         this.chain.push(block);
     }
 
-    // getBalanceOfAddress(address) {
-    //     let balance = 0;
-    //     for (const block of this.chain) {
-    //         for (const trans of block.actions) {
-    //             if (trans.fromAddress === address) {
-    //                 balance -= trans.amount;
-    //             } else if (trans.toAddress === address) {
-    //                 balance += trans.amount;
-    //             }
-    //         }
-    //     }
-    //     return balance;
-    // }
 
     isChainValid() {
         for (let i = 1; i < this.chain.length; i++) {

@@ -34,22 +34,22 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       res.status(401).json("You need to login");
     }
     const fromUser = await User.REQUEST_ONE(req.currentUser.username);
-    const toUser = await User.REQUEST_ONE(req.body.toUser);
+    const toUser = await User.REQUEST_ONE(req.body.toUser.toLowerCase());
     if (!toUser || !toUser.approved) {
-      console.log("toast toUser does not exist");
-      res.status(200).json({ message: "Loan failed" });
+      console.log("toast to user does not exist");
+      res.status(401).json({ message: "Loan failed: to user does not exist" });
       return;
     }
-    const newBalance = fromUser.balance - req.body.amount;
+    const newBalance = fromUser.balance - Number(req.body.amount);
     if (newBalance <= 0.5 * fromUser.balance) {
       //TODO: toast
       console.log("toast fromuser balance is not enough");
-      res.status(200).json({ message: "Loan failed" });
+      res.status(401).json({ message: "Loan failed: from user balance is not enough" });
       return;
     }
-    if (toUser.balance * 0.6 < req.body.amount) {
+    if (toUser.balance * 0.6 < Number(req.body.amount)) {
       console.log("toast touser balance is not enough");
-      res.status(200).json({ message: "Loan failed" });
+      res.status(401).json({ message: "Loan failed: to user balance is not enough" });
       return;
     }
 
@@ -57,7 +57,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       const loan = new Action(
         fromUser.publicKey,
         toUser.publicKey,
-        req.body.amount,
+        Number(req.body.amount),
         new Date(req.body.endDate),
         Date.now()
       );
@@ -75,7 +75,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       );
     } catch (err) {
       //TODO toast
-      res.status(500).json({
+      res.status(401).json({
         message: "You are not certified to perform this loan ",
         err,
       });
@@ -93,10 +93,10 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       {
         username: toUser.username,
       },
-      { balance: toUser.balance + req.body.amount }
+      { balance: toUser.balance + Number(req.body.amount) }
     );
 
-    const userDebts = await Blockchain.REQUEST_USER_BLOCKS(
+    const userDebts = await BlockchainModel.REQUEST_USER_BLOCKS(
       "loan",
       fromUser.publicKey
     );
