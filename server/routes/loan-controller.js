@@ -32,8 +32,7 @@ router.get("/allloans", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (
       res.status(401).json("You need to login");
     }
     const loans = await BlockchainModel.REQUEST_ALL(
-      "loan",
-      req.currentUser.publicKey
+      "loan"
     );
     res.status(200).json({
       message: "Retrieved loans successfully",
@@ -133,7 +132,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
   }
 });
 
-router.get("/", checkAuth.verifyToken, async (req, res) => {
+router.get("/range", checkAuth.verifyToken, async (req, res) => {
   try {
     if (!req.isLoggedIn) {
       res.status(401).json("You need to login");
@@ -141,7 +140,7 @@ router.get("/", checkAuth.verifyToken, async (req, res) => {
     const loans = await BlockchainModel.REQUEST_BLOCKS_RANGE(
       "loan",
       req.currentUser.publicKey,
-      req.body.range
+      Number(req.query.range)
     );
     res.status(200).json({
       message: "Retrieved loans successfully",
@@ -151,4 +150,23 @@ router.get("/", checkAuth.verifyToken, async (req, res) => {
     res.status(500).json({ message: err });
   }
 });
+
+router.get("/adminrange", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
+  try {
+    if (!req.isLoggedIn) {
+      res.status(401).json("You need to login");
+    }
+    const transactions = await BlockchainModel.REQUEST_ALL_BLOCKS_RANGE(
+      "loan",
+      Number(req.query.range)
+    );
+    res.status(200).json({
+      message: "Retrieved loans successfully",
+      rows: transactions,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+});
+
 module.exports = router;

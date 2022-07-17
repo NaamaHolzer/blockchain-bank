@@ -1,4 +1,3 @@
-
 // import * as React from 'react';
 // import PropTypes from 'prop-types';
 // import { alpha } from '@mui/material/styles';
@@ -184,7 +183,6 @@
 //   orderBy: PropTypes.string.isRequired,
 // };
 
-
 // const EnhancedTableToolbar = (props) => {
 //   return <h1 className="Title">{"Trying"}</h1>;
 // };
@@ -198,7 +196,6 @@
 //     setOrder(isAsc ? 'desc' : 'asc');
 //     setOrderBy(property);
 //   };
-
 
 //   return (
 //     <Box sx={{ width: '100%' }}>
@@ -254,11 +251,13 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import MenuItem from "@mui/material/MenuItem";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import "./ActionTable.css";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -379,7 +378,24 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  return <h1 className="Title">{props.action.toUpperCase() + "S"}</h1>;
+  return (
+    <div className="header-container">
+      <h1 className="Title">{props.action.toUpperCase() + "S"}</h1>
+      <Select
+        className="select"
+        label="range"
+        defaultValue="ALL"
+        onChange={async (e) => {
+          props.fetchData(e.target.value);
+        }}
+      >
+        <MenuItem value="WEEK">WEEK</MenuItem>
+        <MenuItem value="MONTH">MONTH</MenuItem>
+        <MenuItem value="YEAR">YEAR</MenuItem>
+        <MenuItem value="ALL">ALL</MenuItem>
+      </Select>
+    </div>
+  );
 };
 
 export default function ActionTable(props) {
@@ -389,43 +405,85 @@ export default function ActionTable(props) {
   const [orderBy, setOrderBy] = useState("amount");
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+  const fetchData = useCallback(
+    async (range) => {
+      let rangeNum;
+      switch (range) {
+        case "ALL":
+          rangeNum = -1;
+          break;
+        case "YEAR":
+          rangeNum = 365;
+          break;
+        case "MONTH":
+          rangeNum = 30;
+          break;
+        case "WEEK":
+          rangeNum = 7;
+          break;
+        default:
+          alert("Invalid Range");
+      }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const adminActions = props.admin ? "/all" : "/user";
-      let res = await fetch(
-        process.env.REACT_APP_BASE_URL +
-          "/" +
-          props.action +
-          adminActions +
-          props.action +
-          "s",
-        {
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-            accept: "application/json",
-          },
-          credentials: "include",
-        }
-      );
+      // const adminActions = props.admin ? "/all" : "/user";
+
+      // let res = await fetch(
+      //   process.env.REACT_APP_BASE_URL +
+      //     "/" +
+      //     props.action +
+      //     adminActions +
+      //     props.action +
+      //     "s",
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       "content-type": "application/json",
+      //       accept: "application/json",
+      //     },
+      //     credentials: "include",
+      //   }
+      // );
+
+      let url;
+      if (rangeNum === -1) {
+        url = props.admin
+          ? props.action + "/all" + props.action + "s"
+          : props.action + "/user" + props.action + "s";
+      } else {
+        url = props.admin
+          ? props.action + "/adminrange?range=" + rangeNum.toString()
+          : props.action + "/range?range=" + rangeNum.toString();
+      }
+
+      let res = await fetch(process.env.REACT_APP_BASE_URL + "/" + url, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+        credentials: "include",
+      });
+
       if (res.ok) {
         res = await res.json();
-        const resRows = res.rows.map(x=>x.action);
+        const resRows = res.rows.map((x) => x.action);
         console.log(resRows);
         setRows(resRows);
       } else {
         res = await res.json();
         alert(res.message);
       }
-    };
+    },
+    [props.action]
+  );
 
-    fetchData().catch(console.error);
-  }, [props.action]);
+  useEffect(() => {
+    fetchData("YEAR").catch(console.error);
+  }, [fetchData]);
 
   if (props.action != tableState) {
     setTableState(props.action);
@@ -434,9 +492,9 @@ export default function ActionTable(props) {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar action={props.action} />
+        <EnhancedTableToolbar fetchData={fetchData} action={props.action} />
         <TableContainer>
-          <Table sx={{ minWidth: 750 }} >
+          <Table sx={{ minWidth: 750 }}>
             <EnhancedTableHead
               order={order}
               orderBy={orderBy}
@@ -444,13 +502,11 @@ export default function ActionTable(props) {
               action={props.action}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .map((row, index) => {
+              {stableSort(rows, getComparator(order, orderBy)).map(
+                (row, index) => {
                   return props.action === "transaction" ? (
                     <TableRow hover tabIndex={-1} key={row.name}>
-                      <TableCell align="center">
-                        {row.fromUser}
-                      </TableCell>
+                      <TableCell align="center">{row.fromUser}</TableCell>
                       <TableCell align="center">{row.toUser}</TableCell>
                       <TableCell align="center">{row.amount}</TableCell>
                       <TableCell align="center">
@@ -459,9 +515,7 @@ export default function ActionTable(props) {
                     </TableRow>
                   ) : (
                     <TableRow hover tabIndex={-1} key={row.name}>
-                      <TableCell align="center">
-                        {row.fromUser}
-                      </TableCell>
+                      <TableCell align="center">{row.fromUser}</TableCell>
                       <TableCell align="center">{row.toUser}</TableCell>
                       <TableCell align="center">{row.amount}</TableCell>
                       <TableCell align="center">
@@ -472,7 +526,8 @@ export default function ActionTable(props) {
                       </TableCell>
                     </TableRow>
                   );
-                })}
+                }
+              )}
             </TableBody>
           </Table>
         </TableContainer>

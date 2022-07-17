@@ -23,7 +23,10 @@ module.exports = (db) => {
 
 
   schema.statics.REQUEST_ALL = async function (chainType) {
-    let chain = this.find({ chainType: chainType }).exec();
+
+    let chain = await this.find({ chainType: chainType }).exec();
+    console.log(chainType);
+    console.log(chain);
     chain = chain[0].chain.slice(1, chain[0].chain.length);
     return chain;
   };
@@ -48,11 +51,30 @@ module.exports = (db) => {
     const day = 86400000; // number of milliseconds in a day
 
     const startDate = new Date(today - range * day);
+    const res = chain.filter(
+      (block) =>
+        (block.action.fromAddress == publicKey ||
+           block.action.toAddress == publicKey) &&
+         block.action.date >= startDate &&
+         block.action.date <= today
+    );
+    return res;
+  };
+
+  schema.statics.REQUEST_ALL_BLOCKS_RANGE = async function (
+    chainType,
+    range
+  ) {
+    let chain = (await this.find({ chainType: chainType }).exec())[0];
+
+    chain = chain.chain.slice(1, chain.length);
+    const today = new Date();
+    const day = 86400000; // number of milliseconds in a day
+
+    const startDate = new Date(today - range * day);
 
     return chain.filter(
       (block) =>
-        (block.action.fromAddress == publicKey ||
-          block.action.toAddress == publicKey) &&
         block.action.date >= startDate &&
         block.action.date <= today
     );

@@ -44,15 +44,34 @@ router.get("/alltransactions", [checkAuth.verifyToken, checkAdmin.verifyAdmin], 
   }
 );
 
-router.get("/", checkAuth.verifyToken, async (req, res) => {
+router.get("/range", checkAuth.verifyToken, async (req, res) => {
   try {
     if (!req.isLoggedIn) {
       res.status(401).json("You need to login");
     }
+    console.log(req.query.range);
     const transactions = await BlockchainModel.REQUEST_BLOCKS_RANGE(
       "transaction",
       req.currentUser.publicKey,
-      req.body.range
+      Number(req.query.range)
+    );
+    res.status(200).json({
+      message: "Retrieved transactions successfully",
+      rows: transactions,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+});
+
+router.get("/adminrange", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
+  try {
+    if (!req.isLoggedIn) {
+      res.status(401).json("You need to login");
+    }
+    const transactions = await BlockchainModel.REQUEST_ALL_BLOCKS_RANGE(
+      "transaction",
+      Number(req.query.range)
     );
     res.status(200).json({
       message: "Retrieved transactions successfully",
