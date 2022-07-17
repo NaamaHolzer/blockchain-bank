@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const checkAuth = require("../middlewares/check-auth");
+const checkAdmin = require("../middlewares/check-admin");
 const Transaction = require("../models")("Transaction");
 const User = require("../models")("User");
 const BlockchainModel = require("../models")("Blockchain");
@@ -18,12 +19,30 @@ router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
     );
     res.status(200).json({
       message: "Retrieved transactions successfully",
-      transactions: transactions,
+      rows: transactions,
     });
   } catch (err) {
     res.status(500).json({ message: err });
   }
 });
+
+router.get("/alltransactions", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
+    try {
+      if (!req.isLoggedIn) {
+        res.status(401).json("You need to login");
+      }
+      const transactions = await BlockchainModel.REQUEST_ALL(
+        "transaction",
+      );
+      res.status(200).json({
+        message: "Retrieved transactions successfully",
+        rows: transactions,
+      });
+    } catch (err) {
+      res.status(500).json({ message: err });
+    }
+  }
+);
 
 router.get("/", checkAuth.verifyToken, async (req, res) => {
   try {
@@ -37,7 +56,7 @@ router.get("/", checkAuth.verifyToken, async (req, res) => {
     );
     res.status(200).json({
       message: "Retrieved transactions successfully",
-      transactions: transactions,
+      rows: transactions,
     });
   } catch (err) {
     res.status(500).json({ message: err });
@@ -62,6 +81,8 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     if (newBalance >= 0) {
       try {
         const transaction = new Action(
+          fromUser.username,
+          toUser.username,
           fromUser.publicKey,
           toUser.publicKey,
           Number(req.body.amount),
@@ -69,11 +90,12 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
           Date.now()
         );
         transaction.signAction(fromUser.privateKey);
-
         const blockchain = new Blockchain(
           (await BlockchainModel.REQUEST("transaction"))[0]
         );
+        console.log("got here1");
         blockchain.addAction(transaction);
+        console.log("got here2");
         await BlockchainModel.UPDATE(
           { chainType: "transaction" },
           {

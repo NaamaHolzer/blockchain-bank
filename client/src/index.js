@@ -28,6 +28,7 @@ const theme = createTheme({
 export default function App() {
   const [IsLoggedIn, setIsLoggedIn] = React.useState(false);
   const [CurrentUser, setCurrentUser] = React.useState({});
+  const [Loading, setLoading] = React.useState(true);
 
   const authenticate = (isLoggedIn, currentUser) => {
     setIsLoggedIn(isLoggedIn);
@@ -54,29 +55,31 @@ export default function App() {
           setCurrentUser(res.currentUser);
         }
       }
+      setLoading(false);
     };
 
     fetchData();
   }, []);
 
-
   return (
+    Loading? <div>Loading</div> : (
     <BrowserRouter>
       <Routes>
         <Route
-          path="/"
+          path="/requests"
           element={
-            IsLoggedIn ? (
-              <User
-                initialState={"Greetings"}
-                currentUser={CurrentUser}
-                auth={authenticate}
-              />
-            ) : (
-              <Home auth={authenticate} />
-            )
+            <GuardedRoute
+              element={
+                <User
+                  auth={authenticate}
+                  initialState={"Requests"}
+                  currentUser={CurrentUser}
+                />
+              }
+              accessCondition={IsLoggedIn}
+            ></GuardedRoute>
           }
-        ></Route>
+        />
         <Route
           path="/transactions"
           element={
@@ -92,7 +95,7 @@ export default function App() {
             ></GuardedRoute>
           }
         />
-    <Route
+        <Route
           path="/loans"
           element={
             <GuardedRoute
@@ -107,25 +110,23 @@ export default function App() {
             ></GuardedRoute>
           }
         />
-         <Route
-          path="/requests"
+        <Route
+          path="/"
           element={
-            <GuardedRoute
-              element={
-                <User
-                  auth={authenticate}
-                  initialState={"Requests"}
-                  currentUser={CurrentUser}
-                />
-              }
-              accessCondition={IsLoggedIn}
-            ></GuardedRoute>
+            IsLoggedIn ? (
+              <User
+                initialState={"Greetings"}
+                currentUser={CurrentUser}
+                auth={authenticate}
+              />
+            ) : (
+              <Home auth={authenticate} />
+            )
           }
-        />
+        ></Route>
         <Route path="/*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
-  );
+    </BrowserRouter>));
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

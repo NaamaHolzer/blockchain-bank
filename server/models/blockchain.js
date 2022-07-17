@@ -21,6 +21,13 @@ module.exports = (db) => {
     return this.find({ chainType: chainType }).exec();
   };
 
+
+  schema.statics.REQUEST_ALL = async function (chainType) {
+    let chain = this.find({ chainType: chainType }).exec();
+    chain = chain[0].chain.slice(1, chain[0].chain.length);
+    return chain;
+  };
+
   schema.statics.REQUEST_USER_BLOCKS = async function (chainType, publicKey) {
     let chain = await this.find({ chainType: chainType }).exec();
     chain = chain[0].chain.slice(1, chain[0].chain.length);

@@ -28,7 +28,6 @@ export default function Requests(props) {
     );
     if (res.ok) {
       res = await res.json();
-      console.log(res)
       setRequests(res.users);
     } else {
       res = await res.json();

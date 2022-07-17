@@ -4,7 +4,9 @@ const EC = require('elliptic').ec;
 const ec = new EC('secp256k1'); // bitcoin wallets algorithm.
 
 class Action {
-    constructor(fromAddress, toAddress, amount, endDate, date) {
+    constructor(fromUser, toUser, fromAddress, toAddress, amount, endDate, date) {
+        this.fromUser = fromUser,
+        this.toUser = toUser,
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
@@ -13,7 +15,7 @@ class Action {
     }
 
     calculateHash() {
-        return SHA256(this.fromAddress, this.toAddress, this.amount, this.endDate, this.date).toString();
+        return SHA256(this.fromUser, this.toUser, this.fromAddress, this.toAddress, this.amount, this.endDate, this.date).toString();
     }
 
     signAction(privateKey) {

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const checkAuth = require("../middlewares/check-auth");
+const checkAdmin = require("../middlewares/check-admin");
 const Loan = require("../models")("Loan");
 const User = require("../models")("User");
 const BlockchainModel = require("../models")("Blockchain");
@@ -18,7 +19,25 @@ router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
     );
     res.status(200).json({
       message: "Retrieved loans successfully",
-      loans: loans,
+      rows: loans,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+});
+
+router.get("/allloans", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
+  try {
+    if (!req.isLoggedIn) {
+      res.status(401).json("You need to login");
+    }
+    const loans = await BlockchainModel.REQUEST_ALL(
+      "loan",
+      req.currentUser.publicKey
+    );
+    res.status(200).json({
+      message: "Retrieved loans successfully",
+      rows: loans,
     });
   } catch (err) {
     res.status(500).json({ message: err });
@@ -53,11 +72,13 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
 
     try {
       const loan = new Action(
+        fromUser.username,
+        toUser.username,
         fromUser.publicKey,
         toUser.publicKey,
         Number(req.body.amount),
         new Date(req.body.endDate),
-        Date.now()
+        new Date(Date.now())
       );
       loan.signAction(fromUser.privateKey);
 
@@ -124,7 +145,7 @@ router.get("/", checkAuth.verifyToken, async (req, res) => {
     );
     res.status(200).json({
       message: "Retrieved loans successfully",
-      loans: loans,
+      rows: loans,
     });
   } catch (err) {
     res.status(500).json({ message: err });

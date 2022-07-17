@@ -12,6 +12,7 @@ import * as React from "react";
 function User(props) {
   const [AnchorEl, setAnchorEl] = React.useState(props.initialState);
   const handleState = (state) => {
+    console.log("handling state ", state);
     setAnchorEl(state);
   };
 
@@ -34,9 +35,9 @@ function User(props) {
                   ></UserGreetings>
                 );
               case "Transactions":
-                return <ActionTable action="TRANSACTIONS"></ActionTable>;
+                return <ActionTable admin={props.currentUser.admin} action="transaction"></ActionTable>;
               case "Loans":
-                return <ActionTable action="LOANS"></ActionTable>;
+                return <ActionTable admin={props.currentUser.admin} action="loan"></ActionTable>;
               case "Requests":
                 return <Requests></Requests>;
               default:
