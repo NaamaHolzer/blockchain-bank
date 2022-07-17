@@ -3,6 +3,7 @@ import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import ReactDOM from "react-dom/client";
 import Home from "./components/Home/Home";
 import User from "./components/User/User";
+import Loading from "./components/Loader/Loader";
 import ActionTable from "./components/ActionTable/ActionTable";
 import { BrowserRouter, Routes, Route, Router, Switch } from "react-router-dom";
 import NavigationBar from "./components/NavgationBar/NavigationBar";
@@ -10,6 +11,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import NotFound from "./components/NotFound/NotFound";
 import { useEffect } from "react";
 import GuardedRoute from "./util/GuardedRoute";
+import Loader from "./components/Loader/Loader";
 
 const theme = createTheme({
   typography: {
@@ -38,21 +40,25 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       if (!CurrentUser || Object.keys(CurrentUser).length === 0) {
-        let res = await fetch(
-          process.env.REACT_APP_BASE_URL + "/auth/currentUser",
-          {
-            method: "GET",
-            headers: {
-              "content-type": "application/json",
-              accept: "application/json",
-            },
-            credentials: "include",
+        try {
+          let res = await fetch(
+            process.env.REACT_APP_BASE_URL + "/auth/currentUser",
+            {
+              method: "GET",
+              headers: {
+                "content-type": "application/json",
+                accept: "application/json",
+              },
+              credentials: "include",
+            }
+          );
+          if (res.ok) {
+            res = await res.json();
+            setIsLoggedIn(true);
+            setCurrentUser(res.currentUser);
           }
-        );
-        if (res.ok) {
-          res = await res.json();
-          setIsLoggedIn(true);
-          setCurrentUser(res.currentUser);
+        } catch (err) {
+          console.log("not logged in");
         }
       }
       setLoading(false);
@@ -61,8 +67,9 @@ export default function App() {
     fetchData();
   }, []);
 
-  return (
-    Loading? <div>Loading</div> : (
+  return Loading ? (
+    <Loader></Loader>
+  ) : (
     <BrowserRouter>
       <Routes>
         <Route
@@ -126,7 +133,8 @@ export default function App() {
         ></Route>
         <Route path="/*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>));
+    </BrowserRouter>
+  );
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
