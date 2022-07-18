@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import signup from "../../images/signup.svg";
 import "./Signup.css";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Signup(props) {
   const [open, setOpen] = React.useState(false);
@@ -41,11 +43,25 @@ export default function Signup(props) {
       if (response.ok) {
         handleClose();
         response = await response.json();
-        alert(response.message);
-      } else {
+        toast.success(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });      } else {
         response = await response.json();
-        alert(response.message);
-      }
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });      }
     } catch (err) {
       console.log(err);
     }

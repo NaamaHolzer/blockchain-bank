@@ -11,14 +11,14 @@ const { Blockchain, Action } = require("../blockchain/blockchain");
 router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
   try {
     if (!req.isLoggedIn) {
-      res.status(401).json("You need to login");
+      res.status(401).json("YOU NEED TO LOG IN");
     }
     const transactions = await BlockchainModel.REQUEST_USER_BLOCKS(
       "transaction",
       req.currentUser.publicKey
     );
     res.status(200).json({
-      message: "Retrieved transactions successfully",
+      message: "RETRIEVED TRANSACTIONS SUCCESSFULLY",
       rows: transactions,
     });
   } catch (err) {
@@ -29,13 +29,13 @@ router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
 router.get("/alltransactions", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
     try {
       if (!req.isLoggedIn) {
-        res.status(401).json("You need to login");
+        res.status(401).json("YOU NEED TO LOGIN");
       }
       const transactions = await BlockchainModel.REQUEST_ALL(
         "transaction",
       );
       res.status(200).json({
-        message: "Retrieved transactions successfully",
+        message: "RETRIEVED TRANSACTIONS SUCCESSFULLY",
         rows: transactions,
       });
     } catch (err) {
@@ -47,7 +47,7 @@ router.get("/alltransactions", [checkAuth.verifyToken, checkAdmin.verifyAdmin], 
 router.get("/range", checkAuth.verifyToken, async (req, res) => {
   try {
     if (!req.isLoggedIn) {
-      res.status(401).json("You need to login");
+      res.status(401).json("YOU NEED TO LOGIN");
     }
     console.log(req.query.range);
     const transactions = await BlockchainModel.REQUEST_BLOCKS_RANGE(
@@ -56,7 +56,7 @@ router.get("/range", checkAuth.verifyToken, async (req, res) => {
       Number(req.query.range)
     );
     res.status(200).json({
-      message: "Retrieved transactions successfully",
+      message: "RETRIEVED TRANSACTIONS SUCCESSFULLY",
       rows: transactions,
     });
   } catch (err) {
@@ -67,14 +67,14 @@ router.get("/range", checkAuth.verifyToken, async (req, res) => {
 router.get("/adminrange", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
   try {
     if (!req.isLoggedIn) {
-      res.status(401).json("You need to login");
+      res.status(401).json("YOU NEED TO LOGIN");
     }
     const transactions = await BlockchainModel.REQUEST_ALL_BLOCKS_RANGE(
       "transaction",
       Number(req.query.range)
     );
     res.status(200).json({
-      message: "Retrieved transactions successfully",
+      message: "RETRIEVED TRANSACTIONS SUCCESSFULLY",
       rows: transactions,
     });
   } catch (err) {
@@ -85,14 +85,14 @@ router.get("/adminrange", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async
 router.post("/", checkAuth.verifyToken, async (req, res) => {
   try {
     if (!req.isLoggedIn) {
-      res.status(401).json("You need to login");
+      res.status(401).json("YOU NEED LOGIN");
     }
     const fromUser = await User.REQUEST_ONE(req.currentUser.username);
     const toUser = await User.REQUEST_ONE(req.body.toUser.toLowerCase());
     if (!toUser || !toUser.approved) {
       res
         .status(401)
-        .json({ message: "Transaction failed: to user does not exist" });
+        .json({ message: "USER DOES NOT EXIST" });
       return;
     }
     const newBalance = fromUser.balance - Number(req.body.amount);
@@ -112,9 +112,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
         const blockchain = new Blockchain(
           (await BlockchainModel.REQUEST("transaction"))[0]
         );
-        console.log("got here1");
         blockchain.addAction(transaction);
-        console.log("got here2");
         await BlockchainModel.UPDATE(
           { chainType: "transaction" },
           {
@@ -124,7 +122,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       } catch (err) {
         //TODO toast
         res.status(401).json({
-          message: "You are not certified to perform this transaction ",
+          message: "YOU ARE NOT CERTIFIED TO PERFORM THIS ACTION ",
           err,
         });
         return;
@@ -152,23 +150,21 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       userDebts.forEach((debt) => {
         if (debt.amount > 0.6 * newBalance) {
           //TODO: alert debt.fromUser
-          // console.log("alerting ", debt.from);
         }
       });
 
       if (newBalance === 0) {
         // TODO: toast
       }
-      res.status(200).json({ message: "Transaction succeeded" });
+      res.status(200).json({ message: "TRANSACTION SUCCEEDED" });
     } else {
       //TODO: toast
       res
         .status(401)
-        .json({ message: "Transaction failed: user balance is less than 0" });
+        .json({ message: "INSUFFICIENT SUM" });
     }
   } catch (err) {
     throw err;
-    // res.status(500).json({ message: err });
   }
 });
 

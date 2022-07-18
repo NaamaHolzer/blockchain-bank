@@ -18,7 +18,7 @@ router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
       req.currentUser.publicKey
     );
     res.status(200).json({
-      message: "Retrieved loans successfully",
+      message: "RETRIEVED LOANS SUCCESSFULLY",
       rows: loans,
     });
   } catch (err) {
@@ -29,13 +29,13 @@ router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
 router.get("/allloans", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
   try {
     if (!req.isLoggedIn) {
-      res.status(401).json("You need to login");
+      res.status(401).json("YOU NEED TO LOG IN");
     }
     const loans = await BlockchainModel.REQUEST_ALL(
       "loan"
     );
     res.status(200).json({
-      message: "Retrieved loans successfully",
+      message: "RETRIEVED LOANS SUCCESSFULLY",
       rows: loans,
     });
   } catch (err) {
@@ -51,7 +51,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     const fromUser = await User.REQUEST_ONE(req.currentUser.username);
     const toUser = await User.REQUEST_ONE(req.body.toUser.toLowerCase());
     if (!toUser || !toUser.approved) {
-      res.status(401).json({ message: "Loan failed: to user does not exist" });
+      res.status(401).json({ message: "USER DOES NOT EXIST" });
       return;
     }
     const newBalance = fromUser.balance - Number(req.body.amount);
@@ -59,13 +59,13 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       //TODO: toast
       res
         .status(401)
-        .json({ message: "Loan failed: from user balance is not enough" });
+        .json({ message: "INSUFFICIENT SUMS" });
       return;
     }
     if (toUser.balance * 0.6 < Number(req.body.amount)) {
       res
         .status(401)
-        .json({ message: "Loan failed: to user balance is not enough" });
+        .json({ message: "INSUFFICIENT SUMS" });
       return;
     }
 
@@ -94,7 +94,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     } catch (err) {
       //TODO toast
       res.status(401).json({
-        message: "You are not certified to perform this loan ",
+        message: "YOU ARE NOT CERTIFIED TO PERFORM THIS ACTION ",
         err,
       });
       return;
@@ -124,7 +124,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       }
     });
 
-    res.status(200).json({ message: "Loan succeeded" });
+    res.status(200).json({ message: "LOAN SUCCEEDED" });
     return;
   } catch (err) {
     res.status(500).json({ message: err });
@@ -143,7 +143,7 @@ router.get("/range", checkAuth.verifyToken, async (req, res) => {
       Number(req.query.range)
     );
     res.status(200).json({
-      message: "Retrieved loans successfully",
+      message: "RETRIEVED LOANS SUCCESSFULLY",
       rows: loans,
     });
   } catch (err) {
@@ -161,7 +161,7 @@ router.get("/adminrange", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async
       Number(req.query.range)
     );
     res.status(200).json({
-      message: "Retrieved loans successfully",
+      message: "RETRIEVED LOANS SUCCESSFULLY",
       rows: transactions,
     });
   } catch (err) {

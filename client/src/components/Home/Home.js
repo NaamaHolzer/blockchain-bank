@@ -5,6 +5,8 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import React from "react";
 import Signup from "../Signup/Signup";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Home(props) {
   const login = async () => {
@@ -30,8 +32,15 @@ function Home(props) {
         props.auth(/*isLoggedIn=*/true, {username: usernameFilled, admin: response.admin});
       } else {
         response = await response.json();
-        alert(response.message);
-      }
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });      }
     } catch (err) {
     }
   };
@@ -43,6 +52,17 @@ function Home(props) {
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   return (
     <div className="Home">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <img src={home} className="Home-img" />
       <h1 className="Home-header">Welcome to Lev Bank</h1>
       <TextField

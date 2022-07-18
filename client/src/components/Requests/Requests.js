@@ -7,6 +7,8 @@ import RequestTableRow from "../RequestTableRow/RequestTableRow";
 import Paper from "@mui/material/Paper";
 import "./Requests.css";
 import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EnhancedTableToolbar = (props) => {
   return <h1 className="Title">PENDING REQUESTS</h1>;
@@ -31,17 +33,35 @@ export default function Requests(props) {
       setRequests(res.users);
     } else {
       res = await res.json();
-      alert(res.message);
+      toast.error(res.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   }, []);
 
   useEffect(() => {
-    fetchData()
-    .catch(console.error);
+    fetchData().catch(console.error);
   }, []);
 
   return (
     <Box sx={{ width: "100%" }}>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar />
         <TableContainer>
@@ -49,7 +69,10 @@ export default function Requests(props) {
             <TableBody>
               {requests.map((row) => {
                 return (
-                  <RequestTableRow fetchData={fetchData} username={row.username}></RequestTableRow>
+                  <RequestTableRow
+                    fetchData={fetchData}
+                    username={row.username}
+                  ></RequestTableRow>
                 );
               })}
             </TableBody>

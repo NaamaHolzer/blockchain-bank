@@ -18,13 +18,13 @@ router.post("/request", async (req, res) => {
   };
   const findUser = await User.REQUEST_ONE(newUser.username);
   if (findUser) {
-    res.status(500).json({ message: "User already exists" });
+    res.status(500).json({ message: "USER ALREADY EXISTS" });
     return;
   }
   try {
     await User.CREATE(newUser);
     sendEmail(req.body.username);
-    res.status(200).json({ message: "Request sent successfully" });
+    res.status(200).json({ message: "REQUEST SENT SUCCESSFULLY" });
   } catch (err) {
     res.json({ message: err });
   }
@@ -34,7 +34,7 @@ router.post("/handleRequest", [checkAuth.verifyToken,checkAdmin.verifyAdmin], as
   const findUser = await User.REQUEST_ONE(req.body.username.toLowerCase());
   console.log(findUser);
   if (!findUser) {
-    res.status(500).json({ message: "User does not exist" });
+    res.status(500).json({ message: "USER DOES NOT EXIST" });
     return;
   }
   try {
@@ -72,7 +72,7 @@ router.post("/handleRequest", [checkAuth.verifyToken,checkAdmin.verifyAdmin], as
     } else {
       await User.DELETE(findUser.username);
     }
-    res.status(200).json({ message: "Request updated successfully" });
+    res.status(200).json({ message: "DETAILS UPDATED SUCCESSFULLY" });
   } catch (err) {
     throw err;
     res.status(500).json({ message: err });
@@ -81,7 +81,7 @@ router.post("/handleRequest", [checkAuth.verifyToken,checkAdmin.verifyAdmin], as
 
 router.put("/", checkAuth.verifyToken, async (req, res) => {
   try {
-    if (!req.isLoggedIn) return res.status(401).json("You need to login");
+    if (!req.isLoggedIn) return res.status(401).json("YOU NEED TO LOGIN");
     await User.UPDATE(
       {
         username: req.currentUser.username,
@@ -92,7 +92,7 @@ router.put("/", checkAuth.verifyToken, async (req, res) => {
         email: req.body.email,
       }
     );
-    return res.status(200).json({ message: "Request updated successfully" });
+    return res.status(200).json({ message: "UPDATED DETAILS SUCCESSFULLY" });
   } catch (err) {
     return res.status(500).json({ message: err });
   }
@@ -100,16 +100,16 @@ router.put("/", checkAuth.verifyToken, async (req, res) => {
 
 router.get("/balance", checkAuth.verifyToken, async (req, res) => {
   try {
-    if (!req.isLoggedIn) res.status(401).json("You need to login");
+    if (!req.isLoggedIn) res.status(401).json("YOU NEED TO LOGIN");
     const user = await User.REQUEST_ONE(req.currentUser.username);
     if (req.body.currency === "LEV") {
       res.status(200).json({
-        message: "Balance retrieved successfully",
+        message: "BALANCE RETRIEVED SUCCESSFULLY",
         balance: user.balance,
       });
     } else if (req.body.currency === "USD") {
       res.status(200).json({
-        message: "Balance retrieved successfully",
+        message: "BALANCE RETRIEVED SUCCESSFULLY",
         balance: user.balance / user.rate,
       });
     } else {
@@ -117,7 +117,7 @@ router.get("/balance", checkAuth.verifyToken, async (req, res) => {
         await convertCurrency(user.balance / user.rate, "USD", "ILS")
       ).result;
       res.status(200).json({
-        message: "Balance retrieved successfully",
+        message: "BALANCE RETRIEVED SUCCESSFULLY",
         balance: ilsBalance,
       });
     }

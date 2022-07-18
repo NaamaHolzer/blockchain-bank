@@ -10,9 +10,9 @@ const pusher = new Pusher({
   });
   
 module.exports.verifyToken = async function(req, res, next) {
-    pusher.trigger("my-channel", "my-event", {
-        message: "hello world"
-      });
+    // pusher.trigger("my-channel", "my-event", {
+    //     message: "hello world"
+    //   });
       
     const token = req.cookies.token || '';
     try {

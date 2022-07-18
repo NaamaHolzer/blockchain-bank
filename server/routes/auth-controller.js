@@ -25,15 +25,15 @@ router.post("/login", async (req, res) => {
           httpOnly: true,
         })
         .status(200)
-        .json({ message: "Login successful", admin:findUser.admin});
+        .json({ message: "LOGIN SUCCESSFULL", admin:findUser.admin});
     } else if(verified)
     {
       return res
         .status(401)
-        .json({ message: "Account is not approved yet"});
+        .json({ message: "ACCOUNT NOT APPROVED YET"});
     }
     else {
-      res.status(404).json({ message: "Login Failed" });
+      res.status(404).json({ message: "LOGIN FAILED" });
     }
   } catch (err) {
     res.status(500).json({ message: err });
@@ -48,7 +48,7 @@ router.get("/logout", checkAuth.verifyToken, (req, res) => {
   return res
     .clearCookie("token")
     .status(200)
-    .json({ message: "Successfully logged out" });
+    .json({ message: "SUCCESSFULLY LOGGED OUT" });
 });
 
 

@@ -8,6 +8,9 @@ import Fab from "@mui/material/Fab";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function ActionModal(props) {
   const [toFilled, setToFilled] = React.useState();
@@ -33,7 +36,7 @@ export default function ActionModal(props) {
             },
             body: JSON.stringify({
               amount: amountFilled,
-              toUser: toFilled
+              toUser: toFilled,
             }),
             credentials: "include",
           }
@@ -41,43 +44,66 @@ export default function ActionModal(props) {
         if (response.ok) {
           handleClose();
           response = await response.json();
-          alert(response.message);
+          toast.success(response.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         } else {
           response = await response.json();
-          alert(response.message);
-        }
-      } catch (err) {
-      }
-    }
-    else
-    {
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+                    }
+      } catch (err) {}
+    } else {
       try {
-        let response = await fetch(
-          process.env.REACT_APP_BASE_URL + "/loan",
-          {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-              accept: "application/json",
-            },
-            body: JSON.stringify({
-              amount: amountFilled,
-              toUser : toFilled,
-              endDate: date 
-            }),
-            credentials: "include",
-          }
-        );
+        let response = await fetch(process.env.REACT_APP_BASE_URL + "/loan", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            amount: amountFilled,
+            toUser: toFilled,
+            endDate: date,
+          }),
+          credentials: "include",
+        });
         if (response.ok) {
           handleClose();
           response = await response.json();
-          alert(response.message);
-        } else{
+          toast.success(response.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });        } else {
           response = await response.json();
-          alert(response.message);
-        }
-      } catch (err) {
-      }
+          toast.error(response.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });        }
+      } catch (err) {}
     }
   };
   const [date, setDate] = React.useState(new Date());
@@ -88,6 +114,17 @@ export default function ActionModal(props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="Action">
         <Fab
           className="Action-button"

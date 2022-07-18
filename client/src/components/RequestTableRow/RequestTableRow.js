@@ -6,6 +6,8 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import TableRow from "@mui/material/TableRow";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function RequestTableRow(props) {
   const handleRequest = async (handleType) => {
@@ -32,11 +34,25 @@ function RequestTableRow(props) {
         response = await response.json();
         props.fetchData();
         setBalance(null);
-        alert(response.message);
-      } else {
+        toast.success(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });       } else {
         response = await response.json();
-        alert(response.message);
-      }
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });              }
     } catch (err) {}
   };
   const [balance, setBalance] = useState();
@@ -44,6 +60,17 @@ function RequestTableRow(props) {
 
   return (
     <TableRow hover tabIndex={-1} key={props.username}>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <TableCell align="center" className="TableCell">
         {props.username}
       </TableCell>

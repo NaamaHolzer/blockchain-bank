@@ -5,13 +5,19 @@ import editProfile from "../../images/editProfile.svg";
 import "./EditProfile.css";
 import { validator } from "validator";
 import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function EditProfile() {
   const [open, setOpen] = React.useState(false);
   const [emailVal, setEmailVal] = React.useState();
   const [firstNameVal, setFirstNameVal] = React.useState();
   const [lastNameVal, setLastNameVal] = React.useState();
-  const [userDetails, setUserDetails] = React.useState({firstName:'',lastName:'',email:''});
+  const [userDetails, setUserDetails] = React.useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,12 +37,18 @@ export default function EditProfile() {
         setUserDetails(res.userDetails);
         setFirstNameVal(res.userDetails.firstName);
         setLastNameVal(res.userDetails.lastName);
-        setEmailVal(res.userDetails.email)
-      }
-      else
-      {
+        setEmailVal(res.userDetails.email);
+      } else {
         res = await res.json();
-        alert(res.message)
+        toast.error(res.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     };
 
@@ -60,14 +72,29 @@ export default function EditProfile() {
       });
       if (response.ok) {
         handleClose();
-      } else {
-        alert(response.status);
-
         response = await response.json();
-        alert(response.message);
+        toast.success(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        response = await response.json();
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
-    } catch (err) {
-    }
+    } catch (err) {}
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -88,6 +115,17 @@ export default function EditProfile() {
   };
   return (
     <div className="Edit">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Button onClick={handleClickOpen}>Edit Details </Button>
       <Dialog className="Edit-Dialog" open={open} onClose={handleClose}>
         <img src={editProfile} className="Edit-img" />

@@ -7,6 +7,8 @@ import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import { Box } from "@mui/material";
 import EditProfile from "../EditProfile/EditProfile";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Profile(props) {
   const logout = async () => {
@@ -26,7 +28,16 @@ function Profile(props) {
         props.auth(/*isLoggedIn=*/ false, {});
       } else {
         response = await response.json();
-        alert(response.message);
+        response = await response.json();
+        toast.error(response.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     } catch (err) {
       console.log(err);
@@ -72,6 +83,17 @@ function Profile(props) {
 
   return (
     <Box>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <IconButton size="large" edge="end" className="IconButton">
         <AccountCircleOutlinedIcon
           size="Large"
