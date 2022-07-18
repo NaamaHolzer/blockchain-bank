@@ -65,7 +65,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     if (toUser.balance * 0.6 < Number(req.body.amount)) {
       res
         .status(401)
-        .json({ message: "INSUFFICIENT SUMS" });
+        .json({ message: "INSUFFICIENT SUM" });
       return;
     }
 

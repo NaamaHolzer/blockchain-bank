@@ -7,8 +7,12 @@ import { useEffect } from "react";
 import GuardedRoute from "../../util/GuardedRoute";
 import Loader from "../Loader/Loader";
 import Pusher from "pusher-js";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
-
+const pusher = new Pusher('ccaa990cbc0f5017da22', {
+  cluster: 'ap2'
+});
 
 
 export default function App() {
@@ -21,6 +25,7 @@ export default function App() {
       setCurrentUser(currentUser);
     };
   
+    const [counter,setCounter] = React.useState(0)
   
     useEffect(() => {
       const fetchData = async () => {
@@ -41,6 +46,25 @@ export default function App() {
               res = await res.json();
               setIsLoggedIn(true);
               setCurrentUser(res.currentUser);
+              console.log(counter)
+              setCounter(counter+1)
+              console.log(res.currentUser);
+              console.log(res.currentUser.admin)
+              if(res.currentUser.admin)
+              {
+                const channel = pusher.subscribe('signup-request');
+                channel.bind('new-request', function(data) {
+                  toast.info(data.message, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });     
+                                    });
+              }
             }
           } catch (err) {
             console.log("Not logged in");
@@ -48,15 +72,6 @@ export default function App() {
         }
         setLoading(false);
       };
-  
-      const pusher = new Pusher('ccaa990cbc0f5017da22', {
-        cluster: 'ap2'
-      });
-    
-      const channel = pusher.subscribe('my-channel');
-      channel.bind('my-event', function(data) {
-        alert(JSON.stringify(data));
-      });
     
       fetchData();
     }, []);
@@ -65,6 +80,17 @@ export default function App() {
       <Loader></Loader>
     ) : (
       <BrowserRouter>
+       <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
         <Routes>
           <Route
             path="/requests"

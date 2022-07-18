@@ -43,6 +43,8 @@ export default function ActionModal(props) {
         );
         if (response.ok) {
           handleClose();
+          setToFilled ('')
+          setAmountFilled ( '')
           response = await response.json();
           toast.success(response.message, {
             position: "top-center",

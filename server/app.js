@@ -12,15 +12,8 @@ let auth = require("./routes/auth-controller");
 let cors = require("cors");
 let app = express();
 
-const Pusher = require("pusher");
 
-const pusher = new Pusher({
-  appId: "1438647",
-  key: "ccaa990cbc0f5017da22",
-  secret: "00fb676b56ff4d382692",
-  cluster: "ap2",
-  useTLS: true
-});
+
 
 
 (async () => {

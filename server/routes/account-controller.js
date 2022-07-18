@@ -8,6 +8,15 @@ const fetch = require("node-fetch");
 const nodemailer = require("nodemailer");
 const keyGenerator = require("../blockchain/keygenerator");
 
+const Pusher = require("pusher");
+const pusher = new Pusher({
+  appId: "1438647",
+  key: "ccaa990cbc0f5017da22",
+  secret: "00fb676b56ff4d382692",
+  cluster: "ap2",
+  useTLS: true
+});
+
 router.post("/request", async (req, res) => {
   const newUser = {
     firstName: req.body.firstName,
@@ -24,7 +33,10 @@ router.post("/request", async (req, res) => {
   try {
     await User.CREATE(newUser);
     sendEmail(req.body.username);
-
+    pusher.trigger("signup-request", "new-request", { 
+         message: req.body.username+" would like to sign up!"
+       });
+      
     res.status(200).json({ message: "REQUEST SENT SUCCESSFULLY" });
   } catch (err) {
     res.json({ message: err });

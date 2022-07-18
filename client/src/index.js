@@ -25,9 +25,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={theme}>
-      <React.StrictMode>
         <App></App>
-      </React.StrictMode>
     </ThemeProvider>
   </StyledEngineProvider>
 );
