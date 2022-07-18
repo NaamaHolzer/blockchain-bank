@@ -12,6 +12,7 @@ import NotFound from "./components/NotFound/NotFound";
 import { useEffect } from "react";
 import GuardedRoute from "./util/GuardedRoute";
 import Loader from "./components/Loader/Loader";
+import Pusher from "pusher-js";
 
 const theme = createTheme({
   typography: {
@@ -36,6 +37,7 @@ export default function App() {
     setIsLoggedIn(isLoggedIn);
     setCurrentUser(currentUser);
   };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,6 +66,15 @@ export default function App() {
       setLoading(false);
     };
 
+    const pusher = new Pusher('ccaa990cbc0f5017da22', {
+      cluster: 'ap2'
+    });
+  
+    const channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      alert(JSON.stringify(data));
+    });
+  
     fetchData();
   }, []);
 

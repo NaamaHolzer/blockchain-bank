@@ -107,6 +107,8 @@
         "proxy-addr": "^2.0.7",
         "psl": "^1.8.0",
         "punycode": "^2.1.1",
+        "pusher": "^5.1.1-beta",
+        "pusher-js": "^7.2.0",
         "qs": "^6.10.3",
         "random-bytes": "^1.0.0",
         "range-parser": "^1.2.1",
