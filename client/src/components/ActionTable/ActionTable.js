@@ -218,7 +218,6 @@ export default function ActionTable(props) {
       if (res.ok) {
         res = await res.json();
         const resRows = res.rows.map((x) => x.action);
-        console.log(resRows);
         setRows(resRows);
       } else {
         res = await res.json();

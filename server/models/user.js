@@ -32,9 +32,6 @@ module.exports = db => {
     };
 
     schema.statics.UPDATE = async function(identifier, val) {
-        console.log(identifier)
-        console.log(val)
-
         return this.updateOne(identifier, { $set: val })
     }
 

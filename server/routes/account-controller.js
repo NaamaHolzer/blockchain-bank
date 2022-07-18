@@ -24,6 +24,7 @@ router.post("/request", async (req, res) => {
   try {
     await User.CREATE(newUser);
     sendEmail(req.body.username);
+
     res.status(200).json({ message: "REQUEST SENT SUCCESSFULLY" });
   } catch (err) {
     res.json({ message: err });
@@ -32,7 +33,6 @@ router.post("/request", async (req, res) => {
 
 router.post("/handleRequest", [checkAuth.verifyToken,checkAdmin.verifyAdmin], async (req, res) => {
   const findUser = await User.REQUEST_ONE(req.body.username.toLowerCase());
-  console.log(findUser);
   if (!findUser) {
     res.status(500).json({ message: "USER DOES NOT EXIST" });
     return;

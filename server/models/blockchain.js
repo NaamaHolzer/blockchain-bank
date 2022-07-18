@@ -25,8 +25,6 @@ module.exports = (db) => {
   schema.statics.REQUEST_ALL = async function (chainType) {
 
     let chain = await this.find({ chainType: chainType }).exec();
-    console.log(chainType);
-    console.log(chain);
     chain = chain[0].chain.slice(1, chain[0].chain.length);
     return chain;
   };

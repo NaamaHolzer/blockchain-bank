@@ -49,7 +49,6 @@ router.get("/range", checkAuth.verifyToken, async (req, res) => {
     if (!req.isLoggedIn) {
       res.status(401).json("YOU NEED TO LOGIN");
     }
-    console.log(req.query.range);
     const transactions = await BlockchainModel.REQUEST_BLOCKS_RANGE(
       "transaction",
       req.currentUser.publicKey,
