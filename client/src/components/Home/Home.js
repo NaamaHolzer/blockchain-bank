@@ -29,7 +29,9 @@ function Home(props) {
 
       if (response.ok) {
         response = await response.json();
-        props.auth(/*isLoggedIn=*/true, {username: usernameFilled, admin: response.admin});
+        console.log("in home");
+        console.log(response);
+        props.auth(/*isLoggedIn=*/true, response.currentUser);
       } else {
         response = await response.json();
         toast.error(response.message, {

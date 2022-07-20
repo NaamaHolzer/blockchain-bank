@@ -12,7 +12,9 @@ module.exports.verifyToken = async function(req, res, next) {
         req.currentUser = {
             username: decrypt.username,
             publicKey: decrypt.publicKey,
-            admin: decrypt.admin
+            admin: decrypt.admin,
+            balance: decrypt.balance,
+            rate: decrypt.rate,
         };
         req.isLoggedIn = true
         next();

@@ -16,23 +16,31 @@ router.post("/login", async (req, res) => {
           username: username,
           admin: findUser.admin,
           publicKey: findUser.publicKey,
+          balance: findUser.balance,
+          rate: findUser.rate,
         },
         process.env.TOKEN_SECRET
       );
+      console.log(findUser.rate)
       return res
         .cookie("token", token, {
           secure: false, // since we're not using https
           httpOnly: true,
         })
         .status(200)
-        .json({ message: "LOGIN SUCCESSFULL", admin:findUser.admin});
-    } else if(verified)
-    {
-      return res
-        .status(401)
-        .json({ message: "ACCOUNT NOT APPROVED YET"});
-    }
-    else {
+        .json({
+          message: "LOGIN SUCCESSFULL",
+          currentUser: {
+            username: username,
+            admin: findUser.admin,
+            publicKey: findUser.publicKey,
+            balance: findUser.balance,
+            rate: findUser.rate,
+          },
+        });
+    } else if (verified) {
+      return res.status(401).json({ message: "ACCOUNT NOT APPROVED YET" });
+    } else {
       res.status(404).json({ message: "LOGIN FAILED" });
     }
   } catch (err) {
@@ -41,7 +49,8 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/currentUser", checkAuth.verifyToken, async (req, res) => {
-  return res.status(200).json({currentUser: req.currentUser});
+  console.log(req.currentUser.balance);
+  return res.status(200).json({ currentUser: req.currentUser });
 });
 
 router.get("/logout", checkAuth.verifyToken, (req, res) => {
@@ -50,6 +59,5 @@ router.get("/logout", checkAuth.verifyToken, (req, res) => {
     .status(200)
     .json({ message: "SUCCESSFULLY LOGGED OUT" });
 });
-
 
 module.exports = router;

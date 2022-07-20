@@ -11,6 +11,8 @@ import * as React from "react";
 
 function User(props) {
   const [AnchorEl, setAnchorEl] = React.useState(props.initialState);
+  console.log('in user')
+  console.log(props.currentUser)
   const handleState = (state) => {
     setAnchorEl(state);
   };
@@ -19,12 +21,9 @@ function User(props) {
     <div>
       {props.currentUser ? (
         <div className="User-div">
-          <NavigationBar auth = {props.auth} handleState={handleState}></NavigationBar>
+          <NavigationBar currentUser={props.currentUser} auth = {props.auth} handleState={handleState}></NavigationBar>
           {(() => {
             const anchorEl = { AnchorEl };
-            // if (!props.currentUser.admin && anchorEl.AnchorEl === "Requests") {
-            //   return <NotFound handleState={handleState}/>;
-            // }
             switch (anchorEl.AnchorEl) {
               case "Greetings":
                 return (

@@ -11,7 +11,7 @@ const { Blockchain, Action } = require("../blockchain/blockchain");
 router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
   try {
     if (!req.isLoggedIn) {
-      res.status(401).json("You need to login");
+      res.status(401).json("YOU NEED TO LOGIN");
     }
     const loans = await BlockchainModel.REQUEST_USER_BLOCKS(
       "loan",

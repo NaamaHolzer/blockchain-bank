@@ -8,6 +8,15 @@ const BlockchainModel = require("../models")("Blockchain");
 const Loan = require("../models")("Loan");
 const { Blockchain, Action } = require("../blockchain/blockchain");
 
+const Pusher = require("pusher");
+const pusher = new Pusher({
+  appId: "1438647",
+  key: "ccaa990cbc0f5017da22",
+  secret: "00fb676b56ff4d382692",
+  cluster: "ap2",
+  useTLS: true
+});
+
 router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
   try {
     if (!req.isLoggedIn) {
@@ -153,12 +162,13 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       });
 
       if (newBalance === 0) {
-        // TODO: toast
-      }
+        pusher.trigger("balance-error", "balance-error", { 
+          message: req.currentUser.username+"'s balance is zero!"
+        });
+             }
       res.status(200).json({ message: "TRANSACTION SUCCEEDED" });
     } else {
-      //TODO: toast
-      res
+           res
         .status(401)
         .json({ message: "INSUFFICIENT SUM" });
     }
