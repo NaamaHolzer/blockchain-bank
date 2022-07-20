@@ -9,6 +9,7 @@ let index = require("./routes/index");
 let loan = require("./routes/loan-controller");
 let transaction = require("./routes/transaction-controller");
 let auth = require("./routes/auth-controller");
+let blockchain = require("./routes/blockchain-controller");
 let cors = require("cors");
 let app = express();
 
@@ -49,6 +50,7 @@ let app = express();
   app.use("/loan", loan);
   app.use("/transaction", transaction);
   app.use("/auth", auth);
+  app.use("/blockchain",blockchain)
   app.use(function (req, res, next) {
     let err = new Error("Not Found");
     err.status = 404;

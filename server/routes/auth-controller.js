@@ -21,7 +21,6 @@ router.post("/login", async (req, res) => {
         },
         process.env.TOKEN_SECRET
       );
-      console.log(findUser.rate)
       return res
         .cookie("token", token, {
           secure: false, // since we're not using https
@@ -49,7 +48,6 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/currentUser", checkAuth.verifyToken, async (req, res) => {
-  console.log(req.currentUser.balance);
   return res.status(200).json({ currentUser: req.currentUser });
 });
 
