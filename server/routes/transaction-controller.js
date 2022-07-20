@@ -14,7 +14,7 @@ const pusher = new Pusher({
   key: "ccaa990cbc0f5017da22",
   secret: "00fb676b56ff4d382692",
   cluster: "ap2",
-  useTLS: true
+  useTLS: true,
 });
 
 router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
@@ -35,14 +35,15 @@ router.get("/usertransactions", checkAuth.verifyToken, async (req, res) => {
   }
 });
 
-router.get("/alltransactions", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
+router.get(
+  "/alltransactions",
+  [checkAuth.verifyToken, checkAdmin.verifyAdmin],
+  async (req, res) => {
     try {
       if (!req.isLoggedIn) {
         res.status(401).json("YOU NEED TO LOGIN");
       }
-      const transactions = await BlockchainModel.REQUEST_ALL(
-        "transaction",
-      );
+      const transactions = await BlockchainModel.REQUEST_ALL("transaction");
       res.status(200).json({
         message: "RETRIEVED TRANSACTIONS SUCCESSFULLY",
         rows: transactions,
@@ -72,23 +73,27 @@ router.get("/range", checkAuth.verifyToken, async (req, res) => {
   }
 });
 
-router.get("/adminrange", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
-  try {
-    if (!req.isLoggedIn) {
-      res.status(401).json("YOU NEED TO LOGIN");
+router.get(
+  "/adminrange",
+  [checkAuth.verifyToken, checkAdmin.verifyAdmin],
+  async (req, res) => {
+    try {
+      if (!req.isLoggedIn) {
+        res.status(401).json("YOU NEED TO LOGIN");
+      }
+      const transactions = await BlockchainModel.REQUEST_ALL_BLOCKS_RANGE(
+        "transaction",
+        Number(req.query.range)
+      );
+      res.status(200).json({
+        message: "RETRIEVED TRANSACTIONS SUCCESSFULLY",
+        rows: transactions,
+      });
+    } catch (err) {
+      res.status(500).json({ message: err });
     }
-    const transactions = await BlockchainModel.REQUEST_ALL_BLOCKS_RANGE(
-      "transaction",
-      Number(req.query.range)
-    );
-    res.status(200).json({
-      message: "RETRIEVED TRANSACTIONS SUCCESSFULLY",
-      rows: transactions,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err });
   }
-});
+);
 
 router.post("/", checkAuth.verifyToken, async (req, res) => {
   try {
@@ -98,9 +103,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     const fromUser = await User.REQUEST_ONE(req.currentUser.username);
     const toUser = await User.REQUEST_ONE(req.body.toUser.toLowerCase());
     if (!toUser || !toUser.approved) {
-      res
-        .status(401)
-        .json({ message: "USER DOES NOT EXIST" });
+      res.status(401).json({ message: "USER DOES NOT EXIST" });
       return;
     }
     const newBalance = fromUser.balance - Number(req.body.amount);
@@ -128,7 +131,6 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
           }
         );
       } catch (err) {
-        //TODO toast
         res.status(401).json({
           message: "YOU ARE NOT CERTIFIED TO PERFORM THIS ACTION ",
           err,
@@ -150,27 +152,26 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
         { balance: toUser.balance + Number(req.body.amount) }
       );
 
-      const userDebts = await BlockchainModel.REQUEST_USER_BLOCKS(
-        "loan",
+      const userDebts = await BlockchainModel.REQUEST_USER_DEBTS(
         fromUser.publicKey
       );
 
       userDebts.forEach((debt) => {
         if (debt.amount > 0.6 * newBalance) {
-          //TODO: alert debt.fromUser
+          pusher.trigger("loan-alert" + debt.fromUser, "laon-alert", {
+            message: debt.toUser + " WILL SOON NOT BE ABLE TO RETURN YOUR LOAN",
+          });
         }
       });
 
       if (newBalance === 0) {
-        pusher.trigger("balance-error", "balance-error", { 
-          message: req.currentUser.username+"'s balance is zero!"
+        pusher.trigger("balance-error", "balance-error", {
+          message: req.currentUser.username + "'s balance is zero!",
         });
-             }
+      }
       res.status(200).json({ message: "TRANSACTION SUCCEEDED" });
     } else {
-           res
-        .status(401)
-        .json({ message: "INSUFFICIENT SUM" });
+      res.status(401).json({ message: "INSUFFICIENT SUM" });
     }
   } catch (err) {
     throw err;

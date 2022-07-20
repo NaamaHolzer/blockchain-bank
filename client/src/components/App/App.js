@@ -43,8 +43,6 @@ export default function App() {
           );
           if (res.ok) {
             res = await res.json();
-            console.log("in app");
-            console.log(res.currentUser);
             setIsLoggedIn(true);
             setCurrentUser(res.currentUser);
             setCounter(counter + 1);
@@ -75,14 +73,27 @@ export default function App() {
                 });
               });
             }
+            const loanAlertChannel = pusher.subscribe(
+              "loan-alert" + res.currentUser.username
+            );
+            loanAlertChannel.bind("loan-alert", function (data) {
+              toast.info(data.message, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            });
           }
         } catch (err) {
-          console.log("Not logged in");
+          console.log(err);
         }
       }
       setLoading(false);
     };
-    console.log("before fetch");
     fetchData();
   }, []);
 

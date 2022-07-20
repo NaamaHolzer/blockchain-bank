@@ -6,6 +6,15 @@ const Loan = require("../models")("Loan");
 const User = require("../models")("User");
 const BlockchainModel = require("../models")("Blockchain");
 
+const Pusher = require("pusher");
+const pusher = new Pusher({
+  appId: "1438647",
+  key: "ccaa990cbc0f5017da22",
+  secret: "00fb676b56ff4d382692",
+  cluster: "ap2",
+  useTLS: true,
+});
+
 const { Blockchain, Action } = require("../blockchain/blockchain");
 
 router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
@@ -26,22 +35,24 @@ router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
   }
 });
 
-router.get("/allloans", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
-  try {
-    if (!req.isLoggedIn) {
-      res.status(401).json("YOU NEED TO LOG IN");
+router.get(
+  "/allloans",
+  [checkAuth.verifyToken, checkAdmin.verifyAdmin],
+  async (req, res) => {
+    try {
+      if (!req.isLoggedIn) {
+        res.status(401).json("YOU NEED TO LOG IN");
+      }
+      const loans = await BlockchainModel.REQUEST_ALL("loan");
+      res.status(200).json({
+        message: "RETRIEVED LOANS SUCCESSFULLY",
+        rows: loans,
+      });
+    } catch (err) {
+      res.status(500).json({ message: err });
     }
-    const loans = await BlockchainModel.REQUEST_ALL(
-      "loan"
-    );
-    res.status(200).json({
-      message: "RETRIEVED LOANS SUCCESSFULLY",
-      rows: loans,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err });
   }
-});
+);
 
 router.post("/", checkAuth.verifyToken, async (req, res) => {
   try {
@@ -56,16 +67,11 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     }
     const newBalance = fromUser.balance - Number(req.body.amount);
     if (newBalance <= 0.5 * fromUser.balance) {
-      //TODO: toast
-      res
-        .status(401)
-        .json({ message: "INSUFFICIENT SUMS" });
+      res.status(401).json({ message: "INSUFFICIENT SUMS" });
       return;
     }
     if (toUser.balance * 0.6 < Number(req.body.amount)) {
-      res
-        .status(401)
-        .json({ message: "INSUFFICIENT SUM" });
+      res.status(401).json({ message: "INSUFFICIENT SUM" });
       return;
     }
 
@@ -92,7 +98,6 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
         }
       );
     } catch (err) {
-      //TODO toast
       res.status(401).json({
         message: "YOU ARE NOT CERTIFIED TO PERFORM THIS ACTION ",
         err,
@@ -114,13 +119,15 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       { balance: toUser.balance + Number(req.body.amount) }
     );
 
-    const userDebts = await BlockchainModel.REQUEST_USER_BLOCKS(
-      "loan",
+    const userDebts = await BlockchainModel.REQUEST_USER_DEBTS(
       fromUser.publicKey
     );
     userDebts.forEach((debt) => {
-      if (debt.amount > 0.6 * newBalance) {
-        //TODO: toast debt.fromuser
+      if (debt.amount > 0.6 * newBalance) 
+      {
+        pusher.trigger("loan-alert"+debt.fromUser, "laon-alert", {
+          message: debt.toUser +" WILL SOON NOT BE ABLE TO RETURN YOUR LOAN",
+        });
       }
     });
 
@@ -151,22 +158,26 @@ router.get("/range", checkAuth.verifyToken, async (req, res) => {
   }
 });
 
-router.get("/adminrange", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
-  try {
-    if (!req.isLoggedIn) {
-      res.status(401).json("You need to login");
+router.get(
+  "/adminrange",
+  [checkAuth.verifyToken, checkAdmin.verifyAdmin],
+  async (req, res) => {
+    try {
+      if (!req.isLoggedIn) {
+        res.status(401).json("You need to login");
+      }
+      const transactions = await BlockchainModel.REQUEST_ALL_BLOCKS_RANGE(
+        "loan",
+        Number(req.query.range)
+      );
+      res.status(200).json({
+        message: "RETRIEVED LOANS SUCCESSFULLY",
+        rows: transactions,
+      });
+    } catch (err) {
+      res.status(500).json({ message: err });
     }
-    const transactions = await BlockchainModel.REQUEST_ALL_BLOCKS_RANGE(
-      "loan",
-      Number(req.query.range)
-    );
-    res.status(200).json({
-      message: "RETRIEVED LOANS SUCCESSFULLY",
-      rows: transactions,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err });
   }
-});
+);
 
 module.exports = router;

@@ -21,7 +21,6 @@ module.exports = (db) => {
     return this.find({ chainType: chainType }).exec();
   };
 
-
   schema.statics.REQUEST_ALL = async function (chainType) {
 
     let chain = await this.find({ chainType: chainType }).exec();
@@ -34,6 +33,14 @@ module.exports = (db) => {
     chain = chain[0].chain.slice(1, chain[0].chain.length);
     return chain.filter(
       (block) => {return block.action.fromAddress === publicKey.toString() || block.action.toAddress === publicKey.toString()}
+    );
+  };
+
+  schema.statics.REQUEST_USER_DEBTS = async function (publicKey) {
+    let chain = await this.find({ chainType: "loan" }).exec();
+    chain = chain[0].chain.slice(1, chain[0].chain.length);
+    return chain.filter(
+      (block) => {return block.action.toAddress === publicKey.toString()}
     );
   };
 

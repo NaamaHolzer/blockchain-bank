@@ -4,7 +4,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "@mui/material/Button"
+import Button from "@mui/material/Button";
+import { useEffect } from "react";
 export default function Balance(props) {
   const [balance, setBalance] = React.useState(props.currentUser.balance);
 
@@ -70,11 +71,35 @@ export default function Balance(props) {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let res = await fetch(
+          process.env.REACT_APP_BASE_URL + "/auth/currentUser",
+          {
+            method: "GET",
+            headers: {
+              "content-type": "application/json",
+              accept: "application/json",
+            },
+            credentials: "include",
+          }
+        );
+        if (res.ok) {
+          res = await res.json();
+          setBalance(res.currentUser.balance)
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, []);
+
   const setCurrency = async (currency) => {
     if (currency === "LEV") setBalance(props.currentUser.balance);
     else {
       const val = (await convertCurrency()).result;
-      console.log(val);
       setBalance(val);
     }
   };
@@ -97,7 +122,6 @@ export default function Balance(props) {
     )
       .then((response) => {
         const res = response.json();
-        console.log(res);
         return res;
       })
       .catch((error) => console.log("error", error));

@@ -11,8 +11,6 @@ import * as React from "react";
 
 function User(props) {
   const [AnchorEl, setAnchorEl] = React.useState(props.initialState);
-  console.log('in user')
-  console.log(props.currentUser)
   const handleState = (state) => {
     setAnchorEl(state);
   };

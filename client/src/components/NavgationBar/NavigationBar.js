@@ -13,7 +13,6 @@ import Balance from '../Balance/Balance';
 
 
 export default function NavgationBar(props) {
-  console.log('in nav')
   console.log(props.currentUser)
   return (
     <AppBar position="static" color="secondary">

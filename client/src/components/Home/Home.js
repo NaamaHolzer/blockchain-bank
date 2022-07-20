@@ -29,8 +29,6 @@ function Home(props) {
 
       if (response.ok) {
         response = await response.json();
-        console.log("in home");
-        console.log(response);
         props.auth(/*isLoggedIn=*/true, response.currentUser);
       } else {
         response = await response.json();

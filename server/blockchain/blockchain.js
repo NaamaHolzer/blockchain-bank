@@ -60,15 +60,11 @@ class Block {
     this.action = action;
     if (hash === "") {
       const calc = this.calculateHash();
-      console.log("Block constructor-calculating hash");
-      console.log(calc);
       this.hash = calc;
     } else this.hash = hash;
   }
 
   calculateHash() {
-    console.log("calculating hash on string:")
-    console.log(this.previousHash + this.date + JSON.stringify(this.action));
     return SHA256(
       this.previousHash + this.date + JSON.stringify(this.action)
     ).toString();
@@ -149,14 +145,7 @@ class Blockchain {
         this.chain[i - 1].previousHash,
         this.chain[i - 1].hash
       );
-      console.log("verifying block i:")
-      console.log(i);
-      console.log("currentBlock.hash !== currentBlock.calculateHash:")
-      console.log(currentBlock.hash !== currentBlock.calculateHash());
-      console.log("currentBlock.hash")
-      console.log(currentBlock.hash);
-      console.log("currentBlock.calculateHash:")
-      console.log(currentBlock.calculateHash());
+
 
       if (
         currentBlock.hash !== currentBlock.calculateHash() ||
