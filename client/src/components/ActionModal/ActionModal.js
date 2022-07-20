@@ -67,7 +67,7 @@ export default function ActionModal(props) {
             progress: undefined,
             });
                     }
-      } catch (err) {}
+      } catch (err) {console.log(err)}
     } else {
       try {
         let response = await fetch(process.env.REACT_APP_BASE_URL + "/loan", {

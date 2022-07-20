@@ -2,9 +2,73 @@ import "./Balance.css";
 import React from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Button from "@mui/material/Button"
 export default function Balance(props) {
   const [balance, setBalance] = React.useState(props.currentUser.balance);
+
+  const verify = async () => {
+    try {
+      let response = await fetch(
+        process.env.REACT_APP_BASE_URL + "/blockchain",
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        response = await response.json();
+        if (response.loansValid && response.transactionsValid) {
+          toast.success("Both chains are valid!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else if (!response.loansValid && !response.transactionsValid) {
+          toast.error("Both chains are not valid!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else if (!response.loansValid) {
+          toast.error("Loans chain is not valid!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else {
+          toast.error("Transactions chain is not valid!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const setCurrency = async (currency) => {
     if (currency === "LEV") setBalance(props.currentUser.balance);
@@ -41,20 +105,34 @@ export default function Balance(props) {
 
   return !props.currentUser.admin ? (
     <div className="balance">
-    <p className="title">BALANCE:</p>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <p className="title">BALANCE:</p>
       <p className="amount">{balance}</p>
-      <Select className="select"
+      <Select
+        className="select"
         label="Balance"
         defaultValue="LEV"
         onChange={async (e) => {
           await setCurrency(e.target.value);
         }}
       >
-         <MenuItem value="LEV">LEV</MenuItem>
+        <MenuItem value="LEV">LEV</MenuItem>
         <MenuItem value="ILS">ILS</MenuItem>
       </Select>
     </div>
   ) : (
-    <p></p>
+    <Button variant="outlined" onClick={verify}>
+      VERIFY CHAINS
+    </Button>
   );
 }

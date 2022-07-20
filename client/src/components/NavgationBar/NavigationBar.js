@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import { Link } from "react-router-dom";
-import Balace from '../Balance/Balance';
+import Balance from '../Balance/Balance';
 
 
 export default function NavgationBar(props) {
@@ -52,7 +52,7 @@ export default function NavgationBar(props) {
               </Button>
             </Link>
           </Box>
-          <Balace currentUser = {props.currentUser}></Balace>
+          <Balance currentUser = {props.currentUser}></Balance>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip>
               <Profile auth = {props.auth}></Profile>
