@@ -76,7 +76,6 @@ export default function Balance(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('in use effect')
         let res = await fetch(
           process.env.REACT_APP_BASE_URL + "/auth/currentUser",
           {

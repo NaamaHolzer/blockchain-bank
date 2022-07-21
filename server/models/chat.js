@@ -21,7 +21,6 @@ module.exports = (db) => {
   };
 
   schema.statics.REQUEST = async function (currentUser, chatUser) {
-    console.log(currentUser,chatUser)
     return {
       fromCurrentUser: await this.find({
         from: currentUser,
