@@ -11,4 +11,5 @@ require("./user")(db);
 require("./loan")(db);
 require("./transaction")(db);
 require("./blockchain")(db);
+require("./chat")(db);
 module.exports = (model) => db.model(model);
