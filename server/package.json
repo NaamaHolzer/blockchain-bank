@@ -127,6 +127,7 @@
         "sparse-bitfield": "^3.0.3",
         "sshpk": "^1.17.0",
         "statuses": "^2.0.1",
+        "stream-chat": "^6.7.3",
         "toidentifier": "^1.0.1",
         "tough-cookie": "^2.5.0",
         "tr46": "^3.0.0",
