@@ -48,7 +48,16 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/currentUser", checkAuth.verifyToken, async (req, res) => {
-  return res.status(200).json({ currentUser: req.currentUser });
+  const user = await User.REQUEST_ONE(req.currentUser.username);
+  return res.status(200).json({
+    currentUser: {
+      username: user.username,
+      admin: user.admin,
+      publicKey: user.publicKey,
+      balance: user.balance,
+      rate: user.rate,
+    },
+  });
 });
 
 router.get("/logout", checkAuth.verifyToken, (req, res) => {

@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 import { useEffect } from "react";
 export default function Balance(props) {
   const [balance, setBalance] = React.useState(props.currentUser.balance);
+  const [currency,setCurrency] = React.useState('LEV');
+  const[currentUser,setCurrentUser] = React.useState(props.currentUser)
 
   const verify = async () => {
     try {
@@ -74,6 +76,7 @@ export default function Balance(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log('in use effect')
         let res = await fetch(
           process.env.REACT_APP_BASE_URL + "/auth/currentUser",
           {
@@ -87,26 +90,30 @@ export default function Balance(props) {
         );
         if (res.ok) {
           res = await res.json();
-          setBalance(res.currentUser.balance)
+          setCurrentUser(res.currentUser);
+          await setCurrencyConversion(res.currentUser.balance,currency)
         }
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, []);
+  }, [balance]);
 
-  const setCurrency = async (currency) => {
-    if (currency === "LEV") setBalance(props.currentUser.balance);
+  const setCurrencyConversion = async (amount,currentCurrency) => {
+    setCurrency(currentCurrency)
+    if (currentCurrency === "LEV")
+     {
+      setBalance(amount);
+    }
     else {
-      const val = (await convertCurrency()).result;
+      const val = (await convertCurrency(amount)).result;
       setBalance(val);
     }
   };
 
-  const convertCurrency = async () => {
-    const usdBalance = props.currentUser.rate * props.currentUser.balance;
-    console.log(props.currentUser.rate);
+  const convertCurrency = async (amount) => {
+    const usdBalance = props.currentUser.rate * amount;
     return await fetch(
       "https://api.apilayer.com/currency_data/convert?to=" +
         "ILS" +
@@ -141,13 +148,13 @@ export default function Balance(props) {
         pauseOnHover
       />
       <p className="title">BALANCE:</p>
-      <p className="amount">{balance}</p>
+      <p className="amount">{Math.round((balance + Number.EPSILON) * 100) / 100}</p>
       <Select
         className="select"
         label="Balance"
         defaultValue="LEV"
         onChange={async (e) => {
-          await setCurrency(e.target.value);
+          await setCurrencyConversion(currentUser.balance,e.target.value);
         }}
       >
         <MenuItem value="LEV">LEV</MenuItem>
