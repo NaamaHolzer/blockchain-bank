@@ -146,7 +146,7 @@ export default function Balance(props) {
         draggable
         pauseOnHover
       />
-      <p className="title">BALANCE:</p>
+      <p className="balance-title">BALANCE:</p>
       <p className="amount">{Math.round((balance + Number.EPSILON) * 100) / 100}</p>
       <Select
         className="select"

@@ -110,6 +110,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
 
     if (newBalance >= 0) {
       try {
+        const transactionId = (await BlockchainModel.REQUEST("transaction")).length;
         const transaction = new Action(
           fromUser.username,
           toUser.username,
@@ -117,7 +118,8 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
           toUser.publicKey,
           Number(req.body.amount),
           new Date(2000, 1, 1),
-          Date.now()
+          Date.now(),
+          transactionId,
         );
         transaction.signAction(fromUser.privateKey);
         const blockchain = new Blockchain(

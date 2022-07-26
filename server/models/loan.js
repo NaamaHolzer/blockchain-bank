@@ -7,6 +7,7 @@ module.exports = db => {
         endDate: { type: Date, required: true, index: true },
         from: { type: String, required: true, unique: true },
         to: { type: String, required: true },
+        isClosed:{type: Boolean,required:true},
     }, { autoIndex: false });
 
     schema.statics.CREATE = async function(loan) {
@@ -16,6 +17,7 @@ module.exports = db => {
             endDate: loan.endDate,
             from: loan.from,
             to: loan.to,
+            isClosed: false
         });
     };
 

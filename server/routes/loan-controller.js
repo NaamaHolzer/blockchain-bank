@@ -16,6 +16,7 @@ const pusher = new Pusher({
 });
 
 const { Blockchain, Action } = require("../blockchain/blockchain");
+const blockchain = require("../models/blockchain");
 
 router.get("/userloans", checkAuth.verifyToken, async (req, res) => {
   try {
@@ -43,7 +44,7 @@ router.get(
       if (!req.isLoggedIn) {
         res.status(401).json("YOU NEED TO LOG IN");
       }
-      const loans = await BlockchainModel.REQUEST_ALL("loan");
+      const loans = await BlockchainModel.REQUEST_OPEN_LOANS();
       res.status(200).json({
         message: "RETRIEVED LOANS SUCCESSFULLY",
         rows: loans,
@@ -76,6 +77,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     }
 
     try {
+      const loanId = (await BlockchainModel.REQUEST("loan"))[0].chain.length;
       const loan = new Action(
         fromUser.username,
         toUser.username,
@@ -83,7 +85,8 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
         toUser.publicKey,
         Number(req.body.amount),
         new Date(req.body.endDate),
-        new Date(Date.now())
+        new Date(Date.now()),
+        loanId,
       );
       loan.signAction(fromUser.privateKey);
 
@@ -123,10 +126,9 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
       fromUser.publicKey
     );
     userDebts.forEach((debt) => {
-      if (debt.amount > 0.6 * newBalance) 
-      {
-        pusher.trigger("loan-alert"+debt.fromUser, "laon-alert", {
-          message: debt.toUser +" WILL SOON NOT BE ABLE TO RETURN YOUR LOAN",
+      if (debt.amount > 0.6 * newBalance) {
+        pusher.trigger("loan-alert" + debt.fromUser, "laon-alert", {
+          message: debt.toUser + " WILL SOON NOT BE ABLE TO RETURN YOUR LOAN",
         });
       }
     });
@@ -179,5 +181,17 @@ router.get(
     }
   }
 );
+
+router.put("/", checkAdmin.verifyAdmin, async (req, res) => {
+  try {
+    await BlockchainModel.UPDATE_LOAN(req.body.id);
+    res.status(200).json({
+      message: "LOAN CLOSED SUCCESSFULLY",
+    });
+  } catch (err) {
+    // res.status(500).json({ message: err });
+    throw err;
+  }
+});
 
 module.exports = router;

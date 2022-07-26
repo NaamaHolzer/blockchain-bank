@@ -4,7 +4,18 @@ const EC = require("elliptic").ec;
 const ec = new EC("secp256k1"); // bitcoin wallets algorithm.
 
 class Action {
-  constructor(fromUser, toUser, fromAddress, toAddress, amount, endDate, date, signature = "") {
+  constructor(
+    fromUser,
+    toUser,
+    fromAddress,
+    toAddress,
+    amount,
+    endDate,
+    date,
+    id,
+    isClosed = false,
+    signature = ""
+  ) {
     (this.fromUser = fromUser),
       (this.toUser = toUser),
       (this.fromAddress = fromAddress);
@@ -12,9 +23,9 @@ class Action {
     this.amount = amount;
     this.endDate = endDate;
     this.date = date;
-    if(signature !== "")
-        this.signature = signature;
-
+    this.id = id;
+    this.isClosed = isClosed;
+    if (signature !== "") this.signature = signature;
   }
 
   calculateHash() {
@@ -45,6 +56,7 @@ class Action {
     if (!this.fromAddress) return true;
 
     if (!this.signature || !this.signature.length) {
+      console.log(this)
       throw new Error("No signature in this action");
     }
 
@@ -66,7 +78,13 @@ class Block {
 
   calculateHash() {
     return SHA256(
-      this.previousHash + this.date + JSON.stringify(this.action)
+      this.action.previousHash + this.date + this.fromUser+
+      this.action.toUser+
+      this.action.fromAddress+
+      this.action.toAddress+
+      this.action.amount+
+      this.action.endDate+
+      this.action.date
     ).toString();
   }
 
@@ -124,7 +142,9 @@ class Blockchain {
           this.chain[i].action.amount,
           this.chain[i].action.endDate,
           this.chain[i].action.date,
-          this.chain[i].action.signature
+          this.chain[i].action.id,
+          this.chain[i].action.isClosed,
+          this.chain[i].action.signature,
         ),
         this.chain[i].previousHash,
         this.chain[i].hash
@@ -139,13 +159,14 @@ class Blockchain {
           this.chain[i - 1].action.amount,
           this.chain[i - 1].action.endDate,
           this.chain[i - 1].action.date,
-          this.chain[i-1].action.signature
+          this.chain[i - 1].action.id,
+          this.chain[i - 1].action.isClosed,
+          this.chain[i - 1].action.signature,
 
         ),
         this.chain[i - 1].previousHash,
         this.chain[i - 1].hash
       );
-
 
       if (
         currentBlock.hash !== currentBlock.calculateHash() ||
