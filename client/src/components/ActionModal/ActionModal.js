@@ -127,22 +127,22 @@ export default function ActionModal(props) {
         draggable
         pauseOnHover
       />
-      <div className="Action">
+      <div className="action">
         <Fab
-          className="Action-button"
+          className="action-button"
           variant="extended"
           color="primary"
           onClick={handleClickOpen}
         >
           {props.action}
         </Fab>
-        <Dialog className="Action-Dialog" open={open} onClose={handleClose}>
+        <Dialog className="action-dialog" open={open} onClose={handleClose}>
           {props.action === "TRANSFER" ? (
-            <img src={transaction} className="Transfer-img" />
+            <img src={transaction} className="transfer-img" />
           ) : (
-            <img src={loan} className="Loan-img" />
+            <img src={loan} className="loan-img" />
           )}
-          <DialogContent className="Action-DialogContent">
+          <DialogContent className="action-dialog-content">
             <TextField
               id="to"
               label="To"
@@ -177,7 +177,7 @@ export default function ActionModal(props) {
             <br></br>
           </DialogContent>
 
-          <DialogActions className="Action-DialogOptions">
+          <DialogActions className="action-dialog-options">
             <Button variant="outlined" onClick={handleClose}>
               Cancel
             </Button>

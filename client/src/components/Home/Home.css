@@ -1,14 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap");
 
-.Home-Button {
+.home-button {
   margin: 20px;
   font-weight: bold;
   letter-spacing: 1px;
   width: 228px;
 }
 
-.Home {
+.home {
   text-align: center;
   background-color: white;
   display: flex;
@@ -19,21 +19,21 @@
   font-family: "Montserrat", sans-serif;
 }
 
-.Home-header {
+.home-header {
   font-size: 40px;
   color: #07877D;
   font-weight: 100px;
 }
 
-.Home-p {
+.home-p {
   margin-bottom: 2px;
 }
 
-.Home-img {
+.home-img {
   max-width: 70vmin;
 }
 
-.Home-TextField {
+.home-text-field {
   width: 228px;
 }
 

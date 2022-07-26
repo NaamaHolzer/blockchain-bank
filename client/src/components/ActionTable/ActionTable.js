@@ -138,7 +138,7 @@ EnhancedTableHead.propTypes = {
 const EnhancedTableToolbar = (props) => {
   return (
     <div className="header-container">
-      <h1 className="Title">{props.action.toUpperCase() + "S"}</h1>
+      <h1 className="title">{props.action.toUpperCase() + "S"}</h1>
       <Select
         className="select"
         label="range"

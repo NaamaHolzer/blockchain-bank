@@ -32,7 +32,7 @@ export default function NavgationBar(props) {
             <Link to="/transactions" style={{ textDecoration: "none" }}>
               <Button
                 onClick={() => props.handleState("Transactions")}
-                className="Nav-items"
+                className="nav-items"
                 key="transactions"
                 sx={{ my: 2, display: "block" }}
               >
@@ -42,7 +42,7 @@ export default function NavgationBar(props) {
             <Link to="/loans" style={{ textDecoration: "none" }}>
               <Button
                 onClick={() => props.handleState("Loans")}
-                className="Nav-items"
+                className="nav-items"
                 key="loans"
                 sx={{ my: 2, display: "block" }}
               >

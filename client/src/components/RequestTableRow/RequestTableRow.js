@@ -71,7 +71,7 @@ function RequestTableRow(props) {
         draggable
         pauseOnHover
       />
-      <TableCell align="center" className="TableCell">
+      <TableCell align="center" className="table-cell">
         {props.username}
       </TableCell>
       <TableCell align="center">

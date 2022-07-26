@@ -85,12 +85,12 @@ export default function Signup(props) {
     setOpen(false);
   };
   return (
-    <div className="Signup">
+    <div className="signup">
       <Button onClick={handleClickOpen}>Sign up here</Button>
-      <Dialog className="Signup-Dialog" open={open} onClose={handleClose}>
-        <img src={signup} className="Signup-img" />
-        <h1 className="Signup-header">Join us!</h1>
-        <DialogContent className="Signup-DialogContent">
+      <Dialog className="signup-dialog" open={open} onClose={handleClose}>
+        <img src={signup} className="signup-img" />
+        <h1 className="signup-header">Join us!</h1>
+        <DialogContent className="signup-dialog-content">
           <TextField
             id="firstName"
             label="First Name"
@@ -133,7 +133,7 @@ export default function Signup(props) {
           />
           <br></br>
         </DialogContent>
-        <DialogActions className="Signup-DialogOptions">
+        <DialogActions className="signup-dialog-options">
           <Button variant="outlined" onClick={handleClose}>
             Cancel
           </Button>

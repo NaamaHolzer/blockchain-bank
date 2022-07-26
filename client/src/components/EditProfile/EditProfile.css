@@ -1,11 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap");
 
-.Edit {
+.edit {
   text-align: center;
   letter-spacing: 2px;
 }
 
-.Edit-img {
+.edit-img {
   max-width: 50vmin;
   max-height: 80vmin;
   align-self: center;
@@ -13,24 +13,24 @@
   margin-top: 10%;
 }
 
-.Edit-header {
+.edit-header {
   align-self: center;
   font-family: "Montserrat", sans-serif;
   margin-bottom: 1px;
 }
 
-.Edit-DialogOptions {
+.edit-dialog-options {
   align-self: center;
   margin-top: 10px;
   margin-bottom: 30px;
 }
 
-.Edit-DialogContent {
+.edit-dialog-content {
   align-self: center;
   max-width: 5000px;
   max-height: 5000px;
 }
 
-.Edit-Dialog {
+.edit-dialog {
   max-height: fit-content;
 }

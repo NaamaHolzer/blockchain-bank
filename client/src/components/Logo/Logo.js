@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 function Logo(props) {
   return (
     <Link to="/" style={{ textDecoration: "none" }}>
-      <Button className="Logo-container">
+      <Button className="logo-container">
         <img
           src={logo}
-          className="Logo-img"
+          className="logo-img"
           onClick={() => props.handleState("Greetings")}
         />
       </Button>

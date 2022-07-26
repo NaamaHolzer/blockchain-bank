@@ -72,10 +72,10 @@ function Profile(props) {
       open={isMenuOpen}
       onClick={handleMenuClose}
     >
-      <MenuItem className="Menu-item" color="primary">
+      <MenuItem className="menu-item" color="primary">
         <EditProfile></EditProfile>
       </MenuItem>
-      <MenuItem className="Menu-item" color="primary" onClick={logout}>
+      <MenuItem className="menu-item" color="primary" onClick={logout}>
         <Button>Logout</Button>
       </MenuItem>
     </Menu>
@@ -94,10 +94,10 @@ function Profile(props) {
         draggable
         pauseOnHover
       />
-      <IconButton size="large" edge="end" className="IconButton">
+      <IconButton size="large" edge="end" className="icon-button">
         <AccountCircleOutlinedIcon
           size="Large"
-          className="Icon"
+          className="icon"
           color="primary"
           onClick={handleMenuOpen}
         />

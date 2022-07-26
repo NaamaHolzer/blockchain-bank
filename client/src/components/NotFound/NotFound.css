@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap");
 
-.NotFound {
+.not-found {
   text-align: center;
   background-color: white;
   display: flex;
@@ -12,11 +12,11 @@
   font-family: "Montserrat", sans-serif;
 }
 
-.NotFound-img {
+.not-found-img {
   max-width: 70vmin;
 }
 
-.NotFound-header {
+.not-found-header {
   font-size: 40px;
   color: #07877D;
   font-weight: 100px;

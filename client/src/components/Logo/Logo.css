@@ -1,12 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap");
 
-.Logo-container {
+.logo-container {
   display: flex;
   height: fit-content;
   width: fit-content;
 }
 
-.Logo-img {
+.logo-img {
   height: 80px;
   width: 180px;
 }

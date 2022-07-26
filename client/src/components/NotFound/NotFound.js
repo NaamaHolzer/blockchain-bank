@@ -12,9 +12,9 @@ function NotFound(props) {
         handleState={props.handleState}
         sx={{ display: { xs: "none", md: "flex" } }}
       />
-      <div className="NotFound">
-        <img src={notfound} className="NotFound-img" />
-        <h1 className="NotFound-header">LOST IN SPACE</h1>
+      <div className="not-found">
+        <img src={notfound} className="not-found-img" />
+        <h1 className="not-found-header">LOST IN SPACE</h1>
       </div>
     </div>
   );

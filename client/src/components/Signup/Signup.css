@@ -1,11 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap");
 
-.Signup {
+.signup {
   text-align: center;
   letter-spacing: 2px;
 }
 
-.Signup-img {
+.signup-img {
   max-width: 50vmin;
   max-height: 80vmin;
   align-self: center;
@@ -13,25 +13,25 @@
   margin-top: 10%;
 }
 
-.Signup-header {
+.signup-header {
   align-self: center;
   font-family: "Montserrat", sans-serif;
   margin-bottom: 1px;
 }
 
-.Signup-DialogOptions {
+.signup-dialog-options {
   align-self: center;
   margin-top: 10px;
   margin-bottom: 30px;
 }
 
-.Signup-DialogContent {
+.signup-dialog-content {
   align-self: center;
   max-width: 5000px;
   max-height: 5000px;
 }
 
-.Signup-Dialog {
+.signup-dialog {
   max-height: fit-content;
 }
 

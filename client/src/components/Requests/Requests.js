@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const EnhancedTableToolbar = (props) => {
-  return <h1 className="Title">PENDING REQUESTS</h1>;
+  return <h1 className="title">PENDING REQUESTS</h1>;
 };
 
 export default function Requests(props) {

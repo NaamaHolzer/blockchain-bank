@@ -114,7 +114,7 @@ export default function EditProfile() {
     else return false;
   };
   return (
-    <div className="Edit">
+    <div className="edit">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -127,9 +127,9 @@ export default function EditProfile() {
         pauseOnHover
       />
       <Button onClick={handleClickOpen}>Edit Details </Button>
-      <Dialog className="Edit-Dialog" open={open} onClose={handleClose}>
-        <img src={editProfile} className="Edit-img" />
-        <DialogContent className="Edit-DialogContent">
+      <Dialog className="edit-dialog" open={open} onClose={handleClose}>
+        <img src={editProfile} className="edit-img" />
+        <DialogContent className="edit-dialog-content">
           <TextField
             defaultValue={userDetails.firstName}
             onChange={(e) => setFirstNameVal(e.target.value)}
@@ -159,7 +159,7 @@ export default function EditProfile() {
           />
           <br></br>
         </DialogContent>
-        <DialogActions className="Edit-DialogOptions">
+        <DialogActions className="edit-dialog-options">
           <Button variant="outlined" onClick={handleClose}>
             Cancel
           </Button>

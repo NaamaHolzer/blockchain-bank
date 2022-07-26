@@ -51,7 +51,7 @@ function Home(props) {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   return (
-    <div className="Home">
+    <div className="home">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -63,10 +63,10 @@ function Home(props) {
         draggable
         pauseOnHover
       />
-      <img src={home} className="Home-img" />
-      <h1 className="Home-header">Welcome to Lev Bank</h1>
+      <img src={home} className="home-img" />
+      <h1 className="home-header">Welcome to Lev Bank</h1>
       <TextField
-        className="Home-TextField"
+        className="home-text-field"
         label="Username"
         variant="standard"
         id="standard-basic"
@@ -74,7 +74,7 @@ function Home(props) {
         onChange={(e) => setUsernameFilled(e.target.value)}
       />
       <TextField
-        className="Home-TextField"
+        className="home-text-field"
         id="input-with-sx"
         label="Password"
         margin="10px"
@@ -98,14 +98,14 @@ function Home(props) {
       />
       <Button
         onClick={() => login()}
-        className="Home-Button"
+        className="home-button"
         variant="outlined"
         margin="none"
         disabled={!usernameFilled || !passwordFilled}
       >
         Login
       </Button>
-      <p className="Home-p">Don't have an account yet?</p>
+      <p className="home-p">Don't have an account yet?</p>
       <Signup auth={props.auth} />
     </div>
   );

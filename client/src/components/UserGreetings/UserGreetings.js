@@ -8,18 +8,18 @@ import { Link } from "react-router-dom";
 
 export default function UserGreetings(props) {
   return (
-    <div className="User-div">
+    <div className="user-div">
       {props.currentUser.admin ? (
-        <img src={admin} className="ImgAdmin"></img>
+        <img src={admin} className="img-admin"></img>
       ) : (
-        <img src={user} className="Img"></img>
+        <img src={user} className="img"></img>
       )}
-      <p className="Greetings">Welcome back, {props.currentUser.username[0].toUpperCase()+props.currentUser.username.substring(1)}!</p>
+      <p className="greetings">Welcome back, {props.currentUser.username[0].toUpperCase()+props.currentUser.username.substring(1)}!</p>
       {props.currentUser.admin ? (
         <Link to="/requests" style={{ textDecoration: "none" }}>
-          <div className="Actions-div">
+          <div className="actions-div">
             <Fab
-              className="Requests-button"
+              className="requests-button"
               variant="extended"
               color="primary"
               onClick={() => props.handleState("Requests")}
@@ -29,7 +29,7 @@ export default function UserGreetings(props) {
           </div>
         </Link>
       ) : (
-        <div className="Actions-div">
+        <div className="actions-div">
           <ActionModal action="TRANSFER" />
           <ActionModal action="LOAN" />
         </div>
