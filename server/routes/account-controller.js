@@ -83,8 +83,9 @@ router.post("/handleRequest", [checkAuth.verifyToken,checkAdmin.verifyAdmin], as
       );
     } else {
       await User.DELETE(findUser.username);
+      res.status(200).json({ message: "USER REJECTED" });
     }
-    res.status(200).json({ message: "USER REJECTED" });
+    res.status(200).json({ message: "USER APPROVED" });
   } catch (err) {
     throw err;
     res.status(500).json({ message: err });

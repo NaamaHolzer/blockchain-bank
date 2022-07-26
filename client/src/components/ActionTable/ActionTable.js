@@ -15,7 +15,8 @@ import "./ActionTable.css";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import { Button } from "@mui/material";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -161,6 +162,29 @@ export default function ActionTable(props) {
   const [rows, setRows] = useState([]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("amount");
+  const [currentRange, setCurrentRange] = useState("YEAR");
+
+  const closeRequest = async (id) => {
+    try {
+      let response = await fetch(process.env.REACT_APP_BASE_URL + "/loan", {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
+        credentials: "include",
+      });
+      if (response.ok) {
+        response = await response.json();
+        await fetchData(currentRange);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -194,7 +218,7 @@ export default function ActionTable(props) {
             progress: undefined,
           });
       }
-
+      setCurrentRange(range);
       let url;
       if (rangeNum === -1) {
         url = props.admin
@@ -279,6 +303,7 @@ export default function ActionTable(props) {
                       </TableCell>
                     </TableRow>
                   ) : (
+                    
                     <TableRow hover tabIndex={-1} key={row.name}>
                       <TableCell align="center">{row.fromUser}</TableCell>
                       <TableCell align="center">{row.toUser}</TableCell>
@@ -289,6 +314,15 @@ export default function ActionTable(props) {
                       <TableCell align="center">
                         {setDate(new Date(row.endDate))}
                       </TableCell>
+                    {props.admin?(
+                      <TableCell align="center">
+                        <Button
+                          variant="contained"
+                          onClick={async () => closeRequest(row.id)}
+                        >
+                          CLOSE
+                        </Button>
+                      </TableCell>):(<div/>)}
                     </TableRow>
                   );
                 }

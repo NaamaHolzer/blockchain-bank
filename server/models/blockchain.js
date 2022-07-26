@@ -77,7 +77,7 @@ module.exports = (db) => {
     const today = new Date();
     const day = 86400000; // number of milliseconds in a day
     const startDate = new Date(today - range * day);
-    const res = chain.filter(
+    let res = chain.filter(
       (block) =>
         (block.action.fromAddress == publicKey ||
           block.action.toAddress == publicKey) &&
