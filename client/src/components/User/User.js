@@ -8,7 +8,7 @@ import "./User.css";
 import Fab from "@mui/material/Fab";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import * as React from "react";
-
+import ChatModal from "../ChatModal/ChatModal"
 function User(props) {
   const [AnchorEl, setAnchorEl] = React.useState(props.initialState);
   const handleState = (state) => {
@@ -40,18 +40,7 @@ function User(props) {
                 return <p>{AnchorEl}</p>;
             }
           })()}
-          <Fab
-            className="Chat-button"
-            size="large"
-            edge="end"
-            color="primary"
-            style={{ position: "absolute", top: "90%" }}
-          >
-            <ChatBubbleOutlineOutlinedIcon
-              className="Chat-icon"
-              color="primary"
-            />
-          </Fab>
+    <ChatModal currentUser = {props.currentUser}/>
         </div>
       ) : (
         <div>

@@ -7,7 +7,7 @@ export default function Loader() {
     <div className="spinner-container">
       <img src={loader} className="Loader-img"/>
       <div className="loading-spinner"></div>
-      <p className="text">Loading...</p>
+      <p className="loader-text">Loading...</p>
     </div>
   );
 }

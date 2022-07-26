@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap");
+
+.chat-button {
+  background-color: #07877d;
+}
+
+.header {
+  color: #07877d;
+  font-family: "Montserrat", sans-serif;
+  margin-top: 5px;
+}
+
+.chat-content {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.dialog {
+  align-self: center;
+  max-height: fit-content;
+  margin-top: 40px;
+}
+
+.chat {
+  width: fit-content; 
+  margin-top: 10px;
+}
