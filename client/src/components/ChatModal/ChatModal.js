@@ -9,42 +9,96 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import ChatList from "../ChatList/ChatList"
-import MessagesList from "../MessagesList/MessagesList"
+import ChatList from "../ChatList/ChatList";
+import MessagesList from "../MessagesList/MessagesList";
+import chat from "../../images/chat.svg";
 
-export default function ActionModal(props) {
+export default function ChatModal(props) {
   const [open, setOpen] = React.useState(false);
+
+  const [messages, setMessages] = React.useState([]);
+  const [chatUser, setChatUser] = React.useState("");
+
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+  const updateMessages = (newMessage) => {
+    console.log("in updateMessages, currentUser: ", props.currentUser.username);
+    let updatedMessages = [...messages];
+    updatedMessages.push(newMessage);
+    console.log("is updated list different from current state? ", updatedMessages === messages)
+    setMessages(updatedMessages);
+  };
+  const getMessages = async (username) => {
+    console.log("in getMessages");
+    try {
+      let res = await fetch(
+        process.env.REACT_APP_BASE_URL + "/chat?toUser=" + username,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      if (res.ok) {
+        res = await res.json();
+        setMessages(res.chat);
+        setChatUser(username);
+        console.log("fetched messages length: ", res.chat.length);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  React.useEffect(() => {
+    console.log("in ChatModal's useeffect");
+  }, []);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} >
-        <div className="chat">
-        <Fab className = "chat-button"
-            size="large"
-            edge="end"
-            color="primary"
-            style={{ position: "absolute", top: "85%",marginLeft:"40px"}}>
-          <ChatBubbleOutlineOutlinedIcon
-            color="secondary"
-            onClick={handleClickOpen}
-          />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <div className="chat">
+        <Fab
+          className="chat-button"
+          size="large"
+          edge="end"
+          color="primary"
+          style={{ position: "absolute", top: "85%", marginLeft: "40px" }}
+          onClick={handleClickOpen}
+        >
+          <ChatBubbleOutlineOutlinedIcon color="secondary" />
         </Fab>
         <Dialog open={open} onClose={handleClose} className="dialog">
           <DialogContent>
             <h2 className="header">CHATS</h2>
             <div className="chat-content">
-            <ChatList></ChatList>
-            <MessagesList></MessagesList>
+              <ChatList
+                currentUser={props.currentUser}
+                changeMessagesList={getMessages}
+              ></ChatList>
+              {messages.length===0 && chatUser === "" ? (
+                <div>
+                  <p className="chat-text">{"START CHATTING NOW!"}</p>
+                <img src={chat} className="chat-img" />
+                </div>
+              ) : (
+                <MessagesList
+                  currentUser={props.currentUser}
+                  chatUser={chatUser}
+                  currentMessages={messages}
+                  updateMessages={updateMessages}
+                ></MessagesList>
+              )}
             </div>
           </DialogContent>
         </Dialog>
-        </div>
+      </div>
     </LocalizationProvider>
-
   );
 }

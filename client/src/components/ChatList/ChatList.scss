@@ -49,9 +49,14 @@
   .a1-column {
     display: flex;
     flex-wrap: nowrap;
-    overflow: auto;
+    overflow: scroll;
   }
   
+  .a1-column {
+    max-height: 520px;
+    overflow: scroll;
+  }
+
   .a1-row.a1-end,
   .a1-column.a1-end {
     justify-content: flex-end;
@@ -162,7 +167,7 @@
   .a1-column.a1-divided-items > :not(:first-child):after {
     content: "";
     position: absolute;
-    width: 100%;
+    width: fit-content;
     left: 0;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
@@ -306,6 +311,7 @@ section.container {
 .aside {
     flex: 30%;
     min-width: 270px;
+    width: fit-content;
 }
 
 .main {
@@ -366,7 +372,9 @@ section.container {
     border-radius: 50%;
 
 }
-
+.a1-column {
+  width: 170px;
+}
 .pin-wrap {
     background-color: var(--grey);
     color: var(--white);
@@ -390,7 +398,7 @@ section.container {
 }
 
 .message-preview {
-    max-width: 90%;
+    max-width: fit-content;
     font-size: 0.9em;
     color: var(--secondary-text-color);
     text-overflow: ellipsis;
@@ -430,7 +438,7 @@ section.container {
 .text {
     position: relative;
     border-radius: .6em;
-    max-width: 50%;
+    max-width: fit-content;
     padding: 0.2em 0.6em 0.1em 0.6em;
     color: var(--black);
 
@@ -500,7 +508,7 @@ section.container {
         right: -100%;
         top: 0;
         bottom: 0;
-        width: 100%;
+        width: fit-content;
         transition: transform 0.4s;
     }
 
@@ -518,5 +526,6 @@ section.container {
         height: 100%;
         margin: unset;
         top: 0;
+        width: fit-content;
     }   
 }
