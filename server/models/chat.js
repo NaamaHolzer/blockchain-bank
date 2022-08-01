@@ -3,34 +3,32 @@ const mongo = require("mongoose");
 module.exports = (db) => {
   let schema = new mongo.Schema(
     {
-      from: { type: String, required: true, index: true },
-      to: { type: String, required: true, index: true },
-      content: { type: String, required: true },
-      timestamp: { type: Date },
+      channelName: { type: String, required: true, index: true },
+      messages: { type: Array },
     },
     { autoIndex: false }
   );
 
-  schema.statics.CREATE = async function (message) {
+  schema.statics.CREATE = async function (channelName) {
     return this.create({
-      from: message.from,
-      to: message.to,
-      content: message.content,
-      timestamp: message.timestamp,
+      channelName: channelName,
+      messages: [
+        // { from: "admin", to: "naama", content: "hi", timestamp: Date.now() },
+        // { from: "naama", to: "admin", content: "hi", timestamp: Date.now() },
+        // { from: "admin", to: "naama", content: "hi", timestamp: Date.now() },
+        // { from: "naama", to: "admin", content: "hi", timestamp: Date.now() },
+        // { from: "admin", to: "naama", content: "hi", timestamp: Date.now() },
+        // { from: "naama", to: "admin", content: "hi", timestamp: Date.now() },
+      ],
     });
   };
 
-  schema.statics.REQUEST = async function (currentUser, chatUser) {
-    return {
-      fromCurrentUser: await this.find({
-        from: currentUser,
-        to: chatUser,
-      }).exec(),
-      toCurrentUser: await this.find({
-        from: chatUser,
-        to: currentUser,
-      }).exec(),
-    };
+  schema.statics.REQUEST = async function (channelName) {
+    return this.find({ channelName: channelName }).exec();
+  };
+
+  schema.statics.UPDATE = async function (idenifier, val) {
+    return this.updateOne(idenifier, { $set: val });
   };
 
   db.model("Chat", schema, "Chat");

@@ -3,6 +3,7 @@ const router = express.Router();
 const checkAuth = require("../middlewares/check-auth");
 const bcrypt = require("bcryptjs");
 const User = require("../models")("User");
+const Chat = require("../models")("Chat");
 const checkAdmin = require("../middlewares/check-admin");
 const fetch = require("node-fetch");
 const nodemailer = require("nodemailer");
@@ -81,6 +82,7 @@ router.post("/handleRequest", [checkAuth.verifyToken,checkAdmin.verifyAdmin], as
           publicKey: keys.publicKey,
         }
       );
+      await Chat.CREATE("chat-" + findUser.username);
     } else {
       await User.DELETE(findUser.username);
       res.status(200).json({ message: "USER REJECTED" });
