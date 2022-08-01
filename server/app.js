@@ -20,7 +20,7 @@ let app = express();
 
 (async () => {
   let sessConnStr =
-    "mongodb+srv://naamaholzer:0584322277@cluster0.xsp95.mongodb.net/blockchain-bank?retryWrites=true&w=majority";
+    "mongodb+srv://naamaholzer:" + process.env.MONGO_PASSWORD + "@cluster0.xsp95.mongodb.net/blockchain-bank?retryWrites=true&w=majority";
   process.on("SIGINT", async () => {
     process.exit(0);
   });
