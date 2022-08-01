@@ -8,10 +8,10 @@ const BlockchainModel = require("../models")("Blockchain");
 
 const Pusher = require("pusher");
 const pusher = new Pusher({
-  appId: "1438647",
-  key: "ccaa990cbc0f5017da22",
-  secret: "00fb676b56ff4d382692",
-  cluster: "ap2",
+  appId: process.env.PUSHER_APP_ID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
+  cluster: process.env.PUSHER_CLUSTER,
   useTLS: true,
 });
 
