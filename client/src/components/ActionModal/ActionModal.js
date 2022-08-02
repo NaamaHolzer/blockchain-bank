@@ -9,8 +9,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ActionModal(props) {
   const [toFilled, setToFilled] = React.useState();
@@ -43,8 +42,8 @@ export default function ActionModal(props) {
         );
         if (response.ok) {
           handleClose();
-          setToFilled ('')
-          setAmountFilled ( '')
+          setToFilled("");
+          setAmountFilled("");
           response = await response.json();
           toast.success(response.message, {
             position: "top-center",
@@ -55,6 +54,7 @@ export default function ActionModal(props) {
             draggable: true,
             progress: undefined,
           });
+          window.location.reload(true);
         } else {
           response = await response.json();
           toast.error(response.message, {
@@ -65,9 +65,11 @@ export default function ActionModal(props) {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            });
-                    }
-      } catch (err) {console.log(err)}
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       try {
         let response = await fetch(process.env.REACT_APP_BASE_URL + "/loan", {
@@ -94,7 +96,9 @@ export default function ActionModal(props) {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-          });        } else {
+          });
+          window.location.reload(true);
+        } else {
           response = await response.json();
           toast.error(response.message, {
             position: "top-center",
@@ -104,7 +108,8 @@ export default function ActionModal(props) {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            });        }
+          });
+        }
       } catch (err) {}
     }
   };
