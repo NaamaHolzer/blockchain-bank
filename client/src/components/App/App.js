@@ -128,7 +128,7 @@ export default function App() {
                   currentUser={CurrentUser}
                 />
               }
-              accessCondition={IsLoggedIn}
+              accessCondition={IsLoggedIn && CurrentUser.admin}
             ></GuardedRoute>
           }
         />

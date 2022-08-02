@@ -57,7 +57,7 @@ router.post("/handleRequest", [checkAuth.verifyToken,checkAdmin.verifyAdmin], as
       if (currency === "LEV") {
         balance = Number(req.body.balance);
       } else if (currency === "USD") {
-        balance = Number(req.body.balance) * calcRate();
+        balance = Number(req.body.balance) * (await calcRate());
       } else {
         try {
           const usdBalance = parseFloat(
@@ -156,7 +156,7 @@ router.get("/getUserDetails", checkAuth.verifyToken, async (req, res) => {
   }
 });
 
-router.get("/getRequests", checkAuth.verifyToken, async (req, res) => {
+router.get("/getRequests", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
   try {
     const users = await User.REQUEST_REQUESTS();
     res.status(200).json({
