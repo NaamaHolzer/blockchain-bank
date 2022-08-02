@@ -74,10 +74,10 @@ export default function ChatModal(props) {
                 currentUser={props.currentUser}
                 changeMessagesList={getMessages}
               ></ChatList>
-              {messages.length===0 && chatUser === "" ? (
+              {messages.length === 0 && chatUser === "" ? (
                 <div>
                   <p className="chat-text">{"START CHATTING NOW!"}</p>
-                <img src={chat} className="chat-img" />
+                  <img src={chat} className="chat-img" />
                 </div>
               ) : (
                 <MessagesList

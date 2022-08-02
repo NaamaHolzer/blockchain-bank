@@ -8,7 +8,7 @@ import "./User.css";
 import Fab from "@mui/material/Fab";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import * as React from "react";
-import ChatModal from "../ChatModal/ChatModal"
+import ChatModal from "../ChatModal/ChatModal";
 function User(props) {
   const [AnchorEl, setAnchorEl] = React.useState(props.initialState);
   const handleState = (state) => {
@@ -19,7 +19,11 @@ function User(props) {
     <div>
       {props.currentUser ? (
         <div className="User-div">
-          <NavigationBar currentUser={props.currentUser} auth = {props.auth} handleState={handleState}></NavigationBar>
+          <NavigationBar
+            currentUser={props.currentUser}
+            auth={props.auth}
+            handleState={handleState}
+          ></NavigationBar>
           {(() => {
             const anchorEl = { AnchorEl };
             switch (anchorEl.AnchorEl) {
@@ -31,16 +35,26 @@ function User(props) {
                   ></UserGreetings>
                 );
               case "Transactions":
-                return <ActionTable admin={props.currentUser.admin} action="transaction"></ActionTable>;
+                return (
+                  <ActionTable
+                    admin={props.currentUser.admin}
+                    action="transaction"
+                  ></ActionTable>
+                );
               case "Loans":
-                return <ActionTable admin={props.currentUser.admin} action="loan"></ActionTable>;
+                return (
+                  <ActionTable
+                    admin={props.currentUser.admin}
+                    action="loan"
+                  ></ActionTable>
+                );
               case "Requests":
                 return <Requests></Requests>;
               default:
                 return <p>{AnchorEl}</p>;
             }
           })()}
-    <ChatModal currentUser = {props.currentUser}/>
+          <ChatModal currentUser={props.currentUser} />
         </div>
       ) : (
         <div>

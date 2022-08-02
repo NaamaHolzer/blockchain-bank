@@ -15,7 +15,7 @@ const pusher = new Pusher({
   key: process.env.PUSHER_KEY,
   secret: process.env.PUSHER_SECRET,
   cluster: process.env.PUSHER_CLUSTER,
-  useTLS: true
+  useTLS: true,
 });
 
 router.post("/request", async (req, res) => {
@@ -34,65 +34,70 @@ router.post("/request", async (req, res) => {
   try {
     await User.CREATE(newUser);
     sendEmail(req.body.username);
-    pusher.trigger("signup-request", "new-request", { 
-         message: req.body.username+" would like to sign up!"
-       });
-      
+    pusher.trigger("signup-request", "new-request", {
+      message: req.body.username + " would like to sign up!",
+    });
+
     res.status(200).json({ message: "REQUEST SENT SUCCESSFULLY" });
   } catch (err) {
     res.json({ message: err });
   }
 });
 
-router.post("/handleRequest", [checkAuth.verifyToken,checkAdmin.verifyAdmin], async (req, res) => {
-  const findUser = await User.REQUEST_ONE(req.body.username.toLowerCase());
-  if (!findUser) {
-    res.status(500).json({ message: "USER DOES NOT EXIST" });
-    return;
-  }
-  try {
-    if (req.body.approved) {
-      const currency = req.body.currency;
-      var balance = 0;
-      if (currency === "LEV") {
-        balance = Number(req.body.balance);
-      } else if (currency === "USD") {
-        balance = Number(req.body.balance) * (await calcRate());
-      } else {
-        try {
-          const usdBalance = parseFloat(
-            (await convertCurrency(Number(req.body.balance), "ILS", "USD")).result
-          );
-          const rate = await calcRate();
-          balance = usdBalance * rate;
-        } catch (err) {
-          console.log(err);
-        }
-      }
-      const keys = keyGenerator.getKeys();
-      await User.UPDATE(
-        {
-          username: findUser.username,
-        },
-        {
-          approved: true,
-          balance: balance,
-          rate: await calcRate(),
-          privateKey: keys.privateKey,
-          publicKey: keys.publicKey,
-        }
-      );
-      await Chat.CREATE("chat-" + findUser.username);
-    } else {
-      await User.DELETE(findUser.username);
-      res.status(200).json({ message: "USER REJECTED" });
+router.post(
+  "/handleRequest",
+  [checkAuth.verifyToken, checkAdmin.verifyAdmin],
+  async (req, res) => {
+    const findUser = await User.REQUEST_ONE(req.body.username.toLowerCase());
+    if (!findUser) {
+      res.status(500).json({ message: "USER DOES NOT EXIST" });
+      return;
     }
-    res.status(200).json({ message: "USER APPROVED" });
-  } catch (err) {
-    throw err;
-    res.status(500).json({ message: err });
+    try {
+      if (req.body.approved) {
+        const currency = req.body.currency;
+        var balance = 0;
+        if (currency === "LEV") {
+          balance = Number(req.body.balance);
+        } else if (currency === "USD") {
+          balance = Number(req.body.balance) * (await calcRate());
+        } else {
+          try {
+            const usdBalance = parseFloat(
+              (await convertCurrency(Number(req.body.balance), "ILS", "USD"))
+                .result
+            );
+            const rate = await calcRate();
+            balance = usdBalance * rate;
+          } catch (err) {
+            console.log(err);
+          }
+        }
+        const keys = keyGenerator.getKeys();
+        await User.UPDATE(
+          {
+            username: findUser.username,
+          },
+          {
+            approved: true,
+            balance: balance,
+            rate: await calcRate(),
+            privateKey: keys.privateKey,
+            publicKey: keys.publicKey,
+          }
+        );
+        await Chat.CREATE("chat-" + findUser.username);
+      } else {
+        await User.DELETE(findUser.username);
+        res.status(200).json({ message: "USER REJECTED" });
+      }
+      res.status(200).json({ message: "USER APPROVED" });
+    } catch (err) {
+      throw err;
+      res.status(500).json({ message: err });
+    }
   }
-});
+);
 
 router.put("/", checkAuth.verifyToken, async (req, res) => {
   try {
@@ -156,16 +161,20 @@ router.get("/getUserDetails", checkAuth.verifyToken, async (req, res) => {
   }
 });
 
-router.get("/getRequests", [checkAuth.verifyToken, checkAdmin.verifyAdmin], async (req, res) => {
-  try {
-    const users = await User.REQUEST_REQUESTS();
-    res.status(200).json({
-      users: users
-    });
-  } catch (err) {
-    res.status(500).json({ message: err });
+router.get(
+  "/getRequests",
+  [checkAuth.verifyToken, checkAdmin.verifyAdmin],
+  async (req, res) => {
+    try {
+      const users = await User.REQUEST_REQUESTS();
+      res.status(200).json({
+        users: users,
+      });
+    } catch (err) {
+      res.status(500).json({ message: err });
+    }
   }
-});
+);
 
 async function calcRate() {
   const numUsers = (await User.REQUEST()).filter(

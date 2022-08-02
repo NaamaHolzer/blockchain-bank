@@ -10,8 +10,12 @@ const BlockchainModel = require("../models")("Blockchain");
 
 router.get("/", checkAdmin.verifyAdmin, async (req, res) => {
   try {
-    const loansChain = new Blockchain((await BlockchainModel.REQUEST("loan"))[0]);
-    const transactionsChain = new Blockchain((await BlockchainModel.REQUEST("transaction"))[0]);
+    const loansChain = new Blockchain(
+      (await BlockchainModel.REQUEST("loan"))[0]
+    );
+    const transactionsChain = new Blockchain(
+      (await BlockchainModel.REQUEST("transaction"))[0]
+    );
 
     const loansValid = loansChain.isChainValid();
     const transactionsValid = transactionsChain.isChainValid();

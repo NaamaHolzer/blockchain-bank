@@ -11,7 +11,7 @@ import {
 import signup from "../../images/signup.svg";
 import "./Signup.css";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Signup(props) {
   const [open, setOpen] = React.useState(false);
@@ -51,7 +51,8 @@ export default function Signup(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        });      } else {
+        });
+      } else {
         response = await response.json();
         toast.error(response.message, {
           position: "top-center",
@@ -61,7 +62,8 @@ export default function Signup(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });      }
+        });
+      }
     } catch (err) {
       console.log(err);
     }

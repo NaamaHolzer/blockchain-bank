@@ -14,13 +14,11 @@ let chat = require("./routes/chat-controller");
 let cors = require("cors");
 let app = express();
 
-
-
-
-
 (async () => {
   let sessConnStr =
-    "mongodb+srv://naamaholzer:" + process.env.MONGO_PASSWORD + "@cluster0.xsp95.mongodb.net/blockchain-bank?retryWrites=true&w=majority";
+    "mongodb+srv://naamaholzer:" +
+    process.env.MONGO_PASSWORD +
+    "@cluster0.xsp95.mongodb.net/blockchain-bank?retryWrites=true&w=majority";
   process.on("SIGINT", async () => {
     process.exit(0);
   });
@@ -51,8 +49,8 @@ let app = express();
   app.use("/loan", loan);
   app.use("/transaction", transaction);
   app.use("/auth", auth);
-  app.use("/blockchain",blockchain)
-  app.use("/chat",chat)
+  app.use("/blockchain", blockchain);
+  app.use("/chat", chat);
   app.use(function (req, res, next) {
     let err = new Error("Not Found");
     err.status = 404;

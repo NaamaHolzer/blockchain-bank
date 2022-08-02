@@ -12,7 +12,6 @@ export default function MessageList(props) {
   const [inputMessage, setInputMessage] = useState();
   const scrollRef = useRef(null);
 
-
   const sendMessage = async (content) => {
     try {
       let response = await fetch(process.env.REACT_APP_BASE_URL + "/chat", {
@@ -94,7 +93,10 @@ export default function MessageList(props) {
     <div class="a1-column-messages a1-long a1-elastic chat-container">
       <div className="chat-user">{props.chatUser}</div>
       <div className="messages-container">
-        <div ref={scrollRef} class="a1-column-messages a1-long a1-elastic chat-main a1-spaced-items">
+        <div
+          ref={scrollRef}
+          class="a1-column-messages a1-long a1-elastic chat-main a1-spaced-items"
+        >
           {props.currentMessages.map((message) => {
             return (
               <div

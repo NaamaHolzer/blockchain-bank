@@ -292,7 +292,6 @@ export default function ActionTable(props) {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    
                     <TableRow hover tabIndex={-1} key={row.name}>
                       <TableCell align="center">{row.fromUser}</TableCell>
                       <TableCell align="center">{row.toUser}</TableCell>
@@ -303,15 +302,18 @@ export default function ActionTable(props) {
                       <TableCell align="center">
                         {setDate(new Date(row.endDate))}
                       </TableCell>
-                    {props.admin?(
-                      <TableCell align="center">
-                        <Button
-                          variant="contained"
-                          onClick={async () => closeRequest(row.id)}
-                        >
-                          CLOSE
-                        </Button>
-                      </TableCell>):(<div/>)}
+                      {props.admin ? (
+                        <TableCell align="center">
+                          <Button
+                            variant="contained"
+                            onClick={async () => closeRequest(row.id)}
+                          >
+                            CLOSE
+                          </Button>
+                        </TableCell>
+                      ) : (
+                        <div />
+                      )}
                     </TableRow>
                   );
                 }

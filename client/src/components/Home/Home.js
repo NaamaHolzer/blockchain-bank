@@ -6,7 +6,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import React from "react";
 import Signup from "../Signup/Signup";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 function Home(props) {
   const login = async () => {
@@ -23,13 +23,13 @@ function Home(props) {
             username: usernameFilled,
             password: passwordFilled,
           }),
-          credentials:"include"
+          credentials: "include",
         }
       );
 
       if (response.ok) {
         response = await response.json();
-        props.auth(/*isLoggedIn=*/true, response.currentUser);
+        props.auth(/*isLoggedIn=*/ true, response.currentUser);
       } else {
         response = await response.json();
         toast.error(response.message, {
@@ -40,9 +40,9 @@ function Home(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });      }
-    } catch (err) {
-    }
+        });
+      }
+    } catch (err) {}
   };
 
   const [showPassword, setShowPassword] = React.useState(false);

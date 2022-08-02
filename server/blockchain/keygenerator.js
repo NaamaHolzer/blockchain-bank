@@ -9,4 +9,4 @@ module.exports.getKeys = function () {
     privateKey: private,
     publicKey: public,
   };
-}
+};

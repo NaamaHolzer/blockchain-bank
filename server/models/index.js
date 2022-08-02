@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const uri =
-  "mongodb+srv://naamaholzer:" + process.env.MONGO_PASSWORD + "@cluster0.xsp95.mongodb.net/blockchain-bank?retryWrites=true&w=majority";
+  "mongodb+srv://naamaholzer:" +
+  process.env.MONGO_PASSWORD +
+  "@cluster0.xsp95.mongodb.net/blockchain-bank?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));

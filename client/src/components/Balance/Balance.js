@@ -8,8 +8,8 @@ import Button from "@mui/material/Button";
 import { useEffect } from "react";
 export default function Balance(props) {
   const [balance, setBalance] = React.useState(props.currentUser.balance);
-  const [currency,setCurrency] = React.useState('LEV');
-  const[currentUser,setCurrentUser] = React.useState(props.currentUser)
+  const [currency, setCurrency] = React.useState("LEV");
+  const [currentUser, setCurrentUser] = React.useState(props.currentUser);
 
   const verify = async () => {
     try {
@@ -90,7 +90,7 @@ export default function Balance(props) {
         if (res.ok) {
           res = await res.json();
           setCurrentUser(res.currentUser);
-          await setCurrencyConversion(res.currentUser.balance,currency)
+          await setCurrencyConversion(res.currentUser.balance, currency);
         }
       } catch (err) {
         console.log(err);
@@ -99,13 +99,11 @@ export default function Balance(props) {
     fetchData();
   }, [balance]);
 
-  const setCurrencyConversion = async (amount,currentCurrency) => {
-    setCurrency(currentCurrency)
-    if (currentCurrency === "LEV")
-     {
+  const setCurrencyConversion = async (amount, currentCurrency) => {
+    setCurrency(currentCurrency);
+    if (currentCurrency === "LEV") {
       setBalance(amount);
-    }
-    else {
+    } else {
       const val = (await convertCurrency(amount)).result;
       setBalance(val);
     }
@@ -136,13 +134,15 @@ export default function Balance(props) {
   return !props.currentUser.admin ? (
     <div className="balance">
       <p className="balance-title">BALANCE:</p>
-      <p className="amount">{Math.round((balance + Number.EPSILON) * 100) / 100}</p>
+      <p className="amount">
+        {Math.round((balance + Number.EPSILON) * 100) / 100}
+      </p>
       <Select
         className="select"
         label="Balance"
         defaultValue="LEV"
         onChange={async (e) => {
-          await setCurrencyConversion(currentUser.balance,e.target.value);
+          await setCurrencyConversion(currentUser.balance, e.target.value);
         }}
       >
         <MenuItem value="LEV">LEV</MenuItem>

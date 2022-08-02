@@ -1,4 +1,4 @@
-import {React, useEffect, useState} from "react";
+import { React, useEffect, useState } from "react";
 import "./ChatList.scss";
 
 export default function ChatList(props) {
@@ -21,13 +21,20 @@ export default function ChatList(props) {
           );
           if (res.ok) {
             res = await res.json();
-            setUsers(res.users.map((username) => {return ({username: username, image: Math.floor(Math.random() * 50) + 2})}));
+            setUsers(
+              res.users.map((username) => {
+                return {
+                  username: username,
+                  image: Math.floor(Math.random() * 50) + 2,
+                };
+              })
+            );
           }
         } catch (err) {
           console.log(err);
         }
       } else {
-        setUsers([{username:"admin", image:1}]);
+        setUsers([{ username: "admin", image: 1 }]);
       }
     };
     fetchData();
@@ -44,7 +51,7 @@ export default function ChatList(props) {
             <img
               src={
                 "https://xsgames.co/randomusers/assets/avatars/pixel/" +
-                user.image+
+                user.image +
                 ".jpg"
               }
               class="profile-pic side-friend-profile-pic"

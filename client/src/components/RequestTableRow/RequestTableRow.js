@@ -1,5 +1,5 @@
 import "./RequestTableRow.css";
-import {React, useState} from "react";
+import { React, useState } from "react";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -7,7 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import TableRow from "@mui/material/TableRow";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 function RequestTableRow(props) {
   const handleRequest = async (handleType) => {
@@ -42,7 +42,8 @@ function RequestTableRow(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        });       } else {
+        });
+      } else {
         response = await response.json();
         toast.error(response.message, {
           position: "top-center",
@@ -52,7 +53,8 @@ function RequestTableRow(props) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });              }
+        });
+      }
     } catch (err) {}
   };
   const [balance, setBalance] = useState();

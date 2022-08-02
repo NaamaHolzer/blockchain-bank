@@ -74,8 +74,7 @@ export default function App() {
                   progress: undefined,
                 });
               });
-
-            } 
+            }
 
             const loanAlertChannel = pusher.subscribe(
               "loan-alert" + res.currentUser.username
@@ -167,7 +166,6 @@ export default function App() {
           element={
             IsLoggedIn ? (
               <User
-                
                 initialState={"Greetings"}
                 currentUser={CurrentUser}
                 auth={authenticate}

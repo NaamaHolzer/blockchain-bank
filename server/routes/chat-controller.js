@@ -43,7 +43,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
     );
     return res.status(200).json({
       message: "MESSAGE SENT",
-      newMessage: newMessage
+      newMessage: newMessage,
     });
   } catch (err) {
     res.status(500).json({ message: err });
@@ -58,31 +58,31 @@ router.get("/", checkAuth.verifyToken, async (req, res) => {
     const channelName = "chat-" + chatUser;
     const chat = (await Chat.REQUEST(channelName))[0];
 
-    return res
-      .status(200)
-      .json({
-        chat: chat.messages,
-        message: "MESSAGES RETRIEVED SUCCESSFULLY",
-      });
+    return res.status(200).json({
+      chat: chat.messages,
+      message: "MESSAGES RETRIEVED SUCCESSFULLY",
+    });
   } catch (err) {
     res.status(500).json({ message: err });
   }
 });
 
-router.get("/allusers", [checkAuth.verifyToken,checkAdmin.verifyAdmin], async (req, res) => {
-  try {
-    const users = (await User.REQUEST()).filter(
-      (account) => account.approved && account.username!="admin"
-    ).map(user => user.username);
-    return res
-      .status(200)
-      .json({
+router.get(
+  "/allusers",
+  [checkAuth.verifyToken, checkAdmin.verifyAdmin],
+  async (req, res) => {
+    try {
+      const users = (await User.REQUEST())
+        .filter((account) => account.approved && account.username != "admin")
+        .map((user) => user.username);
+      return res.status(200).json({
         users: users,
         message: "USERS RETRIEVED SUCCESSFULLY",
       });
-  } catch (err) {
-    res.status(500).json({ message: err });
+    } catch (err) {
+      res.status(500).json({ message: err });
+    }
   }
-});
+);
 
 module.exports = router;

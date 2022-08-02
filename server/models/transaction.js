@@ -47,7 +47,6 @@ module.exports = (db) => {
 
     const startDate = new Date(today - range * day);
 
-
     return this.find({
       $or: [
         {

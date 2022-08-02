@@ -77,13 +77,15 @@ class Block {
 
   calculateHash() {
     return SHA256(
-      this.action.previousHash + this.date + this.fromUser+
-      this.action.toUser+
-      this.action.fromAddress+
-      this.action.toAddress+
-      this.action.amount+
-      this.action.endDate+
-      this.action.date
+      this.action.previousHash +
+        this.date +
+        this.fromUser +
+        this.action.toUser +
+        this.action.fromAddress +
+        this.action.toAddress +
+        this.action.amount +
+        this.action.endDate +
+        this.action.date
     ).toString();
   }
 
@@ -143,7 +145,7 @@ class Blockchain {
           this.chain[i].action.date,
           this.chain[i].action.id,
           this.chain[i].action.isClosed,
-          this.chain[i].action.signature,
+          this.chain[i].action.signature
         ),
         this.chain[i].previousHash,
         this.chain[i].hash
@@ -160,8 +162,7 @@ class Blockchain {
           this.chain[i - 1].action.date,
           this.chain[i - 1].action.id,
           this.chain[i - 1].action.isClosed,
-          this.chain[i - 1].action.signature,
-
+          this.chain[i - 1].action.signature
         ),
         this.chain[i - 1].previousHash,
         this.chain[i - 1].hash

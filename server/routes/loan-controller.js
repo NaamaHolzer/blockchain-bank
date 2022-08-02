@@ -86,7 +86,7 @@ router.post("/", checkAuth.verifyToken, async (req, res) => {
         Number(req.body.amount),
         new Date(req.body.endDate),
         new Date(Date.now()),
-        loanId,
+        loanId
       );
       loan.signAction(fromUser.privateKey);
 
