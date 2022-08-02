@@ -61,7 +61,6 @@ export default function MessageList(props) {
       for (let user in res.users) {
         let chatChannel = pusher.subscribe("chat-" + res.users[user]);
         chatChannel.bind("new-message", function (data) {
-          console.log("should update channel? ", data.message.from != "admin")
           if (data.message.from != "admin") {
             props.updateMessages(data.message);
           }
@@ -71,10 +70,8 @@ export default function MessageList(props) {
   });
 
   useEffect(() => {
-    console.log("in messagesList useeffect");
     const scroller = scrollRef.current;
     scroller.scrollTop = scroller.scrollHeight;
-    console.log("current messages length: ", props.currentMessages.length);
     if (props.currentUser.admin) {
       try {
         fetchData().catch(console.error);
@@ -86,10 +83,6 @@ export default function MessageList(props) {
         "chat-" + props.currentUser.username
       );
       chatChannel.bind("new-message", function (data) {
-        console.log("should update channel? ", data.message.from != props.currentUser.username)
-        console.log("data.message.from user is ", data.message.from);
-        console.log("currentuser is ", props.currentUser.username);
-
         if (data.message.from != props.currentUser.username) {
           props.updateMessages(data.message);
         }

@@ -83,17 +83,6 @@ function Profile(props) {
 
   return (
     <Box>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <IconButton size="large" edge="end" className="icon-button">
         <AccountCircleOutlinedIcon
           size="Large"

@@ -269,17 +269,6 @@ export default function ActionTable(props) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar fetchData={fetchData} action={props.action} />
         <TableContainer>

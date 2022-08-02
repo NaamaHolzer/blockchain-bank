@@ -184,14 +184,12 @@ router.get(
 
 router.put("/", checkAdmin.verifyAdmin, async (req, res) => {
   try {
-    console.log("in put")
     await BlockchainModel.UPDATE_LOAN(req.body.id);
     res.status(200).json({
       message: "LOAN CLOSED SUCCESSFULLY",
     });
   } catch (err) {
-    // res.status(500).json({ message: err });
-    throw err;
+    res.status(500).json({ message: err });
   }
 });
 

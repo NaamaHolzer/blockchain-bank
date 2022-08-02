@@ -26,14 +26,11 @@ export default function ChatModal(props) {
     setOpen(false);
   };
   const updateMessages = (newMessage) => {
-    console.log("in updateMessages, currentUser: ", props.currentUser.username);
     let updatedMessages = [...messages];
     updatedMessages.push(newMessage);
-    console.log("is updated list different from current state? ", updatedMessages === messages)
     setMessages(updatedMessages);
   };
   const getMessages = async (username) => {
-    console.log("in getMessages");
     try {
       let res = await fetch(
         process.env.REACT_APP_BASE_URL + "/chat?toUser=" + username,
@@ -50,16 +47,11 @@ export default function ChatModal(props) {
         res = await res.json();
         setMessages(res.chat);
         setChatUser(username);
-        console.log("fetched messages length: ", res.chat.length);
       }
     } catch (err) {
       console.log(err);
     }
   };
-
-  React.useEffect(() => {
-    console.log("in ChatModal's useeffect");
-  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>

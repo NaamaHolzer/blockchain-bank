@@ -49,5 +49,5 @@ module.exports = db => {
             to: username
         }).exec();
     }
-    db.model('Loan', schema, 'Loan'); // if model name === collection name
+    db.model('Loan', schema, 'Loan'); 
 }

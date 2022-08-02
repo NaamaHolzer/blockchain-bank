@@ -12,14 +12,7 @@ module.exports = (db) => {
   schema.statics.CREATE = async function (channelName) {
     return this.create({
       channelName: channelName,
-      messages: [
-        // { from: "admin", to: "naama", content: "hi", timestamp: Date.now() },
-        // { from: "naama", to: "admin", content: "hi", timestamp: Date.now() },
-        // { from: "admin", to: "naama", content: "hi", timestamp: Date.now() },
-        // { from: "naama", to: "admin", content: "hi", timestamp: Date.now() },
-        // { from: "admin", to: "naama", content: "hi", timestamp: Date.now() },
-        // { from: "naama", to: "admin", content: "hi", timestamp: Date.now() },
-      ],
+      messages: [],
     });
   };
 

@@ -57,8 +57,6 @@ router.get("/", checkAuth.verifyToken, async (req, res) => {
     const chatUser = fromUser === "admin" ? toUser : fromUser;
     const channelName = "chat-" + chatUser;
     const chat = (await Chat.REQUEST(channelName))[0];
-    console.log(channelName);
-    console.log(chat);
 
     return res
       .status(200)
@@ -67,8 +65,7 @@ router.get("/", checkAuth.verifyToken, async (req, res) => {
         message: "MESSAGES RETRIEVED SUCCESSFULLY",
       });
   } catch (err) {
-    throw err;
-    //res.status(500).json({ message: err });
+    res.status(500).json({ message: err });
   }
 });
 

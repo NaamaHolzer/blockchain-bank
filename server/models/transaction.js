@@ -64,5 +64,5 @@ module.exports = (db) => {
     }).exec();
   };
 
-  db.model("Transaction", schema, "Transaction"); // if model name === collection name
+  db.model("Transaction", schema, "Transaction");
 };

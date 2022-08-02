@@ -22,6 +22,7 @@ export default function App() {
   const authenticate = (isLoggedIn, currentUser) => {
     setIsLoggedIn(isLoggedIn);
     setCurrentUser(currentUser);
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
   };
 
   const [counter, setCounter] = React.useState(0);
@@ -45,6 +46,7 @@ export default function App() {
             res = await res.json();
             setIsLoggedIn(true);
             setCurrentUser(res.currentUser);
+            localStorage.setItem("currentUser", res.currentUser);
             setCounter(counter + 1);
             if (res.currentUser.admin) {
               const requestChannel = pusher.subscribe("signup-request");
@@ -72,7 +74,9 @@ export default function App() {
                   progress: undefined,
                 });
               });
-            }
+
+            } 
+
             const loanAlertChannel = pusher.subscribe(
               "loan-alert" + res.currentUser.username
             );
@@ -163,6 +167,7 @@ export default function App() {
           element={
             IsLoggedIn ? (
               <User
+                
                 initialState={"Greetings"}
                 currentUser={CurrentUser}
                 auth={authenticate}

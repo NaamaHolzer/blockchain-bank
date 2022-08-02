@@ -115,17 +115,6 @@ export default function EditProfile() {
   };
   return (
     <div className="edit">
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <Button onClick={handleClickOpen}>Edit Details </Button>
       <Dialog className="edit-dialog" open={open} onClose={handleClose}>
         <img src={editProfile} className="edit-img" />

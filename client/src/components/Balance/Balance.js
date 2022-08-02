@@ -135,17 +135,6 @@ export default function Balance(props) {
 
   return !props.currentUser.admin ? (
     <div className="balance">
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <p className="balance-title">BALANCE:</p>
       <p className="amount">{Math.round((balance + Number.EPSILON) * 100) / 100}</p>
       <Select

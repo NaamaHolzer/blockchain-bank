@@ -52,17 +52,6 @@ function Home(props) {
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   return (
     <div className="home">
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <img src={home} className="home-img" />
       <h1 className="home-header">Welcome to Lev Bank</h1>
       <TextField

@@ -116,17 +116,6 @@ export default function ActionModal(props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <div className="action">
         <Fab
           className="action-button"

@@ -60,17 +60,6 @@ function RequestTableRow(props) {
 
   return (
     <TableRow hover tabIndex={-1} key={props.username}>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <TableCell align="center" className="table-cell">
         {props.username}
       </TableCell>

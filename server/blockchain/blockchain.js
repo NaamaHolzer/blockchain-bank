@@ -56,7 +56,6 @@ class Action {
     if (!this.fromAddress) return true;
 
     if (!this.signature || !this.signature.length) {
-      console.log(this)
       throw new Error("No signature in this action");
     }
 
