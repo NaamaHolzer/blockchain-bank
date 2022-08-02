@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useCallback } from "react";
+import { React, useEffect, useState, useCallback, useRef } from "react";
 import "./MessagesList.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,6 +10,8 @@ const pusher = new Pusher("ccaa990cbc0f5017da22", {
 
 export default function MessageList(props) {
   const [inputMessage, setInputMessage] = useState();
+  const scrollRef = useRef(null);
+
 
   const sendMessage = async (content) => {
     try {
@@ -70,6 +72,8 @@ export default function MessageList(props) {
 
   useEffect(() => {
     console.log("in messagesList useeffect");
+    const scroller = scrollRef.current;
+    scroller.scrollTop = scroller.scrollHeight;
     console.log("current messages length: ", props.currentMessages.length);
     if (props.currentUser.admin) {
       try {
@@ -97,7 +101,7 @@ export default function MessageList(props) {
     <div class="a1-column-messages a1-long a1-elastic chat-container">
       <div className="chat-user">{props.chatUser}</div>
       <div className="messages-container">
-        <div class="a1-column-messages a1-long a1-elastic chat-main a1-spaced-items">
+        <div ref={scrollRef} class="a1-column-messages a1-long a1-elastic chat-main a1-spaced-items">
           {props.currentMessages.map((message) => {
             return (
               <div
